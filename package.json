@@ -1,0 +1,23 @@
+{
+  "name": "portale_appunti",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngeloRipamonti/5C_RipamontiAvvedutoKotisCinquetti_PortaleAppunti.git"
+  },
+  "keywords": [
+    "js",
+    "nodejs"
+  ],
+  "author": "Angelo Ripamonti, Alexandros Kotis, Luca Avveduto & Simone Cinquetti",
+  "license": "CC-BY-NC-ND-4.0",
+  "bugs": {
+    "url": "https://github.com/AngeloRipamonti/5C_RipamontiAvvedutoKotisCinquetti_PortaleAppunti/issues"
+  },
+  "homepage": "https://github.com/AngeloRipamonti/5C_RipamontiAvvedutoKotisCinquetti_PortaleAppunti#readme",
+  "description": ""
+}
