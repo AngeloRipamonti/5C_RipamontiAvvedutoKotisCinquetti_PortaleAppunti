@@ -49,9 +49,7 @@
     ============================ -->
         <div class="idocs-navigation bg-dark docs-navigation-dark">
           <ul class="nav flex-column ">
-            <li class="nav-item"><a class="nav-link active" href="#start">Inizio</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#architettura_informazione">Architettura informazione</a>
+            <li class="nav-item"><a class="nav-link active" href="#analisifunzionale">Analisi Funzionale</a>
             </li>
             <li class="nav-item"><a class="nav-link" href="#UML">UML</a>
               <ul class="nav flex-column">
@@ -81,11 +79,37 @@
         <div class="idocs-content">
           <div class="container">
 
-            <section id="start">
+            <section id="analisifunzionale">
               <h1>Documentazione</h1>
               <h2>Portale Appunti</h2>
               <p class="lead">
-                Lo scopo di questo progetto è quello di ricreare una piattaforma di <strong><b>social media</b></strong> basata esclusivamente sugli <u>appunti</u>, propri e altrui</p>
+                Lo scopo di questo progetto è quello di ricreare una piattaforma di <strong><b>social media</b></strong> basata esclusivamente sugli <u>appunti</u>, propri e altrui.
+                  L'applicazione mostrerà un sito web che conterà una pagina "<b>home</b>", nella quale verrà dato il benvenuto e verrà proposta la <u>registrazione</u> per usufruire a pieno delle funzionalità del sito.
+                  Dopo la registrazione/Login l'utente avrà a disposizione le seguenti funzinalità in una "<b>Area Personale</b>":<br>
+                <ul>
+                  <li> <u>Creazione</u> di appunti, inizialmente privati.</li>
+                  <li> <u>Modifica</u> di appunti già esistenti.</li>
+                  <li> <u>Cambiare</u> visibilità degli appunti (da privati a pubblici).</li>
+                  <li> <u>Cancellare</u> appunti di cui ne è proprietario.</li>
+                  <li> <u>Valutare</u> gli appunti di una altra persona in modo anonimo.</li>
+                </ul>
+                In qualsiasi momento sarà possibile <b>selezionare tag</b> esistenti oppure <b>crearne di nuovi</b>.<br>
+                In più sarà possibile seguire un profilo per ricevere un <b>feed</b> degli ultimi appunti pubblicati dalle <u>persone seguite</u>, nella pagina "<b>Principale</b>"
+                (vengono mostrati gli appunti pubblicati nell’ultima settimana).<br>
+  
+                <br>Ci sarà inoltre una "<b>sezione di ricerca</b>", nella quale sarà possibile: <br>
+                <ul>
+                  <li><u>Ricerca di appunti</u> per tag.</li>
+                  <li><u>Ricerca di profili</u> per nome.</li>
+                  <li><u>Visualizzazione</u> del profilo degli utenti e dei relativi appunti che hanno pubblicato.</li>
+                </ul>
+  
+                Infine sarà effettuabile utilizzare queste ultime funizonalità, sempre nell' "Area Perosnale":
+                <ul>
+                  <li>Creazione di un appunto a partire da un file Word.</li>
+                  <li>Esportazione di un appunto in formato Word o PDF.</li>
+                </ul>
+              </p>
               <hr>
               <div class="row">
                 <div class="col-sm-6 col-lg-4">
@@ -105,35 +129,6 @@
 
             <hr class="divider">
 
-            <section id="architettura_informazione">
-              <h2>Architettura informazione</h2>
-              <p class="lead">
-                L'applicazione mostrerà un sito web che conterà una pagina "home", nella quale verrà dato il benvenuto e verrà proposta la registrazione per l'utilizzo del sito.
-                Dopo la registrazione/Login l'utente avrà a disposizione le seguenti funzinalità :<br>
-              <ul>
-                <li> Creazione di appunti, inizialmente privati.</li>
-                <li> Modifica di appunti già esistenti.</li>
-                <li> Cambiare visibilità degli appunti (da privati a pubblici).</li>
-                <li> Cancellare appunti di cui ne è proprietario.</li>
-                <li> Valutare gli appunti di una altra persona in modo anonimo.</li>
-              </ul>
-              In qualsiasi momento è possibile selezionare tag esistenti oppure crearne di nuovi.<br>
-              È anche possibile seguire un profilo per ricevere un feed degli ultimi appunti pubblicati dalle persone seguite 
-              (vengono mostrati gli appunti pubblicati nell’ultima settimana).<br>
-
-              Funzionalità aggiuntive:<br>
-              <ul>
-                <li>Ricerca di appunti per tag.</li>
-                <li>Ricerca di profili per nome.</li>
-                <li>Visualizzazione del profilo degli utenti e dei relativi appunti pubblicati.</li>
-                <li>Creazione di un appunto a partire da un file Word.</li>
-                <li>Esportazione di un appunto in formato Word o PDF.</li>
-              </ul>
-              </p>
-            </section>
-
-            <hr class="divider">
-
 
             <section id="UML">
               <h2>UML</h2>
@@ -145,7 +140,7 @@
               <h2>Diagramma di Casi d'uso</h2>
               <p class="lead">Di seguito il diagramma dei casi d'uso</p>
               <picture>
-                <img src="/assets/schemas/SchemaCasiUso.drawio.png" alt="Diagramma dei Casi d'Uso">
+                <img src="/assets/schemas/diagrams/SchemaCasiUso.drawio.png" alt="Diagramma dei Casi d'Uso">
               </picture>
 
             </section>
@@ -154,7 +149,7 @@
               <h2>Diagrammi di oggetti</h2>
               <p class="lead">Di seguito il diagramma dei componenti</p>
               <picture>
-                <img src="/assets/schemas/SchemaOgetti.drawio.png" alt="Diagramma di Componenti">
+                <img src="/assets/schemas/diagrams/SchemaOggetti.drawio.png" alt="Diagramma di Componenti">
               </picture>
 
             </section>
@@ -163,7 +158,7 @@
               <h2>Diagrammi di Stato</h2>
               <p class="lead">Di seguito il diagramma di stato </p>
               <picture>
-                <img src="/assets/schemas/SchemaStato.drawio.png" alt="Diagramma di Stato">
+                <img src="/assets/schemas/diagrams/SchemaStato.drawio.png" alt="Diagramma di Stato">
               </picture>
             </section>
 
@@ -171,7 +166,7 @@
               <h2>Diagrammi di Sequenza</h2>
               <p class="lead">Di seguito il diagramma di sequenza</p>
               <picture>
-                <img src="/assets/schemas/SchemaSequenza.drawio.png" alt="Diagramma di Sequenza ">
+                <img src="/assets/schemas/diagrams/SchemaSequenza.drawio.png" alt="Diagramma di Sequenza ">
               </picture>
             </section>
 
