@@ -83,17 +83,16 @@
               <h1>Documentazione</h1>
               <h2>Portale Appunti</h2>
               <p>
-                Lo scopo di questo progetto è quello di creare una piattaforma stile <strong><b>"social media"</b></strong> nella quale si possono condividere appunti/testi decidendo se dargli visibilità pubblica, 
-                quindi sfruttando di fatto le funzionalità offerte dal social media, oppure dandogli visibilità privata, facendo sì che la piattaforma funga da spazio personale in cui salvare i propri appunti/testi. 
+                Lo scopo di questo progetto è quello di creare una piattaforma <strong><b>"social media"</b></strong> nella quale si possono condividere appunti/testi decidendo se dargli visibilità pubblica, 
+                quindi sfruttando di fatto le funzionalità offerte dal social media, oppure privata, facendo sì che la piattaforma funga da spazio personale in cui salvare i propri appunti/testi. 
                 <br>
-                  L'applicazione è composta da una pagina iniziale di <b>home</b>, nella quale verrà dato il benvenuto e verrà imposta la <u>registrazione/login</u> per usufruire delle funzionalità del portale.
+                  L'applicazione è composta da una pagina iniziale di <b>home</b>, nella quale verrà dato il benvenuto e verrà imposta una <u>registrazione/login</u> per usufruire delle funzionalità del portale.
                   Dopo la registrazione/Login l'utente avrà a disposizione un'<b>Area Personale</b> che offrirà le seguenti funzionalità:<br>
                 <ul>
                   <li> <u>Creazione</u> di appunti (inizialmente privati);</li>
                   <li> <u>Modifica</u> di appunti (proprietari) già esistenti;</li>
                   <li> <u>Cambiare</u> visibilità degli appunti (privati/pubblici);</li>
                   <li> <u>Cancellare</u> appunti (proprietari);</li>
-                  <li> <u>Valutare</u> gli appunti di una altra persona in maniera totalmente anomia.</li>
                 </ul>
                 Per <b>creare</b> un nuovo documento, basterà andare nella propria area personale che predisporrà un apposito pulsante. Una volta cliccato, verrà visualizzata
                 una modale con due "tabs", una che permetterà un "drag and drop", di un file docx/pdf, per poter creare l'appunto a partire dal documento e una per scrivere il documento
@@ -102,17 +101,18 @@
                 Ad avvenuto upload del documento o approvazione del testo, apparirà una modale che permetterà di assegnare un titolo al proprio documento, inserire tag pre esistenti o inserirne di nuovi,
                 e decidere la visibilità del proprio documento (privato/pubblico). <br><br>
                 Dopo che l'utente avrà pubblicato, potrà vedere il post nell'area del proprio profilo, e passando su esso col cursore del mouse
-                verrà renderizzata l'icona di un lucchetto (bloccato o sbloccato in base alla visibilità del post), che se cliccato cambierà la visibilità di esso, quella di un cestino che se cliccato dopo aver confermato
+                verrà renderizzata l'icona di un lucchetto (bloccato o sbloccato in base alla visibilità del post), che se cliccato cambierà la visibilità di esso, quella di un cestino che se cliccato, dopo aver confermato
                 l'azione, eliminerà <b>definitivamente</b> il post, e quella di "esportazione", che darà scelta se esportare il documento in formato docx o pdf.
-                <br><br>
-                <b>In qualsiasi momento sarà possibile creare nuovi <u>tag</u> da assegnare alle proprie pubblicazioni.</b><br>
-                In più sarà possibile seguire un profilo per ricevere i post settimanali che compariranno nel <b>feed</b> degli ultimi appunti pubblicati nella pagina di <b>home</b>. 
                 <br><br>
                 Il caso della modifica di un documento è simile a quello della creazione: sarà visualizzato un editor di testo precompilato con l'attuale versione del documento. 
                 Una volta che il testo verrà approvato verrà direttamente "pubblicato".
                 <br><br>
-                Ogni appunto sarà rappresentato con una "preview" rettangolare, che oltre ad essa, conterrà la valutazione media del post (da 1 a 5), la possibilità di valutare il post in maniera anonima ed il nome dell'autore del post (in sovraimpressione),
-                che una volta cliccato, verrà visualizzato il profilo dell'utente con i propri followers, i seguiti, la propria "bio", di un massimo di 150 caratteri e un elenco dei propri post.
+                <b>In qualsiasi momento sarà possibile creare nuovi <u>tag</u> da assegnare alle proprie pubblicazioni attraverso un apposito pulsante nell'area personale che se cliccato vedrà aprirsi una modale che richiederà
+                l'inserimento del tag vero e prorio e un colore.</b><br><br>
+                L'insieme dei post dell'ultima settimana (In ordine a partire dal più recente) degli utenti seguiti saranno il contenuto del <b>feed</b>, situato nella pagina di <b>home</b>. 
+                <br><br>
+                Ogni appunto sarà rappresentato con una forma rettangolare che conterrà una "preview" del documento, la valutazione media del post (da 1 a 5), la possibilità di valutare il post in maniera anonima ed il nome dell'autore del post (in sovraimpressione),
+                che una volta cliccato, aprirà il profilo dell'utente con i propri followers, i seguiti, la propria "bio", di un massimo di 150 caratteri e un elenco dei propri post.
                 Ogni volta che un post verrà cliccato, sarà aperta una modale con l'intero testo e un'icona che permetterà di visualizzare il post a schermo intero.
                 <br>
   
@@ -122,7 +122,8 @@
                   <li><u>Ricercare profili</u> per nome.</li>
                 </ul>
                 <br>
-                Una volta effettuata la ricerca verranno renderizzati tutti i post risultanti.
+                Una volta effettuata la ricerca verranno renderizzati tutti i post risultanti con la stessa logica di 
+                renderizzazione precedentemente spiegata.
               </p>
               <hr>
               <div class="row">
