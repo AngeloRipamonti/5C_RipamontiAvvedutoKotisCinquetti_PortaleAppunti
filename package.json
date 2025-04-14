@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
+    "build": "npm install -y",
+    "start": "npm run build && node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -11,7 +13,12 @@
   },
   "keywords": [
     "js",
-    "nodejs"
+    "nodejs",
+    "html",
+    "idocs",
+    "express",
+    "css",
+    "sqlite"
   ],
   "author": "Angelo Ripamonti, Alexandros Kotis, Luca Avveduto & Simone Cinquetti",
   "license": "CC-BY-NC-ND-4.0",
@@ -19,5 +26,19 @@
     "url": "https://github.com/AngeloRipamonti/5C_RipamontiAvvedutoKotisCinquetti_PortaleAppunti/issues"
   },
   "homepage": "https://github.com/AngeloRipamonti/5C_RipamontiAvvedutoKotisCinquetti_PortaleAppunti#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "multer": "^1.4.5-lts.2",
+    "path": "^0.12.7",
+    "socket.io": "^4.8.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "pm2": "^6.0.5"
+  }
 }
