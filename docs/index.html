@@ -58,6 +58,8 @@
                 <li class="nav-item"><a class="nav-link" href="#umlstato">Stato</a></li>
                 <li class="nav-item"><a class="nav-link" href="#umlsequenza">Sequenza</a></li>
                 <li class="nav-item"><a class="nav-link" href="#umler">Entity Relationship</a></li>
+                <li class="nav-item"><a class="nav-link" href="#logicalscheme">Logical Scheme</a></li>
+
 
               </ul>
             </li>
@@ -191,6 +193,22 @@
               <picture>
                 <img src="/assets/schemas/ER/SchemaER.drawio.png" alt="Schema E/R">
               </picture>
+            </section>
+
+            <hr class="divider">
+
+            <section id="logicalscheme">
+              <h2>Logical Scheme</h2>
+              <p class="lead">Di seguito lo schema logico <br>
+                <strong><b>Users</b></strong>(<u>email</u>, userame, bio, password, path_thumbnall) <br>
+                <strong><b>Seguire_Users</b></strong>(<u>followedEmail</u>(FK), <u>folowEmail</u>(FK)) <br>
+                <strong><b>Feedbacks</b></strong>(<u>email</u>(FK), <u>idNotes</u>(FK), created_at, n_start) <br>
+                <strong><b>Modifica_Notes</b></strong>(<u>email</u>(FK), <u>idNotes</u>(FK), created_at) <br>
+                <strong><b>Notes</b></strong>(<u>idNotes</u>, emailUsers(FK), path_note, created_at, visibility) <br>
+                <strong><b>Tags</b></strong>(<u>name</u>) <br>
+                <strong><b>Avere_Notes_Tags</b></strong>(<u>idNotes</u>(FK), <u>name</u>(FK)) <br>
+
+              </p>
             </section>
 
             <hr class="divider">
