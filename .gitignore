@@ -2,6 +2,6 @@
 package-lock.json
 node_modules
 dist
-*.db
 *.cer
 *.key
+config.json

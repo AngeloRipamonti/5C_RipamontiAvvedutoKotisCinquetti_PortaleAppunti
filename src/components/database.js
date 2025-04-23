@@ -1,35 +1,34 @@
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
-const { join } = require("path");
+const mysql = require('mysql2/promise');
 
-module.exports = async function database() {
+module.exports = function database() {
     let db;
-
-    await open({
-        filename: join(process.cwd(), 'NotesPortal.db'),
-        driver: sqlite3.cached.Database,
-        mode: sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE
-    }).then((d) => {
-        console.log('Connessione al database avvenuta con successo');
-        db = d;
-    }).catch((err) => {
-        console.error(`Errore nella connessione al database: ${err.message}`);
-        throw err;
-    });
-
     
     async function _query(sql, params) {
-        return db.all(sql, params);
+        return (await db.execute(sql, params))[0];
     }
 
     async function _get(sql, params) {
-        return db.get(sql, params);
+        return (await db.execute(sql, params))[0][0] || null;
     }
 
     return {
-        setup: async function () {
+        setup: async function (config) {
+            try{
+                db = await mysql.createConnection({
+                    host: config.host,       
+                    user: config.user,        
+                    password: config.password,
+                    database: config.portal,
+                    port: config.port  
+                });
+            }
+            catch(err){
+                console.error(`Errore nella connessione al database: ${err.message}`);
+                throw err;
+            }
+
             await Promise.all([
-                db.run(`CREATE TABLE IF NOT EXISTS users(
+                db.execute(`CREATE TABLE IF NOT EXISTS users(
                             email TEXT PRIMARY KEY,
                             password TEXT NOT NULL,
                             username TEXT NOT NULL,

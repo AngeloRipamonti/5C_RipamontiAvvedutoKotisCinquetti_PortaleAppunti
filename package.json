@@ -33,10 +33,9 @@
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "multer": "^1.4.5-lts.2",
+    "mysql2": "^3.14.0",
     "path": "^0.12.7",
-    "socket.io": "^4.8.1",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "pm2": "^6.0.5"
