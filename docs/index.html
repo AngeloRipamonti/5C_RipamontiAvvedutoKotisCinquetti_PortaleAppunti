@@ -179,9 +179,14 @@
 
             <section id="umloggetti">
               <h2>Diagrammi di oggetti</h2>
-              <p class="lead">Di seguito il diagramma dei componenti</p>
+              <p class="lead">Di seguito i diagrammi dei componenti</p>
               <picture>
                 <img src="/assets/schemas/diagrams/SchemaOggetti.drawio.png" alt="Diagramma di Componenti">
+              </picture>
+
+              <h2>Diagrammi di oggetti lato Server</h2>
+              <picture>
+              <img src="/assets/schemas/diagrams/SchemaOggettiServer.drawio.png" alt="Diagramma di Componenti Server">
               </picture>
 
             </section>
@@ -215,7 +220,7 @@
             <section id="logicalscheme">
               <h2>Logical Scheme</h2>
               <p class="lead">Di seguito lo schema logico <br>
-                <strong><b>Users</b></strong>(<u>email</u>, userame, bio, password, path_thumbnall) <br>
+                <strong><b>Users</b></strong>(<u>email</u>, userame, bio, password, password_salt, path_thumbnall) <br>
                 <strong><b>Seguire_Users</b></strong>(<u>followedEmail</u>(FK), <u>folowEmail</u>(FK)) <br>
                 <strong><b>Feedbacks</b></strong>(<u>email</u>(FK), <u>idNotes</u>(FK), created_at, n_start) <br>
                 <strong><b>Modifica_Notes</b></strong>(<u>email</u>(FK), <u>idNotes</u>(FK), created_at) <br>
