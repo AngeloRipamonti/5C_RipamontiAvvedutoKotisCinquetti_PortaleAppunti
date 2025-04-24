@@ -5,3 +5,4 @@ dist
 *.cer
 *.key
 config.json
+*.pem
