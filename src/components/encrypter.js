@@ -3,6 +3,7 @@ module.exports = function encrypter() {
     const algorithm = 'sha512';
     const iterations = 10000;
     const keylen = 64;
+    const bytes = 16;
 
     function generateSalt(bytes) {
         return crypto.randomBytes(bytes).toString('hex');
@@ -10,8 +11,8 @@ module.exports = function encrypter() {
 
     return {
         encrypt: function (password){
-            const salt = generateSalt(16);
-            const hash = crypto.pbkdf2Sync(password, generateSalt(16), iterations, keylen, algorithm).toString('hex');
+            const salt = generateSalt(bytes);
+            const hash = crypto.pbkdf2Sync(password, salt, iterations, keylen, algorithm).toString('hex');
             return {
                 salt: salt,
                 hash: hash
