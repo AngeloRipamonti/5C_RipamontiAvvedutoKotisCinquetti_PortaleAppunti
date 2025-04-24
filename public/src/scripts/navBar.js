@@ -6,7 +6,7 @@ export function generateNavbar(parentElement, pubsub) {
     [
         "<button class='button is-white'>User Icon</button>",
         "<h3>$Username</h3>",
-        "<button class='button is-white'> <i class='fa fa-wrench'></i> </button>",
+        "<button class='button is-white'> <i class='fa fa-gear'></i> </button>",
         "<button class='button is-rounded'>+</button>"
     ],
     "accounts": 
@@ -31,7 +31,7 @@ export function generateNavbar(parentElement, pubsub) {
     "entry": ["<button class='button is-white'>Sign Up</button>"]
  };   
 
- let index = "accounts";
+ let index = "personal";
  
  const template = `
     <div class="navbar-item">
