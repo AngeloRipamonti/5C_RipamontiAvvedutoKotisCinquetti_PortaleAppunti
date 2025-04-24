@@ -30,12 +30,14 @@
   "dependencies": {
     "body-parser": "^2.2.0",
     "bulma": "^1.0.4",
+    "crypto": "^1.0.1",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "multer": "^1.4.5-lts.2",
     "mysql2": "^3.14.0",
     "path": "^0.12.7",
+    "quill": "^2.0.3",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
