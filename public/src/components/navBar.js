@@ -71,15 +71,16 @@ export function generateNavbar(parentElement, pubsub) {
        </div>
     `;
 
-  return {
-    build: function(element) {
+    function build(element) {
       if (elements[element]) index = element;
-    },
+    }
+
+  return {
     render: function() {
       console.log(index);
       const data = elements[index];
       parentElement.innerHTML = `
-               <nav class="navbar is-transparent">
+              <nav class="navbar is-transparent">
                   <div class="navbar-brand">
                       <div class="navbar-burger js-burger" data-target="navbarExampleTransparentExample">
                         <span></span>
@@ -87,27 +88,27 @@ export function generateNavbar(parentElement, pubsub) {
                         <span></span>
                         <span></span>
                       </div>
-                   </div>
-                   <div id="navbarExampleTransparentExample" class="navbar-menu">
-                       <div class="navbar-start">
-                           ${data.right.map((e) => {
-                               return startTemplate.replace("%content%", e);
-                             })
-                             .join("")}
-                       </div>
-                       
-                       <div class="navbar-end">
-                           ${data.left.map((e) => {
-                               return endTemplate.replace("%content%", e);
-                             })
-                             .join("")}
-                       </div>
-                   </div>
-               </nav>
-           `;
+                  </div>
+                  <div id="navbarExampleTransparentExample" class="navbar-menu">
+                      <div class="navbar-start">
+                          ${data.right.map((e) => {
+                              return startTemplate.replace("%content%", e);
+                            })
+                            .join("")}
+                      </div>
+                      
+                      <div class="navbar-end">
+                          ${data.left.map((e) => {
+                              return endTemplate.replace("%content%", e);
+                            })
+                            .join("")}
+                      </div>
+                  </div>
+              </nav>
+          `;
 
           pubsub.subscribe("newHash", (page) => {
-              this.build(page);
+              build(page);
               this.render();
           });
     },
