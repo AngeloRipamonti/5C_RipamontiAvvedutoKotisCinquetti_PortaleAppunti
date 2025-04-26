@@ -1,4 +1,4 @@
-export const generatePubSub = () => {
+module.exports = function generatePubSub() {
     const events = {};
 
     return {
