@@ -1,4 +1,4 @@
-export const credentialManager = (parentElement, pubSub) => {
+export const generateDocumentCreation = (parentElement, pubSub) => {
 
     //variables
 

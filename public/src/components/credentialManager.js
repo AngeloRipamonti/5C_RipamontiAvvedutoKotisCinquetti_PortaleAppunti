@@ -1,37 +1,33 @@
-export const credentialManager = (parentElement, pubSub) => {
+export const generateCredentialManager = (parentElement, pubSub) => {
 
     return{
         renderLogin: function() {
 
             parentElement.innerHTML = `
-            <div>
-                <h2>Take notes and share them with everyone</h2>
+            <div class="container has-text-centered">
+
+                <div class="titles">
+                    <h1 class="title is-1">Take notes and share them with everyone</h1>
+                    <h2 class="subtitle is-3">Welcome on mind sharing!</h2>
+                </div>
+            
+           <div class="mt-5">
+                <p class="has-text-centered mb-3 is-size-4"><strong>Sign in to get started</strong></p>
+                <div class="login-box">
+                    <input type="text" id="emailInput" placeholder="Email">
+                    <button type="button" id="loginButton" class="button is-link is-light">Login</button>
+                </div>
             </div>
 
-            <div>
-                <h3>Welcome on mind sharing!</h3>
-            </div>
-
-           <div>
-                <label for="email">Sign in to get started</label>
-                <input type="text" id="emailInput" placeholder="Email">
-            </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="loginButton" class="btn btn-primary">Login</button>
-            </div>
-            <div id="error_area">
-            </div>`;
+            <div id="error_area"></div>
+            
+             </div>
+            `;
 
             document.getElementById("loginButton").onclick =  () => {
                 const email = document.getElementById("emailInput").value;
                  pubSub.publish("isLogged", email);
             }
-
-            document.getElementById("signupButton").onclick =  () => {
-                 pubSub.publish("signUp");
-            }
-
         },
 
         renderRegister: function() {

@@ -1,6 +1,6 @@
-import {postManager} from "./postManager.js";
+import {generatePostManager} from "./postManager.js";
 
-export const user = (parentElement, pubSub) => {
+export const generateUser = (parentElement, pubSub) => {
 
     let postManager;
     let thumnail;

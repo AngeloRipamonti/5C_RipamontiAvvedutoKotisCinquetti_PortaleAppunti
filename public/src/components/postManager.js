@@ -1,6 +1,6 @@
-import {note} from "./note.js";
+import {generateNote} from "./note.js";
 
-export const postManager = (parentElement, pubSub) => {
+export const generatePostManager = (parentElement, pubSub) => {
 
     let notes;
     

@@ -1,4 +1,4 @@
-export const note = (parentElement, pubSub) => {
+export const generateNote = (parentElement, pubSub) => {
 
     let data;
     

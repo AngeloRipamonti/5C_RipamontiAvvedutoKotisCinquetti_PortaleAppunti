@@ -1,4 +1,4 @@
-export const userSettings = (parentElement, pubSub) => {
+export const generateUserSettings = (parentElement, pubSub) => {
 
     //variables
 
