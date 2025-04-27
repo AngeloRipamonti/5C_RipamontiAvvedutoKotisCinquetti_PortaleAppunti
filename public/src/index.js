@@ -1,4 +1,4 @@
-import { generateNavbar } from "./components/navbar.js";
+import { generateNavbar } from "./components/navBar.js";
 import { generatePubSub } from "./components/pubsub.js";
 import { generateNavigator } from "./components/navigator.js";
 import { generateCredentialManager } from "./components/credentialManager.js";
