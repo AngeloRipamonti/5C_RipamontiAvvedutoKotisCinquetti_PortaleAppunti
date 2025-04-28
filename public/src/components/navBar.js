@@ -13,18 +13,18 @@ export function generateNavbar(parentElement, pubsub) {
     "personal": {
       "logo": false,
       "right": [
-        "<button class='button is-white'>User Icon</button>",
+        "<button class='button is-white u-icon'>User Icon</button>",
         "<h3>$Username</h3>",
       ],
       "left": [
-         "<button class='button is-white'> <i class='fa fa-gear'></i> </button>",
-         "<button class='button is-rounded'>+</button>"
+         "<button class='button is-white' id='u-settings'> <i class='fa fa-gear'></i> </button>",
+         "<button class='button is-rounded' id='doc-creation'>+</button>"
       ]
     },
     "accounts": {
       "logo": false,
       "right": [
-          "<button class='button is-white'>User Icon</button>",
+          "<button class='button is-white' id='acc-icon'>User Icon</button>",
           "<h3>$Username</h3>",
         ],
       "left": ["<button class='button is-rounded'>Follow</button>"]
@@ -45,7 +45,7 @@ export function generateNavbar(parentElement, pubsub) {
                     <i class="fa-solid fa-xmark"></i>
                 </span>
             </p>`,
-        "<button class='button is-white'>User Icon</button>",
+        "<button class='button is-white u-icon'>User Icon</button>",
       ]
     },
     "entry": {
@@ -53,7 +53,7 @@ export function generateNavbar(parentElement, pubsub) {
       "right": [
         '<img src="/assets/images/favicon.ico" id="logo">'
       ],
-      "left": ["<button class='button is-white'>Sign Up</button>"]
+      "left": ["<button class='button is-white' id='register'>Sign Up</button>"]
     },
   };
 
@@ -108,6 +108,10 @@ export function generateNavbar(parentElement, pubsub) {
                   </div>
               </nav>
           `;
+          
+           document.getElementById("register").onclick = () => {
+            pubsub.publish("sign-up");
+           }
 
           pubsub.subscribe("newHash", (page) => {
               build(page);
