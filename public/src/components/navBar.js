@@ -50,7 +50,9 @@ export function generateNavbar(parentElement, pubsub) {
     },
     "entry": {
       "logo": true,
-      "right": [],
+      "right": [
+        '<img src="/assets/images/favicon.ico" id="logo">'
+      ],
       "left": ["<button class='button is-white'>Sign Up</button>"]
     },
   };
