@@ -1,5 +1,5 @@
 //Importations
-import { generateNavbar } from "./components/navBar.js";
+import { generateNavbar } from "./components/navbar.js";
 import { generatePubSub } from "./components/pubsub.js";
 import { generateNavigator } from "./components/navigator.js";
 import { generateCredentialManager } from "./components/credentialManager.js";
@@ -18,9 +18,11 @@ const navbar = generateNavbar(navbarContainer, pubsub);
 const credential = generateCredentialManager (credentialContainer, pubsub);
 navbar.render();
 credential.renderLogin();
-pubsub.subscribe("sign-up", ()=>{
+
+
+pubsub.subscribe("sign-up", () => {
     credential.renderRegister();
 });
-pubsub.subscribe("close-modal", ()=>{
+pubsub.subscribe("close-modal", () => {
     credential.renderLogin();
 });

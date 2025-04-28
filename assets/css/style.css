@@ -2,3 +2,13 @@ html {
     width: 100%;
     height: 100%;
 }
+
+.modal-content {
+    max-width: 50vh !important;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 40vh !important;
+    }
+}

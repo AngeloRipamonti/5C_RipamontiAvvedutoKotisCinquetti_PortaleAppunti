@@ -1,9 +1,7 @@
 export const generateCredentialManager = (parentElement, pubSub) => {
-
-    return{
-        renderLogin: function() {
-
-            parentElement.innerHTML = `
+  return {
+    renderLogin: function () {
+      parentElement.innerHTML = `
                 <div class="container has-text-centered">
 
             <div class="section">
@@ -30,15 +28,14 @@ export const generateCredentialManager = (parentElement, pubSub) => {
 
             `;
 
-            document.getElementById("loginButton").onclick =  () => {
-                const email = document.getElementById("emailInput").value;
-                 pubSub.publish("isLogged", email);
-            }
-        },
+      document.getElementById("loginButton").onclick = () => {
+        const email = document.getElementById("emailInput").value;
+        pubSub.publish("isLogged", email);
+      };
+    },
 
-        renderRegister: function() {
-
-            parentElement.innerHTML = `
+    renderRegister: function () {
+      parentElement.innerHTML = `
                     <div class="modal is-active">
             <div class="modal-background"></div>
 
@@ -72,15 +69,15 @@ export const generateCredentialManager = (parentElement, pubSub) => {
             </div>
                `;
 
-                document.getElementById("signupButton").onclick =  () => {
-                    let username = document.getElementById("username").value;
-                    let email = document.getElementById("email").value;
+      document.getElementById("signupButton").onclick = () => {
+        let username = document.getElementById("username").value;
+        let email = document.getElementById("email").value;
 
-                     pubSub.publish("isRegisted", [username, email]);
-                }
-                document.getElementById("closeModal").onclick =  () => {
-                    pubSub.publish("close-modal");
-                }
-        }
-    }
-}
+        pubSub.publish("isRegisted", [username, email]);
+      };
+      document.getElementById("closeModal").onclick = () => {
+        pubSub.publish("close-modal");
+      };
+    },
+  };
+};
