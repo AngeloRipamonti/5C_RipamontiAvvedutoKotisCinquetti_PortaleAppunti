@@ -68,7 +68,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
                 </div>
             </div>
 
-            <button class="modal-close is-large" aria-label="close"></button>
+            <button class="modal-close is-large" id="closeModal" aria-label="close"></button>
             </div>
                `;
 
@@ -78,7 +78,9 @@ export const generateCredentialManager = (parentElement, pubSub) => {
 
                      pubSub.publish("isRegisted", [username, email]);
                 }
-
+                document.getElementById("closeModal").onclick =  () => {
+                    pubSub.publish("close-modal");
+                }
         }
     }
 }
