@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const htmlDocx = require('html-to-docx');
 const htmlPdf = require('html-pdf');
+const mammoth = require("mammoth");
 
 module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/docx`)) fs.mkdirSync(`${process.cwd()}/dist/assets/docx`, { recursive: true });
@@ -11,6 +12,7 @@ module.exports = function fileManager() {
     return {
         saveInMd: function (html, filename) {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/md/${filename}`), html);
+            return path.join(process.cwd(), `/dist/assets/md/${filename}`);
         },
         saveInDocx: async function (html, filename) {
             const docxBuffer = await htmlDocx(html);
@@ -31,6 +33,13 @@ module.exports = function fileManager() {
                 if (err) throw err; 
                 return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
             });
+        },
+        importFromMd: function (filepath) {
+            return fs.readFileSync(filepath).toString();
+        },
+        importFromDocx: async function (filepath) {
+            const result = await mammoth.convertToHtml({ path: filepath }, { styleMap: ["u => u"] });
+            return result.value; 
         }
     }
 }

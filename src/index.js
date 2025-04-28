@@ -3,8 +3,7 @@ const bodyParser = require('body-parser');
 let http = require("http");
 const path = require('path');
 const app = express();
-const fileManager = require("./components/fileManager");
-const fm = fileManager();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", express.static(path.join(process.cwd(), "public")));
