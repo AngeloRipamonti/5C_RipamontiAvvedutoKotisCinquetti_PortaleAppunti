@@ -36,7 +36,8 @@ module.exports = function fileManager() {
             });
         },
         saveImage: async function (img, filename){
-
+            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${filename}`), Buffer.from(img));
+            return path.join(process.cwd(), `/dist/assets/images/${filename}`);
         },
         importFromMd: function (filepath) {
             return fs.readFileSync(filepath).toString();
