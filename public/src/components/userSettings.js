@@ -1,11 +1,18 @@
 export const generateUserSettings = (parentElement, pubSub) => {
 
     //variables
-
     
     return{
-        render: function() {
-
+        build : function() {
+            //a
+        },
+        changeCredentials : function() {
+            /*
+                controllo
+            */
+        },
+        changeBio : function() {
+            //a
         }
     }
 }
