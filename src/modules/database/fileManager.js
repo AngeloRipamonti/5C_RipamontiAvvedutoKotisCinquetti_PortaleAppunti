@@ -20,7 +20,7 @@ module.exports = function fileManager() {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
             return path.join(process.cwd(), `/dist/assets/docx/${filename}`);
         },
-        saveInPdf: async function (html, filename){
+        saveInPdf: function (html, filename){
             htmlPdf.create(html, {
                 format: 'A4',
                 border: {
@@ -35,7 +35,7 @@ module.exports = function fileManager() {
                 return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
             });
         },
-        saveImage: async function (img, filename){
+        saveImage: function (img, filename){
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${filename}`), Buffer.from(img));
             return path.join(process.cwd(), `/dist/assets/images/${filename}`);
         },
