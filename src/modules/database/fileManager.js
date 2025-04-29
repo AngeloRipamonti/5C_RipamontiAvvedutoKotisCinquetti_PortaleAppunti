@@ -8,6 +8,7 @@ module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/docx`)) fs.mkdirSync(`${process.cwd()}/dist/assets/docx`, { recursive: true });
     if (!fs.existsSync(`${process.cwd()}/dist/assets/pdf`)) fs.mkdirSync(`${process.cwd()}/dist/assets/pdf`, { recursive: true });
     if (!fs.existsSync(`${process.cwd()}/dist/assets/md`)) fs.mkdirSync(`${process.cwd()}/dist/assets/md`, { recursive: true });
+    if (!fs.existsSync(`${process.cwd()}/dist/assets/images`)) fs.mkdirSync(`${process.cwd()}/dist/assets/images`, { recursive: true });
 
     return {
         saveInMd: function (html, filename) {
@@ -19,7 +20,7 @@ module.exports = function fileManager() {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
             return path.join(process.cwd(), `/dist/assets/docx/${filename}`);
         },
-        saveInPdf: async function (html, filename){
+        saveInPdf: function (html, filename){
             htmlPdf.create(html, {
                 format: 'A4',
                 border: {
@@ -33,6 +34,10 @@ module.exports = function fileManager() {
                 if (err) throw err; 
                 return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
             });
+        },
+        saveImage: function (img, filename){
+            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${filename}`), Buffer.from(img));
+            return path.join(process.cwd(), `/dist/assets/images/${filename}`);
         },
         importFromMd: function (filepath) {
             return fs.readFileSync(filepath).toString();
