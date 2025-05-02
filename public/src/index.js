@@ -20,8 +20,7 @@ const navbar = generateNavbar(navbarContainer, pubsub);
 const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager (credentialContainer, pubsub);
 navbar.render();
-searchbar.build("searchbar", "search for tags or users...");
-searchbar.render();
+searchbar.render("searchbar", "search for tags or users...");
 credential.renderLogin();
 
 

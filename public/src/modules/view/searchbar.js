@@ -1,12 +1,7 @@
 export const generateSearchbar = (parentElement, pubsub) => {
-    let id, placeholder;
 
-    const searchbar = {
-        build: (inputId, inputPlaceholder) => {
-            id = inputId;
-            placeholder = inputPlaceholder;
-        },
-        render: () => {
+    return {
+        render: (id,placeholder) => {
             let html = `<p class="control has-icons-left has-icons-right" id="$IDContainer">
 							<input class="input" type="text" placeholder="$PLACEHOLDER" id="$ID">
 							<span class="icon is-left clickableIcon" id="$IDSearch">
@@ -50,15 +45,5 @@ export const generateSearchbar = (parentElement, pubsub) => {
                 }
             };
         },
-        changeVisibility: (visibility) => {
-            if (visibility) {
-                document.getElementById(id + "Container").classList.remove("is-hidden");
-            }
-            else {
-                document.getElementById(id + "Container").classList.add("is-hidden");
-            }
-        }
     };
-
-    return searchbar;
 };
