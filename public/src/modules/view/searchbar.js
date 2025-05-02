@@ -7,17 +7,15 @@ export const generateSearchbar = (parentElement, pubsub) => {
             placeholder = inputPlaceholder;
         },
         render: () => {
-            let html = `
-                        <p class="control has-icons-left has-icons-right" id="${id}Container">
-                            <input class="input" type="text" placeholder="${placeholder}" id="${id}">
-                            <span class="icon is-left clickableIcon" id="${id}Search">
-                                <i class="fas fa-search"></i>
-                            </span>
-                            <span class="icon is-right clickableIcon" id="${id}CancelSearch">
-                                <i class="fa-solid fa-xmark"></i>
-                            </span>							
-                        </p>`;
-
+            let html = `<p class="control has-icons-left has-icons-right" id="$IDContainer">
+							<input class="input" type="text" placeholder="$PLACEHOLDER" id="$ID">
+							<span class="icon is-left clickableIcon" id="$IDSearch">
+								<i class="fas fa-search"></i>
+							</span>
+							<span class="icon is-right clickableIcon" id="$IDCancelSearch">
+								<i class="fa-solid fa-xmark"></i>
+							</span>
+						</p>`.replaceAll("$ID", id).replace("$PLACEHOLDER", placeholder);
             parentElement.innerHTML = html;
 
             const searchBar = document.getElementById(id);
@@ -29,6 +27,7 @@ export const generateSearchbar = (parentElement, pubsub) => {
             };
             searchBar.addEventListener("keydown", (event) => {
                 if (event.key === "Enter" && searchBar.value) {
+                    searchBar.value = "";
                     pubsub.publish(id + "-onsearch", searchBar.value);
                 }
             });
@@ -46,6 +45,7 @@ export const generateSearchbar = (parentElement, pubsub) => {
             
             searchIcon.onclick = () => {
                 if (searchBar.value) {
+                    searchBar.value = "";
                     pubsub.publish(id + "-onsearch", searchBar.value);
                 }
             };

@@ -7,6 +7,11 @@ html {
     max-width: 50vh !important;
 }
 
+.icon {
+    pointer-events: all !important;
+    cursor: pointer !important;
+}
+
 @media (max-width: 768px) {
     .modal-content {
         max-width: 40vh !important;
