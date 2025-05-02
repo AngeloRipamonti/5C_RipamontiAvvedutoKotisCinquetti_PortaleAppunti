@@ -1,9 +1,14 @@
-module.exports = function middleware() {
+module.exports = function middleware(pubsub) {
     return {
+        register: async function(email, username, password) {
+            return await pubsub.publish("databaseRegisterAccount", {
+                email: email,
+                username: username,
+                password: password
+            });
+        },
         login: function(username, password) {
         
-        },
-        register: function(username, email) {
         },
         createDocument: function(title){
         },

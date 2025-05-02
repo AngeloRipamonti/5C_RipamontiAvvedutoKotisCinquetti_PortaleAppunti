@@ -8,7 +8,7 @@ module.exports = function mailerSender(config){
         } else {
             console.log('Your node mailer config is correct');
         }
-    })();
+    });
     //transporter.verify() 
 
     return {

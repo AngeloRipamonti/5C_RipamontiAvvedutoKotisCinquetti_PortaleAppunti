@@ -27,7 +27,7 @@ module.exports = function database() {
                             password_salt TEXT NOT NULL,
                             username VARCHAR(255) NOT NULL,
                             bio TEXT,
-                            path_thumbnail TEXT DEFAULT '/assets/images/default_profile.png'
+                            path_thumbnail VARCHAR(255) DEFAULT '/assets/images/default_profile.png'
                         );`),
                 db.execute(`CREATE TABLE IF NOT EXISTS follows_users(
                             email_parent VARCHAR(255),
@@ -94,6 +94,9 @@ module.exports = function database() {
                 throw err;
             });
             console.log("Database setup completato.");
+        },
+        registerUser: async function(email, password, password_salt, username) {
+            await db.execute(`INSERT INTO users (email, password, password_salt, username) VALUES (?, ?, ?, ?)`, [email, password, password_salt, username]);
         }
     }
 }

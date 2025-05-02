@@ -8,9 +8,9 @@ module.exports = function generatePubSub() {
             }
             events[eventName].push(callback);
         },
-        publish: (eventName, data) => {
+        publish: async (eventName, data) => {
             if (events[eventName]) {
-                events[eventName].forEach(callback => callback(data));
+                return Promise.all(events[eventName].map(callback => callback(data)));
             }
         }
     };
