@@ -1,16 +1,18 @@
-import {generatePostManager} from "./postManager.js";
+export const generateUser = (pubSub) => {
 
-export const generateUser = (parentElement, pubSub) => {
-
-    let postManager;
-    let thumnail;
-    let followers;
-    let follows;
-    let posts;
+   let userData;
+   let view;
     
     return{
-        render: function() {
+        loadProfile: function() {
+
+        },
+        follow: function (target){
+
+        },
+        unfollow: function (target){
 
         }
+
     }
 }

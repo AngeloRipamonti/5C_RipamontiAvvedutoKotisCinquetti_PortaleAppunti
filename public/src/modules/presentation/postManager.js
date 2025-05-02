@@ -1,12 +1,16 @@
 import {generateNote} from "./note.js";
 
-export const generatePostManager = (parentElement, pubSub) => {
+export const generatePostManager = (parentElement) => {
 
-    let notes;
+    let document;
+    let feed;
     
     return{
-        render: function() {
+        updateFeed: function() {
 
+        },
+        viewPost: function(){
+            
         }
     }
 }

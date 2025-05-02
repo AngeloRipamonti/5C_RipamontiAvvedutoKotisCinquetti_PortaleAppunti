@@ -1,18 +1,12 @@
 export const generateNote = (parentElement, pubSub) => {
 
-    let data;
+    let view;
     
     return{
         biuld: function() {
 
         },
-        renderFullScreen: function() {
-            
-        },
         export: function(type) {
-            
-        },
-        publish: function() {
             
         },
         archive: function() {
@@ -21,15 +15,8 @@ export const generateNote = (parentElement, pubSub) => {
         giveFeedback: function(start) {
             
         },
-        getAuthor: function() {
-            
-        },
         save: function() {
             
-        },
-        renderPreview: function() {
-            
         }
-
     }
 }
