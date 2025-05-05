@@ -1,4 +1,4 @@
-export const userData = (postManager, thumbnail, followers, follows, posts) => {
+export const generateUserData = (postManager, thumbnail, followers, follows, posts) => {
     return {
         getPostManager: () => postManager,
         getThumbnail: () => thumbnail,
