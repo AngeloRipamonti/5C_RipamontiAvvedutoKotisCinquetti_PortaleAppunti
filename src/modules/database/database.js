@@ -99,11 +99,7 @@ module.exports = function database() {
             await db.execute(`INSERT INTO users (email, password, password_salt, username) VALUES (?, ?, ?, ?);`, [email, password, password_salt, username]);
         },
         loginUser: async function(email) {
-<<<<<<< HEAD
-            return await db._get(`SELECT * FROM users WHERE email = ?;`, [email]);
-=======
             return await _get(`SELECT * FROM users WHERE email = ?;`, [email]);
->>>>>>> 829f04c74ff21059f37648273198be0d0b80465c
         },
         updateUserPassword: async function (email, password, password_salt) {
             await db.execute(`UPDATE users SET password = ?, password_salt = ? WHERE email = ?;`, [password, password_salt, email]);
@@ -121,11 +117,7 @@ module.exports = function database() {
             await db.execute(`DELETE FROM users WHERE email = ?;`, [email]);
         },
         getUser: async function (username){
-<<<<<<< HEAD
-            return await db._get(`SELECT username, bio, path_thumbnail FROM users WHERE username = ?;`, [username]);
-=======
             return await _get(`SELECT username, bio, path_thumbnail FROM users WHERE username = ?;`, [username]);
->>>>>>> 829f04c74ff21059f37648273198be0d0b80465c
         }
     }
 }
