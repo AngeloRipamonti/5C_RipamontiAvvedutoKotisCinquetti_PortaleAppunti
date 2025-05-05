@@ -1,5 +1,8 @@
-export const generateNote = (parentElement, pubSub) => {
+import { generateDocument } from "../model/document";
 
+export const generateNote = (pubSub) => {
+
+    let document;
     let view;
     
     return{

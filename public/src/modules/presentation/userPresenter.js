@@ -1,4 +1,4 @@
-export const generateUser = (pubSub) => {
+export const generateUserPresenter = (pubSub) => {
 
    let userData;
    let view;

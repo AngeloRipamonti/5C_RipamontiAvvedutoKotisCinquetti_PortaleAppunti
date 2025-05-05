@@ -1,4 +1,4 @@
-export const generatePostManager = (pubSub) => {
+export const generateUserSettingsPresenter = (pubSub) => {
 
     let userData;
     let view;

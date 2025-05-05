@@ -1,3 +1,5 @@
+import { generateDocument } from "../model/document";
+
 export const generateDocPresenter = () => {
 
     let document;
