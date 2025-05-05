@@ -20,7 +20,7 @@ module.exports = function fileManager() {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
             return path.join(process.cwd(), `/dist/assets/docx/${filename}`);
         },
-        saveInPdf: function (html, filename){
+        saveInPdf: function (html, filename) {
             htmlPdf.create(html, {
                 format: 'A4',
                 border: {
@@ -30,12 +30,12 @@ module.exports = function fileManager() {
                     left: '10mm'
                 }
             })
-            .toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
-                if (err) throw err; 
-                return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
-            });
+                .toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
+                    if (err) throw err;
+                    return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
+                });
         },
-        saveImage: function (img, filename){
+        saveImage: function (img, filename) {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${filename}`), Buffer.from(img));
             return path.join(process.cwd(), `/dist/assets/images/${filename}`);
         },
@@ -44,7 +44,7 @@ module.exports = function fileManager() {
         },
         importFromDocx: async function (filepath) {
             const result = await mammoth.convertToHtml({ path: filepath }, { styleMap: ["u => u"] });
-            return result.value; 
+            return result.value;
         }
     }
 }

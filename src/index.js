@@ -100,7 +100,7 @@ io.on('connection', (socket) => {
 /* PubSub */
 // Account
 pubsub.subscribe("databaseRegisterAccount", async (data) => {
-    try{
+    try {
         const psw = encrypter.encrypt(data.password);
         await database.registerUser(data.email, psw.hash, psw.salt, data.username);
         await mailer.send(data.email, "Welcome! Here Are Your Login Credentials", `Hi ${data.username},
@@ -124,99 +124,99 @@ Thanks and welcome aboard!
 The MindSharing Team`);
         return "Account created successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error creating account: ${err}`;
     }
 });
 pubsub.subscribe("databaseLoginAccount", async (data) => {
-    try{
+    try {
         const res = await database.loginUser(data.email);
         return encrypter.check(data.password, res.password, res.salt) ? res : "Credentials are incorrect!";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error logging in: ${err}`;
     }
 });
 pubsub.subscribe("databaseChangeUsername", async (data) => {
-    try{
+    try {
         await database.updateUserUsername(data.email, data.username);
         return "Username changed successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error changing username: ${err}`;
     }
 });
 pubsub.subscribe("databaseChangePassword", async (data) => {
-    try{
+    try {
         const psw = encrypter.encrypt(data.password);
         await database.updateUserPassword(data.email, psw.hash, psw.salt);
         return "Password changed successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error changing password: ${err}`;
     }
 });
 pubsub.subscribe("databaseChangeThumbnail", async (data) => {
-    try{
+    try {
         const thumbnail = fileManager.saveImage(data.thumbnail, `${uuidv4()}.png`); //estensione ? 
         await database.updateUserThumbnail(data.email, thumbnail);
         return "Thumbnail changed successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error changing thumbnail: ${err}`;
     }
 });
 pubsub.subscribe("databaseChangeBio", async (data) => {
-    try{
+    try {
         await database.updateUserBio(data.email, data.bio);
         return "Bio changed successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error changing bio: ${err}`;
     }
 });
 pubsub.subscribe("databaseDeleteAccount", async (data) => {
-    try{
+    try {
         await database.deleteUser(data.email);
         return "Account deleted successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error deleting account: ${err}`;
     }
 });
 pubsub.subscribe("databaseFindUser", async (data) => {
-    try{
+    try {
         const res = await database.getUser(data.username);
         return res;
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error finding user: ${err}`;
     }
 });
 pubsub.subscribe("databaseFollowUser", async (data) => {
-    try{
+    try {
         await database.followUser(data.email, data.username);
         return "Followed user successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error following user: ${err}`;
     }
 });
 pubsub.subscribe("databaseUnfollowUser", async (data) => {
-    try{
+    try {
         await database.unfollowUser(data.email, data.username);
         return "Unfollowed user successfully";
     }
-    catch(err){
+    catch (err) {
         console.error(err);
         return `Error unfollowing user: ${err}`;
     }

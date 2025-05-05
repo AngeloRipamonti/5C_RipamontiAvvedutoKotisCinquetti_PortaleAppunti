@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 
 module.exports = function database() {
     let db;
-    
+
     async function _query(sql, params) {
         return (await db.execute(sql, params))[0];
     }
@@ -95,10 +95,10 @@ module.exports = function database() {
             });
             console.log("Database setup completato.");
         },
-        registerUser: async function(email, password, password_salt, username) {
+        registerUser: async function (email, password, password_salt, username) {
             await db.execute(`INSERT INTO users (email, password, password_salt, username) VALUES (?, ?, ?, ?);`, [email, password, password_salt, username]);
         },
-        loginUser: async function(email) {
+        loginUser: async function (email) {
             return await _get(`SELECT * FROM users WHERE email = ?;`, [email]);
         },
         updateUserPassword: async function (email, password, password_salt) {
@@ -116,14 +116,14 @@ module.exports = function database() {
         deleteUser: async function (email) {
             await db.execute(`DELETE FROM users WHERE email = ?;`, [email]);
         },
-        getUser: async function (username){
+        getUser: async function (username) {
             return await _get(`SELECT username, bio, path_thumbnail FROM users WHERE username = ?;`, [username]);
         },
         followUser: async function (email, username) {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
             await db.execute(`INSERT INTO follows_users (email_parent, email_child) VALUES (?, ?);`, [email, email_child]);
         },
-        unfollowUser: async function (email, username){
+        unfollowUser: async function (email, username) {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
             await db.execute(`DELETE FROM follows_users WHERE email_parent = ? AND email_child = ?;`, [email, email_child]);
         }

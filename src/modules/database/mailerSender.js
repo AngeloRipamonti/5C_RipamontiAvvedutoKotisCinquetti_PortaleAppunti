@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-module.exports = function mailerSender(config){
+module.exports = function mailerSender(config) {
     const transporter = nodemailer.createTransport(config);
     transporter.verify((err, success) => {
         if (err) {

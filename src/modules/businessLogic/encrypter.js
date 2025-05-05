@@ -10,7 +10,7 @@ module.exports = function encrypter() {
     }
 
     return {
-        encrypt: function (password){
+        encrypt: function (password) {
             const salt = generateSalt(bytes);
             const hash = crypto.pbkdf2Sync(password, salt, iterations, keylen, algorithm).toString('hex');
             return {
