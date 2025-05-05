@@ -14,6 +14,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
             <div class="field is-grouped is-grouped-centered">
               <div class="control">
                 <input class="input" type="email" id="emailInput" placeholder="Email" required>
+                <input class="input" type="password" id="passwordInput" placeholder="Password" required>
               </div>
               <div class="control">
                 <button type="button" id="loginButton" class="button is-success">Login</button>
@@ -27,6 +28,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
     
       document.getElementById("loginButton").onclick = () => {
         const emailInput = document.getElementById("emailInput");
+        const passwordInput = document.getElementById("passwordInput");
         const errorArea = document.getElementById("error_area");
     
         if (!emailInput.checkValidity()) {
@@ -35,7 +37,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
         }
     
         errorArea.textContent = "";
-        pubSub.publish("isLogged", emailInput.value);
+        pubSub.publish("isLogged", [emailInput.value, passwordInput.value]);
       };
     },
 
@@ -93,6 +95,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
     
         errorArea.textContent = "";
         pubSub.publish("isRegisted", [usernameInput.value, emailInput.value]);
+        pubSub.publish("close-modal");
       };
     
       document.getElementById("closeModal").onclick = () => {

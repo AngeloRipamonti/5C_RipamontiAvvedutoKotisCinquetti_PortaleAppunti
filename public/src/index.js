@@ -36,6 +36,11 @@ pubsub.subscribe("sign-up", () => {
 pubsub.subscribe("close-modal", () => {
     credential.renderLogin();
 });
+//registrazione
 pubsub.subscribe("isRegisted", (data) => {
     middleware.register(data[0],data[1]);
+});
+//login
+pubsub.subscribe("isLogged", (data) => {
+    middleware.login(data[0], data[1]);
 });

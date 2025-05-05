@@ -2,7 +2,8 @@ export const generateMiddleware = (pubsub,socket) => {
     const events = {};
 
     return {
-        login : function(username,password) {
+        login : function(email,password) {
+            socket.emit("login", {email: email, password: password});
         },
 
         register : function(usr,mail) {
