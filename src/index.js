@@ -23,16 +23,16 @@ app.use("/node_modules", express.static(path.join(process.cwd(), "node_modules")
 app.use("/assets", express.static(path.join(process.cwd(), "assets")));
 
 // Declarations & Initializations
+const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config.json")));
+config.database.ssl.ca = fs.readFileSync(path.join(process.cwd(), "ca.pem"));
 const server = http.createServer(app);
 const io = new Server(server);
 const pubsub = generatePubSub();
 const middleware = generateMiddleware(pubsub);
-//const mailer = generateMailerSender(pubsub);
+const mailer = generateMailerSender(config.mail);
 const fileManager = generateFileManager(pubsub);
 const database = generateDatabase(pubsub);
 const encrypter = generateEncrypter(pubsub);
-const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config.json")));
-config.database.ssl.ca = fs.readFileSync(path.join(process.cwd(), "ca.pem"));
 
 // Start Server
 server.listen(5500, () => {
@@ -58,7 +58,25 @@ pubsub.subscribe("databaseRegisterAccount", async (data) => {
     try{
         const psw = encrypter.encrypt(data.password);
         await database.registerUser(data.email, psw.hash, psw.salt, data.username);
-        await mailer.sendMail(data.email, "Welcome to MindSharing", `Welcome to MindSharing, your account has been created successfully!\nHere is your password ${data.password}`);
+        await mailer.send(data.email, "Welcome! Here Are Your Login Credentials", `Hi ${data.username},
+
+Welcome to MindSharing!
+Your account has been created and you're ready to get started.
+
+Here are your login credentials:
+
+Email: ${data.email}
+Password: ${data.password}
+
+For your security, please change your password upon first login.
+
+You can access your account here:
+👉 https://www.mind-sharing.com/login
+
+If you did not request this account, please disregard this email.
+
+Thanks and welcome aboard!
+The MindSharing Team`);
         return "Account created successfully";
     }
     catch(err){

@@ -9,13 +9,12 @@ module.exports = function mailerSender(config){
             console.log('Your node mailer config is correct');
         }
     });
-    //transporter.verify() 
 
     return {
         send: async (email, subject, text) => {
             try {
                 return await transporter.sendMail({
-                    from: conf.auth.user,
+                    from: config.auth.user,
                     to: email,
                     subject: subject,
                     text: text
