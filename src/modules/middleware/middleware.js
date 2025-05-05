@@ -1,5 +1,6 @@
 module.exports = function middleware(pubsub) {
     return {
+        // Account
         register: async function(email, username, password) {
             return await pubsub.publish("databaseRegisterAccount", {
                 email: email,
@@ -7,14 +8,46 @@ module.exports = function middleware(pubsub) {
                 password: password
             });
         },
-        login: function(username, password) {
-        
+        login: async function(email, password) {
+            return await pubsub.publish("databaseLoginAccount", {
+                email: email,
+                password: password
+            });
         },
+        changeUsername: async function(email, username){
+            return await pubsub.publish("databaseChangeUsername", {
+                email: email,
+                username: username
+            });
+        },
+        changePassword: async function(email, password){
+            return await pubsub.publish("databaseChangePassword", {
+                email: email,
+                password: password
+            });
+        },
+        changeThumbnail: async function (img, email){
+            return await pubsub.publish("databaseChangeThumbnail", {
+                email: email,
+                thumbnail: img
+            });
+        },
+        changeBio: async function(bio, email){
+            return await pubsub.publish("databaseChangeBio", {
+                email: email,
+                bio: bio
+            });
+        },
+        deleteAccount: async function(email){
+            return await pubsub.publish("databaseDeleteAccount", { email: email });
+        },
+        getProfile: async function(username){
+            return await pubsub.publish("databaseFindUser", { username: username });
+        },
+
         createDocument: function(title){
         },
         saveDocument: function (title){
-        },
-        getProfile: function(username){
         },
         getDocument: function(title){
         },
@@ -29,16 +62,6 @@ module.exports = function middleware(pubsub) {
         importDocumentt: function(doc){
         },
         exportDocument: function(doc){
-        },
-        changeUsername: function(user){
-        },
-        changePassword: function(password){
-        },
-        changeThumbnail: function (img){
-        },
-        changeBio: function(bio){
-        },
-        deleteAccount: function(acc){
         },
         followAccount: function(acc, target){
         },

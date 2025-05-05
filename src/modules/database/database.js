@@ -25,7 +25,7 @@ module.exports = function database() {
                             email VARCHAR(255) PRIMARY KEY,
                             password TEXT NOT NULL,
                             password_salt TEXT NOT NULL,
-                            username VARCHAR(255) NOT NULL,
+                            username VARCHAR(255) NOT NULL UNIQUE,
                             bio TEXT,
                             path_thumbnail VARCHAR(255) DEFAULT '/assets/images/default_profile.png'
                         );`),
@@ -96,7 +96,28 @@ module.exports = function database() {
             console.log("Database setup completato.");
         },
         registerUser: async function(email, password, password_salt, username) {
-            await db.execute(`INSERT INTO users (email, password, password_salt, username) VALUES (?, ?, ?, ?)`, [email, password, password_salt, username]);
+            await db.execute(`INSERT INTO users (email, password, password_salt, username) VALUES (?, ?, ?, ?);`, [email, password, password_salt, username]);
+        },
+        loginUser: async function(email) {
+            return await db._get(`SELECT * FROM users WHERE email = ?;`, [email]);
+        },
+        updateUserPassword: async function (email, password, password_salt) {
+            await db.execute(`UPDATE users SET password = ?, password_salt = ? WHERE email = ?;`, [password, password_salt, email]);
+        },
+        updateUserUsername: async function (email, username) {
+            await db.execute(`UPDATE users SET username = ? WHERE email = ?;`, [username, email]);
+        },
+        updateUserThumbnail: async function (email, path_thumbnail) {
+            await db.execute(`UPDATE users SET path_thumbnail = ? WHERE email = ?;`, [path_thumbnail, email]);
+        },
+        updateUserBio: async function (email, bio) {
+            await db.execute(`UPDATE users SET bio = ? WHERE email = ?;`, [bio, email]);
+        },
+        deleteUser: async function (email) {
+            await db.execute(`DELETE FROM users WHERE email = ?;`, [email]);
+        },
+        getUser: async function (username){
+            return await db._get(`SELECT username, bio, path_thumbnail FROM users WHERE username = ?;`, [username]);
         }
     }
 }

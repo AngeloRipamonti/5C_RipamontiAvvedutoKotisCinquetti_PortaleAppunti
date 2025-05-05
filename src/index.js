@@ -43,17 +43,54 @@ server.listen(5500, () => {
 io.on('connection', (socket) => {
     console.log("Socket Connected: " + socket.id);
 
+    // Account
     socket.on("register", async (values) => {
         const res = await middleware.register(values.email, values.username, uuidv4())
         socket.emit("register", res);
-    } );
+    });
+
+    socket.on("login", async (values) => {
+        const res = await middleware.login(values.email, values.password);
+        socket.emit("login", res);
+    });
+
+    socket.on("changeUsername", async (values) => {
+        const res = await middleware.changeUsername(values.email, values.username);
+        socket.emit("changeUsername", res);
+    });
+
+    socket.on("changePassword", async (values) => {
+        const res = await middleware.changePassword(values.email, values.password);
+        socket.emit("changePassword", res);
+    });
+
+    socket.on("changeThumbnail", async (values) => {
+        const res = await middleware.changeThumbnail(values.img, values.email);
+        socket.emit("changeThumbnail", res);
+    });
+
+    socket.on("changeBio", async (values) => {
+        const res = await middleware.changeBio(values.bio, values.email);
+        socket.emit("changeBio", res);
+    });
+
+    socket.on("deleteAccount", async (values) => {
+        const res = await middleware.deleteAccount(values.email);
+        socket.emit("deleteAccount", res);
+    });
+
+    socket.on("getProfile", async (values) => {
+        const res = await middleware.getProfile(values.username);
+        socket.emit("getProfile", res);
+    });
 
     socket.on("disconnect", () => {
         console.log("socket disconnected: " + socket.id);
     });
 });
 
-// PubSub 
+/* PubSub */
+// Account
 pubsub.subscribe("databaseRegisterAccount", async (data) => {
     try{
         const psw = encrypter.encrypt(data.password);
@@ -82,5 +119,77 @@ The MindSharing Team`);
     catch(err){
         console.error(err);
         return `Error creating account: ${err}`;
+    }
+});
+pubsub.subscribe("databaseLoginAccount", async (data) => {
+    try{
+        const res = await database.loginUser(data.email);
+        return encrypter.check(data.password, res.password, res.salt) ? res : "Credentials are incorrect!";
+    }
+    catch(err){
+        console.error(err);
+        return `Error logging in: ${err}`;
+    }
+});
+pubsub.subscribe("databaseChangeUsername", async (data) => {
+    try{
+        await database.updateUserUsername(data.email, data.username);
+        return "Username changed successfully";
+    }
+    catch(err){
+        console.error(err);
+        return `Error changing username: ${err}`;
+    }
+});
+pubsub.subscribe("databaseChangePassword", async (data) => {
+    try{
+        const psw = encrypter.encrypt(data.password);
+        await database.updateUserPassword(data.email, psw.hash, psw.salt);
+        return "Password changed successfully";
+    }
+    catch(err){
+        console.error(err);
+        return `Error changing password: ${err}`;
+    }
+});
+pubsub.subscribe("databaseChangeThumbnail", async (data) => {
+    try{
+        const thumbnail = fileManager.saveImage(data.thumbnail, `${uuidv4()}.png`); //estensione ? 
+        await database.updateUserThumbnail(data.email, thumbnail);
+        return "Thumbnail changed successfully";
+    }
+    catch(err){
+        console.error(err);
+        return `Error changing thumbnail: ${err}`;
+    }
+});
+pubsub.subscribe("databaseChangeBio", async (data) => {
+    try{
+        await database.updateUserBio(data.email, data.bio);
+        return "Bio changed successfully";
+    }
+    catch(err){
+        console.error(err);
+        return `Error changing bio: ${err}`;
+    }
+});
+pubsub.subscribe("databaseDeleteAccount", async (data) => {
+    try{
+        await database.deleteUser(data.email);
+        return "Account deleted successfully";
+    }
+    catch(err){
+        console.error(err);
+        return `Error deleting account: ${err}`;
+    }
+});
+pubsub.subscribe("databaseFindUser", async (data) => {
+    try{
+        const res = await database.getUser(data.username);
+        return res;
+    }
+    catch(err){
+        console.error(err);
+        return `Error finding user: ${err}`;
     }
 });
