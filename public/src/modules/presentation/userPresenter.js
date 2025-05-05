@@ -1,3 +1,5 @@
+import {generateUserData} from "../model/userData";
+
 export const generateUserPresenter = (pubSub) => {
 
    let userData;

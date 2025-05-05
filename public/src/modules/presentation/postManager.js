@@ -1,7 +1,5 @@
 import { generateDocument } from "../model/document";
 
-import {generateNote} from "./note.js";
-
 export const generatePostManager = (parentElement) => {
 
     let document;
