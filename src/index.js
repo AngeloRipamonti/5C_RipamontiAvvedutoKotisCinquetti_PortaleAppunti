@@ -32,6 +32,7 @@ const middleware = generateMiddleware(pubsub);
 const mailer = generateMailerSender(config.mail);
 const fileManager = generateFileManager(pubsub);
 const database = generateDatabase(pubsub);
+database.setup(config.database);
 const encrypter = generateEncrypter(pubsub);
 
 // Start Server
