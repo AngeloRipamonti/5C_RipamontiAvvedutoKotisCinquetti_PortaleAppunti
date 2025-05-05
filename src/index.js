@@ -84,9 +84,17 @@ io.on('connection', (socket) => {
         socket.emit("getProfile", res);
     });
 
-    socket.on("disconnect", () => {
-        console.log("socket disconnected: " + socket.id);
+    socket.on("followAccount", async (values) => {
+        const res = await middleware.followAccount(values.email, values.username);
+        socket.emit("followAccount", res);
     });
+
+    socket.on("unfollowAccount", async (values) => {
+        const res = await middleware.unfollowAccount(values.email, values.username);
+        socket.emit("unfollowAccount", res);
+    });
+
+    socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
 });
 
 /* PubSub */
@@ -191,5 +199,25 @@ pubsub.subscribe("databaseFindUser", async (data) => {
     catch(err){
         console.error(err);
         return `Error finding user: ${err}`;
+    }
+});
+pubsub.subscribe("databaseFollowUser", async (data) => {
+    try{
+        await database.followUser(data.email, data.username);
+        return "Followed user successfully";
+    }
+    catch(err){
+        console.error(err);
+        return `Error following user: ${err}`;
+    }
+});
+pubsub.subscribe("databaseUnfollowUser", async (data) => {
+    try{
+        await database.unfollowUser(data.email, data.username);
+        return "Unfollowed user successfully";
+    }
+    catch(err){
+        console.error(err);
+        return `Error unfollowing user: ${err}`;
     }
 });

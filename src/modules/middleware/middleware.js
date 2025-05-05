@@ -44,6 +44,18 @@ module.exports = function middleware(pubsub) {
         getProfile: async function(username){
             return await pubsub.publish("databaseFindUser", { username: username });
         },
+        followAccount: async function(email, username){
+            return await pubsub.publish("databaseFollowUser", {
+                email: email,
+                username: username
+            });
+        },
+        unfollowAccount: async function(email, username){
+            return await pubsub.publish("databaseUnfollowUser", {
+                email: email,
+                username: username
+            });
+        },
 
         createDocument: function(title){
         },
@@ -62,10 +74,6 @@ module.exports = function middleware(pubsub) {
         importDocumentt: function(doc){
         },
         exportDocument: function(doc){
-        },
-        followAccount: function(acc, target){
-        },
-        unfollowAccount: function(acc, target){
         },
         createTag: function(tag){
         }
