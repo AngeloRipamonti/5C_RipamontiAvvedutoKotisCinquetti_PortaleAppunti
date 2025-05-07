@@ -7,12 +7,15 @@ import { generateSearchbar } from "./modules/view/searchbar.js";
 import { generateMiddleware } from "./modules/middleware/middleware.js";
 import io from "/node_modules/socket.io/client-dist/socket.io.esm.min.js";
 import { generateDocPresenter } from "./modules/presentation/createDocPresenter.js";
+import { generateDocumentCreation } from "./modules/view/documentCreation.js";
+import { generateDocument } from "./modules/model/document.js";
 
 //Container objects
 const navbarContainer = document.getElementById("navbar-container");
 const credentialContainer = document.getElementById("credential-container");
 const pages = document.querySelector(".pages");
 const searchbarContainer = document.getElementById("searchbar-container");
+const editor = document.querySelector("#editor");
 
 //pubSub and Navigator
 const pubsub = generatePubSub();
@@ -28,6 +31,8 @@ navbar.render();
 searchbar.render("searchbar", "search for tags or users...");
 //Login
 credential.renderLogin();
+const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null),generateDocumentCreation(editor, pubsub));
+createDocument.render();
 
 //Apertura e Chiusura della modale di registrazione
 pubsub.subscribe("sign-up", () => {

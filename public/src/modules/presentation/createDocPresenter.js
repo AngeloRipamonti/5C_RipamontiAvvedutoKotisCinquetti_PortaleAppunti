@@ -1,13 +1,5 @@
-//import { generateDocument } from "/public/src/modules/model/document.js";
-
-export const generateDocPresenter = () => {
-  let document;
-  let quill;
-  let view;
-
-  return {
-    render: function () {
-      quill = new Quill("#editor", {
+export const generateDocPresenter = (document,view) => {
+    const quill = new Quill("#editor", {
         modules: {
           toolbar: [
             [
@@ -21,7 +13,14 @@ export const generateDocPresenter = () => {
         placeholder: "Write something...",
         theme: "snow",
       });
+
+  return {
+
+    render: function () {
+      view.render();
     },
-    import: function () {},
+    import: function () {
+
+    },
   };
 };
