@@ -1,14 +1,12 @@
 //Importations
+import io from "/node_modules/socket.io/client-dist/socket.io.esm.min.js";
 import { generateNavbar } from "./modules/view/navbar.js";
 import { generatePubSub } from "./modules/middleware/pubsub.js";
 import { generateNavigator } from "./modules/view/navigator.js";
 import { generateCredentialManager } from "./modules/view/credentialManager.js";
 import { generateSearchbar } from "./modules/view/searchbar.js";
 import { generateMiddleware } from "./modules/middleware/middleware.js";
-import io from "/node_modules/socket.io/client-dist/socket.io.esm.min.js";
-import { generateDocPresenter } from "./modules/presentation/createDocPresenter.js";
-import { generateDocumentCreation } from "./modules/view/documentCreation.js";
-import { generateDocument } from "./modules/model/document.js";
+import { generateUserData } from "./modules/model/userData.js";
 
 //Container objects
 const navbarContainer = document.getElementById("navbar-container");
@@ -25,14 +23,15 @@ const navigator = generateNavigator(pages, pubsub);
 const navbar = generateNavbar(navbarContainer, pubsub);
 const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager (credentialContainer, pubsub);
+let user;
 const socket = io();
 const middleware = generateMiddleware(pubsub, socket);
 navbar.render();
 searchbar.render("searchbar", "search for tags or users...");
 //Login
 credential.renderLogin();
-const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null),generateDocumentCreation(editor, pubsub));
-createDocument.render();
+//const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null),generateDocumentCreation(editor, pubsub));
+//createDocument.render();
 
 //Apertura e Chiusura della modale di registrazione
 pubsub.subscribe("sign-up", () => {
@@ -49,3 +48,9 @@ pubsub.subscribe("isRegisted", (data) => {
 pubsub.subscribe("isLogged", (data) => {
     middleware.login(data[0], data[1]);
 });
+
+/* Sockets */
+socket.on("login", (data) => {
+    user = generateUserData(null, data.username, data.email, data.password, data.bio, data.path_thumbnail);
+    location.href = "#feed";
+})

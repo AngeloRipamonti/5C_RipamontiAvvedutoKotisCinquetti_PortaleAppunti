@@ -138,7 +138,8 @@ The MindSharing Team`);
 pubsub.subscribe("databaseLoginAccount", async (data) => {
     try {
         const res = await database.loginUser(data.email);
-        return encrypter.check(data.password, res.password, res.salt) ? res : "Credentials are incorrect!";
+        const {password, password_salt, ...user} = res;
+        return encrypter.check(data.password, res.password_salt, res.password) ? user : "Credentials are incorrect!";
     }
     catch (err) {
         console.error(err);

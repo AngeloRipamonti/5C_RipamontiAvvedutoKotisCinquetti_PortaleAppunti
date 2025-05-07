@@ -1,9 +1,13 @@
-export const generateUserData = (postManager, thumbnail, followers, follows, posts) => {
+export const generateUserData = (postManager, email, username, bio, thumbnail) => {
     return {
         getPostManager: () => postManager,
+        getEmail: () => email,
+        getUsername: () => username,
+        getBio: () => bio,
         getThumbnail: () => thumbnail,
-        getFollowers: () => followers,
-        getFollows: () => follows,
-        getPosts: () => posts,
+
+        getFollowers: () => followers, // pubsub richiedi database conteggio
+        getFollows: () => follows, // pubsub richiedi database conteggio
+        getPosts: () => posts, // pubsub richiedi database tutti post author he
     }
 }
