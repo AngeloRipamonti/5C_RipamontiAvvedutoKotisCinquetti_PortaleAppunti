@@ -1,15 +1,13 @@
-import { generateDocument } from "../model/document";
-
-export const generatePostManager = (parentElement) => {
-
-    let document;
-    let feed;
-    
+export const generatePostManager = (pubsub,documents,feed) => {
+    pubsub.subscribe("newVote", (post, vote) => {
+        votePost(post,vote);
+        updateFeed();
+    });
     return{
         updateFeed: function() {
-
+            feed.render(documents);
         },
-        viewPost: function(){
+        votePost: function(post, vote){
             
         }
     }

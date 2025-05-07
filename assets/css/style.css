@@ -3,6 +3,16 @@ html {
     height: 100%;
 }
 
+.vote-wrapper {
+    display: flex !important;
+    place-items: center !important;
+    gap: 10px;
+}
+
+#vote-button {
+    border: 0 !important;
+}
+
 .modal-content {
     max-width: 50vh !important;
     height: 60vh !important;
@@ -43,6 +53,11 @@ a.tab-doc {
 div#body-doc {
     width: 100% !important;
     height: 100% !important;
+}
+
+div.post {
+    width: 40vw;
+    height: 40vh;
 }
 
 @media (max-width: 768px) {

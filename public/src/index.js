@@ -10,6 +10,8 @@ import { generateUserData } from "./modules/model/userData.js";
 import { generateDocument } from "./modules/model/document.js";
 import { generateDocumentCreation } from "./modules/view/documentCreation.js";
 import { generateDocPresenter } from "./modules/presentation/createDocPresenter.js";
+import { generateFeed } from "./modules/view/feed.js";
+import { generatePostManager } from "./modules/presentation/postManager.js"
 
 location.href = "#feed"; //se loggati altrimenti #entry
 
@@ -20,6 +22,7 @@ const pages = document.querySelector(".pages");
 const searchbarContainer = document.getElementById("searchbar-container");
 const editor = document.querySelector("#editor");
 const creation = document.getElementById("creation-start");
+const feedContainer = document.getElementById("posts");
 
 //pubSub and Navigator
 const pubsub = generatePubSub();
@@ -30,6 +33,8 @@ const navbar = generateNavbar(navbarContainer, pubsub);
 const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager (credentialContainer, pubsub);
 const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null), generateDocumentCreation(creation, pubsub));
+const feedManager = generatePostManager(pubsub,[generateDocument(null,null,null,null,"Luke",5)],generateFeed(feedContainer,pubsub));
+feedManager.updateFeed();
 let user;
 const socket = io();
 const middleware = generateMiddleware(pubsub, socket);
