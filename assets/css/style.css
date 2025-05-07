@@ -7,6 +7,17 @@ html {
     max-width: 50vh !important;
 }
 
+div#credential-container {
+    width: 100vw !important;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+}
+
+#credential-container input {
+    margin-bottom: 5% !important;
+}
+
 .icon {
     pointer-events: all !important;
     cursor: pointer !important;

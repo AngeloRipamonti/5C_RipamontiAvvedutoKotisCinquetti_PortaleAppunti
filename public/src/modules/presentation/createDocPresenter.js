@@ -1,17 +1,27 @@
-import { generateDocument } from "../model/document";
+//import { generateDocument } from "/public/src/modules/model/document.js";
 
 export const generateDocPresenter = () => {
+  let document;
+  let quill;
+  let view;
 
-    let document;
-    let quill;
-    let view;
-    
-    return{
-        render: function() {
-
+  return {
+    render: function () {
+      quill = new Quill("#editor", {
+        modules: {
+          toolbar: [
+            [
+              {
+                header: [1, 2, false],
+              },
+            ],
+            ["bold", "italic", "underline"],
+          ],
         },
-        import: function (){
-            
-        }
-    }
-}
+        placeholder: "Write something...",
+        theme: "snow",
+      });
+    },
+    import: function () {},
+  };
+};

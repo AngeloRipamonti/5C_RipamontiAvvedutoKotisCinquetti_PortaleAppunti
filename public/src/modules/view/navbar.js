@@ -31,18 +31,9 @@ export function generateNavbar(parentElement, pubsub) {
       logo: true,
       right: [
         '<img src="/assets/images/favicon.ico" id="logo">',
-        "<h3>Mind Sharing</h3>",
+        "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
-        `<p class="control has-icons-left has-icons-right">
-                <input class="input" type="text" placeholder="Search for notes..." id="$searchBar">
-                <span class="icon is-left clickableIcon" id="$search-icon">
-                    <i class="fas fa-search"></i>
-                </span>
-                <span class="icon is-right clickableIcon" id="search-cancel-icon">
-                    <i class="fa-solid fa-xmark"></i>
-                </span>
-            </p>`,
         "<button class='button is-white u-icon'>User Icon</button>",
       ],
     },
@@ -53,7 +44,8 @@ export function generateNavbar(parentElement, pubsub) {
     },
   };
 
-  let index = "entry";
+  let index = new URL(location.href).hash.replace("#","") || "entry";
+  console.log(index)
 
   const endTemplate = `
        <div class="navbar-item">
@@ -105,7 +97,7 @@ export function generateNavbar(parentElement, pubsub) {
               </nav>
           `;
 
-      document.getElementById("register").onclick = () => {
+      if(index === "entry") document.getElementById("register").onclick = () => {
         pubsub.publish("sign-up");
       };
 
