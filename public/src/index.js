@@ -11,6 +11,8 @@ import { generateDocument } from "./modules/model/document.js";
 import { generateDocumentCreation } from "./modules/view/documentCreation.js";
 import { generateDocPresenter } from "./modules/presentation/createDocPresenter.js";
 
+location.href = "#feed"; //se loggati altrimenti #entry
+
 //Container objects
 const navbarContainer = document.getElementById("navbar-container");
 const credentialContainer = document.getElementById("credential-container");
