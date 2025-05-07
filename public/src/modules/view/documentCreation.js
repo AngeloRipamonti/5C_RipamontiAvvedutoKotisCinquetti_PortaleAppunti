@@ -12,13 +12,14 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
             <div class="modal is-active" id="md">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <div class="tabs is-centered">
+             <h1 id="header" class="title has-text-centered">From zero to hero!</h1>
+                <div class="tabs is-centered is-toggle is-toggle-rounded">
                     <ul>
                         <li class="is-active"><a class="tab-doc" id="upload-doc">Upload a document</a></li>
                         <li><a class="tab-doc" id="blank-doc">Start from zero</a></li>
                     </ul>
                 </div>
-                <div id="body-doc" style="background-color:rgba(225,255,255,1) !important;">
+                <div id="body-doc" class="section has-text-centered" style="background-color:rgba(255,255,255,1) !important;">
                 <div class="file has-name">
                     <label class="file-label">
                         <input class="file-input" type="file" accept=".docx,.doc" />
@@ -26,11 +27,12 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                         <span class="file-icon">
                             <i class="fas fa-upload"></i>
                         </span>
-                        <span class="file-label"> Choose a file… </span>
+                        <span class="file-label">Choose a file…</span>
                         </span>
+                        <span class="file-name" style="color: black !important;">Just docx</span>
                     </label>
                     </div>                            
-                    <button type="button" class="button is-white" id="submit-doc">SUBMIT</button>
+                    <button type="button" class="button is-link" id="submit-doc">SUBMIT</button>
                 </div>
             </div>
             <button class="modal-close is-large" id="md-close"></button>
@@ -44,6 +46,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                 location.href = "#personal";
             });            
             const nodes = document.querySelectorAll(".tab-doc");
+            const header = document.getElementById("header");
             const body_doc = document.getElementById("body-doc");
             if(document.getElementById("submit-doc")) document.getElementById("submit-doc").onclick = () => pubSub.publish("doc-submit");
             nodes.forEach(element => {
@@ -52,22 +55,30 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                         nodes.forEach(e => e.parentNode.classList.remove("is-active"));
                         element.parentNode.classList.add("is-active");
                         if(element.id === "upload-doc"){
+                            header.innerText = "Upload a document";
                             body_doc.innerHTML = `
                             <div class="file has-name">
-                            <label class="file-label">
-                                <input class="file-input" type="file" accept=".docx,.doc" />
-                                <span class="file-cta">
-                                <span class="file-icon">
-                                    <i class="fas fa-upload"></i>
-                                </span>
-                                <span class="file-label"> Choose a file… </span>
-                                </span>
-                            </label>
-                            </div>                            
-                            <button type="button" class="button is-white" id="submit-doc">SUBMIT</button>`;
+                                <label class="file-label">
+                                    <input class="file-input" type="file" accept=".docx,.doc" />
+                                    <span class="file-cta">
+                                    <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="file-label">Choose a file…</span>
+                                    </span>
+                                    <span class="file-name" style="color: black !important;">Just docx</span>
+                                </label>
+                                </div>                            
+                                <button type="button" class="button is-link" id="submit-doc">SUBMIT</button>
+                            </div>                           
+                            `;
                         document.getElementById("submit-doc").onclick = () => pubSub.publish("doc-submit");
                         }else {
-                            body_doc.innerHTML = '<button type="button" class="button is-white" id="start-zero">Start from zero</button>';
+                            header.innerText = "From zero to hero!";
+                            body_doc.innerHTML = `
+                                <button type="button" class="button is-link" id="start-zero">Start from zero</button>
+                                <p style="color: black !important;">Start with a black file!</p>
+                                `;
                             document.getElementById("start-zero").onclick = () => pubSub.publish("zero-start");
                         }
                     }

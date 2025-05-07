@@ -5,6 +5,7 @@ html {
 
 .modal-content {
     max-width: 50vh !important;
+    height: 60vh !important;
 }
 
 div#credential-container {
@@ -26,8 +27,6 @@ div#credential-container {
     max-height: 100% !important;
 }
 
-
-
 .icon {
     pointer-events: all !important;
     cursor: pointer !important;
@@ -35,6 +34,15 @@ div#credential-container {
 
 .hide {
     display: none !important;
+}
+
+a.tab-doc {
+    color:white !important;
+}
+
+div#body-doc {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 @media (max-width: 768px) {
