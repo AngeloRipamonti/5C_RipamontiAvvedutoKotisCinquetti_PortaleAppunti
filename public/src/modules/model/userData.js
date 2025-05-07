@@ -9,5 +9,13 @@ export const generateUserData = (postManager, email, username, bio, thumbnail) =
         getFollowers: () => followers, // pubsub richiedi database conteggio
         getFollows: () => follows, // pubsub richiedi database conteggio
         getPosts: () => posts, // pubsub richiedi database tutti post author he
+
+        toString: () => {
+            return `Email: ${email}
+                    Username: ${username}
+                    Bio: ${bio}
+                    Thumbnail: ${thumbnail}
+                    PostManager: ${postManager}`;
+        }
     }
 }

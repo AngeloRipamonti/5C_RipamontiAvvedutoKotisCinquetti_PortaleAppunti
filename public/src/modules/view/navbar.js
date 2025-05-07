@@ -34,7 +34,7 @@ export function generateNavbar(parentElement, pubsub) {
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
-        "<button class='button is-white u-icon'>User Icon</button>",
+        "<button id='goProfile' class='button is-white u-icon'>User Icon</button>",
       ],
     },
     entry: {
@@ -44,8 +44,7 @@ export function generateNavbar(parentElement, pubsub) {
     },
   };
 
-  let index = new URL(location.href).hash.replace("#","") || "entry";
-  console.log(index)
+  let index = new URL(location.href).hash.replace("#", "") || "entry";
 
   const endTemplate = `
        <div class="navbar-item">
@@ -81,25 +80,25 @@ export function generateNavbar(parentElement, pubsub) {
                 <div id="navbarExampleTransparentExample" class="navbar-menu">
                     <div class="navbar-start">
                         ${data.right
-                          .map((e) => {
-                            return startTemplate.replace("%content%", e);
-                          })
-                          .join("")}
+          .map((e) => {
+            return startTemplate.replace("%content%", e);
+          })
+          .join("")}
                     </div>
                     <div class="navbar-end">
                         ${data.left
-                          .map((e) => {
-                            return endTemplate.replace("%content%", e);
-                          })
-                          .join("")}
+          .map((e) => {
+            return endTemplate.replace("%content%", e);
+          })
+          .join("")}
                     </div>
                 </div>
               </nav>
           `;
 
-      if(index === "entry") document.getElementById("register").onclick = () => {
-        pubsub.publish("sign-up");
-      };
+      if (index === "entry") document.getElementById("register").onclick = () => pubsub.publish("sign-up");
+      if (document.getElementById("goProfile")) document.getElementById("goProfile").onclick = () => location.href = "#personal";
+      if(document.getElementById("doc-creation")) document.getElementById("doc-creation").onclick = () => pubsub.publish("doc-creation");
 
       pubsub.subscribe("newHash", (page) => {
         build(page);

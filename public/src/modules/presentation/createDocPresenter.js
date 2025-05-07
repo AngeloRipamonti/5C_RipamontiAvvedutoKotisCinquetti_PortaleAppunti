@@ -22,5 +22,6 @@ export const generateDocPresenter = (document,view) => {
     import: function () {
 
     },
+    document: document,
   };
 };

@@ -9,8 +9,8 @@ export const generateMiddleware = (pubsub,socket) => {
         register : function(usr,mail) {
             socket.emit("register", {username:usr, email: mail});
         },
-        createDocument : function(title) {
-
+        createDocument : function(email) {
+            socket.emit("createDocument", { email });
         },
         saveDocument : function(title) {
 
