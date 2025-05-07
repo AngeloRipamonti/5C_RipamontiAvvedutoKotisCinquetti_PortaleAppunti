@@ -18,9 +18,23 @@ div#credential-container {
     margin-bottom: 5% !important;
 }
 
+#editor-wrapper {
+    height: 80vh !important;
+}
+
+#editor-wrapper > *{
+    max-height: 100% !important;
+}
+
+
+
 .icon {
     pointer-events: all !important;
     cursor: pointer !important;
+}
+
+.hide {
+    display: none !important;
 }
 
 @media (max-width: 768px) {

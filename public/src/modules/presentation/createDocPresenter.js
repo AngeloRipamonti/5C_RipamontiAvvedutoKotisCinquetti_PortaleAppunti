@@ -17,6 +17,7 @@ export const generateDocPresenter = (document,view) => {
   return {
 
     render: function () {
+      quill.root.blur();
       view.render();
     },
     import: function () {

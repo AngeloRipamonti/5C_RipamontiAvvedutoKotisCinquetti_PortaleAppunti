@@ -1,9 +1,9 @@
 export const generateDocumentCreation = (parentElement, pubSub) => {
     pubSub.subscribe("zero-start", () => {
+        console.log("dentro")
         const modal = document.getElementById("md");
         if(modal) modal.classList.remove("is-active");
-        console.log(document.getElementById("editor"))
-        if(document.getElementById("editor").classList.contains("hide")) document.getElementById("editor").classList.remove("hide");
+        if(document.getElementById("editor-wrapper").classList.contains("hide")) document.getElementById("editor-wrapper").classList.remove("hide");
     }
 );
     return{
@@ -40,6 +40,8 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
             console.log(document.getElementById("md"));
             document.getElementById("md-close").addEventListener("click", () => {
                 document.getElementById("md").classList.remove("is-active");
+                document.getElementById("editor-wrapper").classList.add("hide");
+                location.href = "#personal";
             });            
             const nodes = document.querySelectorAll(".tab-doc");
             const body_doc = document.getElementById("body-doc");
