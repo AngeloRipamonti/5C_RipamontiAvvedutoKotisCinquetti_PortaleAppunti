@@ -95,6 +95,7 @@ module.exports = function database() {
             });
             console.log("Database setup completato.");
         },
+        // Users
         registerUser: async function (email, password, password_salt, username) {
             await db.execute(`INSERT INTO users (email, password, password_salt, username) VALUES (?, ?, ?, ?);`, [email, password, password_salt, username]);
         },
@@ -126,6 +127,13 @@ module.exports = function database() {
         unfollowUser: async function (email, username) {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
             await db.execute(`DELETE FROM follows_users WHERE email_parent = ? AND email_child = ?;`, [email, email_child]);
+        },
+        // Notes
+        createNote: async function (path_note, author_email){
+            await db.execute("INSERT INTO notes (path_note, author_email) VALUES (?, ?);", [path_note, author_email]);
+        },
+        deleteNote: async function (id){
+            await db.execute("DELETE FROM notes WHERE id = ?;", [id]);
         }
     }
 }

@@ -56,23 +56,28 @@ module.exports = function middleware(pubsub) {
                 username: username
             });
         },
-
-        createDocument: function (title) {
+        // Document
+        createDocument: function (email) {
+            return pubsub.publish("databaseCreateDocument", { email: email });
+        },
+        deleteDocument: function (id) {
+            return pubsub.publish("databaseDeleteDocument", { id: id });
+        },
+        importDocument: function (document) {
+            
         },
         saveDocument: function (title) {
         },
         getDocument: function (title) {
         },
-        deleteDocument: function (title) {
-        },
+
         getDocTag: function (tag) {
         },
         getDocByAuthor: function (author) {
         },
         changeVisibility: function (doc) {
         },
-        importDocumentt: function (doc) {
-        },
+        
         exportDocument: function (doc) {
         },
         createTag: function (tag) {

@@ -95,6 +95,11 @@ io.on('connection', (socket) => {
         socket.emit("unfollowAccount", res);
     });
 
+    socket.on("createDocument", async (values) => {
+        const res = await middleware.createDocument(values.email);
+        socket.emit("createDocument", res)
+    })
+
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
 });
 
@@ -220,5 +225,22 @@ pubsub.subscribe("databaseUnfollowUser", async (data) => {
     catch (err) {
         console.error(err);
         return `Error unfollowing user: ${err}`;
+    }
+});
+// Document
+pubsub.subscribe("databaseCreateDocument", async (data) => {
+    try{
+        await database.createNote(path.join(process.cwd(), "/dist/assets/md", `${uuidv4()}.md`), data.email );
+    }
+    catch(err){
+        return "Error creating document " + err
+    }
+});
+pubsub.subscribe("databaseDeleteDocument", async (data) => {
+    try{
+        await database.deleteNote(data.id);
+    }
+    catch(err){
+        return "Error deleting document " + err
     }
 });
