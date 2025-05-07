@@ -17,6 +17,7 @@ const credentialContainer = document.getElementById("credential-container");
 const pages = document.querySelector(".pages");
 const searchbarContainer = document.getElementById("searchbar-container");
 const editor = document.querySelector("#editor");
+const creation = document.getElementById("creation-start");
 
 //pubSub and Navigator
 const pubsub = generatePubSub();
@@ -26,7 +27,7 @@ const navigator = generateNavigator(pages, pubsub);
 const navbar = generateNavbar(navbarContainer, pubsub);
 const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager (credentialContainer, pubsub);
-const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null), generateDocumentCreation(editor, pubsub));
+const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null), generateDocumentCreation(creation, pubsub));
 let user;
 const socket = io();
 const middleware = generateMiddleware(pubsub, socket);

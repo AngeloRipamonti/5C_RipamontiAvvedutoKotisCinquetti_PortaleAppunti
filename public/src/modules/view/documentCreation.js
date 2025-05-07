@@ -2,7 +2,8 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
     pubSub.subscribe("zero-start", () => {
         const modal = document.getElementById("md");
         if(modal) modal.classList.remove("is-active");
-        if(parentElement.classList.contains("hide")) parentElement.classList.remove("hide");
+        console.log(document.getElementById("editor"))
+        if(document.getElementById("editor").classList.contains("hide")) document.getElementById("editor").classList.remove("hide");
     }
 );
     return{
@@ -32,11 +33,14 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                     <button type="button" class="button is-white" id="submit-doc">SUBMIT</button>
                 </div>
             </div>
-            <button class="modal-close is-large" onclick="console.log("ciao");" id="md-close"></button>
+            <button class="modal-close is-large" id="md-close"></button>
             </div>
             `;
-            parentElement.innerHTML += html;
-            
+            parentElement.innerHTML = html;
+            console.log(document.getElementById("md"));
+            document.getElementById("md-close").addEventListener("click", () => {
+                document.getElementById("md").classList.remove("is-active");
+            });            
             const nodes = document.querySelectorAll(".tab-doc");
             const body_doc = document.getElementById("body-doc");
             if(document.getElementById("submit-doc")) document.getElementById("submit-doc").onclick = () => pubSub.publish("doc-submit");

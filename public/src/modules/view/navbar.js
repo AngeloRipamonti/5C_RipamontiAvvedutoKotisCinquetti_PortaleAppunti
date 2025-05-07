@@ -3,7 +3,7 @@ export function generateNavbar(parentElement, pubsub) {
     creation: {
       logo: true,
       right: [
-        '<img src="/assets/images/favicon.ico" id="logo">',
+        '<a href="#feed"><a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a></a>',
         "<h3>Mind Sharing</h3>",
       ],
       left: ["<h3>Document Creation</h3>"],
@@ -16,7 +16,7 @@ export function generateNavbar(parentElement, pubsub) {
       ],
       left: [
         "<button class='button is-white' id='u-settings'> <i class='fa fa-gear'></i> </button>",
-        "<button class='button is-rounded' id='doc-creation'>+</button>",
+        `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`
       ],
     },
     accounts: {
@@ -30,7 +30,7 @@ export function generateNavbar(parentElement, pubsub) {
     feed: {
       logo: true,
       right: [
-        '<img src="/assets/images/favicon.ico" id="logo">',
+        '<a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a>',
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
@@ -39,7 +39,7 @@ export function generateNavbar(parentElement, pubsub) {
     },
     entry: {
       logo: true,
-      right: ['<img src="/assets/images/favicon.ico" id="logo">'],
+      right: ['<a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a>'],
       left: ["<button class='button is-white' id='register'>Sign Up</button>"],
     },
   };
@@ -98,7 +98,10 @@ export function generateNavbar(parentElement, pubsub) {
 
       if (index === "entry") document.getElementById("register").onclick = () => pubsub.publish("sign-up");
       if (document.getElementById("goProfile")) document.getElementById("goProfile").onclick = () => location.href = "#personal";
-      if(document.getElementById("doc-creation")) document.getElementById("doc-creation").onclick = () => pubsub.publish("doc-creation");
+      if(document.getElementById("doc-creation")) document.getElementById("doc-creation").onclick = () => {
+        pubsub.publish("doc-creation");
+        document.getElementById("md").classList.add("is-active");
+      }
 
       pubsub.subscribe("newHash", (page) => {
         build(page);
