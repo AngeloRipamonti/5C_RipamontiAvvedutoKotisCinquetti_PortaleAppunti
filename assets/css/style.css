@@ -3,6 +3,19 @@ html {
     height: 100%;
 }
 
+#body-pub > * {
+    margin-bottom: 1rem;
+}
+
+#search-result {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #dbdbdb;
+    padding: 0.5rem;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
 .preview {
     max-width: 100%;
     max-height: auto;
@@ -62,9 +75,13 @@ a.tab-doc {
     color:white !important;
 }
 
-div#body-doc {
+div#body-doc, div#body-pub {
     width: 100% !important;
     height: 100% !important;
+}
+
+div#body-pub {
+    margin-top: 1%;
 }
 
 div.post {

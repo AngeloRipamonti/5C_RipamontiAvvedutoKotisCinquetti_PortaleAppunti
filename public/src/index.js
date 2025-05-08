@@ -12,6 +12,8 @@ import { generateDocumentCreation } from "./modules/view/documentCreation.js";
 import { generateDocPresenter } from "./modules/presentation/createDocPresenter.js";
 import { generateFeed } from "./modules/view/feed.js";
 import { generatePostManager } from "./modules/presentation/postManager.js"
+import { generatePublisher } from "./modules/presentation/publisher.js";
+import { generateViewPublisher } from "./modules/view/viewPublisher.js";
 
 location.href = "#entry"; //se loggati #feed
 
@@ -23,6 +25,7 @@ const searchbarContainer = document.getElementById("searchbar-container");
 const editor = document.querySelector("#editor");
 const creation = document.getElementById("creation-start");
 const feedContainer = document.getElementById("posts");
+const publisherContainer = document.getElementById("publisher");
 
 //pubSub and Navigator
 const pubsub = generatePubSub();
@@ -89,4 +92,6 @@ socket.on("importDocument", ([data])=> {
 /* Callback */
 document.getElementById("saveDocument").onclick = () => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
+    const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
+    document.getElementById("publish-modal").classList.add("is-active");
 };
