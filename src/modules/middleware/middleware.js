@@ -63,8 +63,12 @@ module.exports = function middleware(pubsub) {
         deleteDocument: function (id) {
             return pubsub.publish("databaseDeleteDocument", { id: id });
         },
-        importDocument: function (document) {
-            
+        importDocument: async function (fileName, fileData, author_email) {
+            return await pubsub.publish("databaseImportDocument", { 
+                fileName: fileName,
+                fileData: fileData,
+                author_email: author_email
+            });
         },
         saveDocument: function (title) {
         },

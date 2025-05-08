@@ -11,6 +11,12 @@ module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/images`)) fs.mkdirSync(`${process.cwd()}/dist/assets/images`, { recursive: true });
 
     return {
+        saveWord: function (fileData, fileName){
+            const bufferData = Buffer.from(fileData); 
+            fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
+            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${fileName}`), bufferData);
+            return path.join(process.cwd(), `/dist/assets/docx/${fileName}`);
+        },
         saveInMd: function (html, filename) {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/md/${filename}`), html);
             return path.join(process.cwd(), `/dist/assets/md/${filename}`);

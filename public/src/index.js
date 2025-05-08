@@ -70,8 +70,6 @@ pubsub.subscribe("zero-start", () => {
     })
 });
 pubsub.subscribe('uploadFile', file => {
-    console.log("entro pbsb")
-
     file.author_email = user.getEmail();
     middleware.importDocument(file)
 });
@@ -81,4 +79,7 @@ pubsub.subscribe('uploadFile', file => {
 socket.on("login", ([data]) => {
     user = generateUserData(null, data.email, data.username, data.bio, data.path_thumbnail);
     location.href = "#feed";
-})
+});
+socket.on("importDocument", (data)=> {
+    console.log(data);
+});

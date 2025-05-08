@@ -101,8 +101,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("importDocument", async (values) => {
-        console.log(values);
-        //const res = await middleware.importDocument();
+        const res = await middleware.importDocument(values.fileName, values.fileData, values.author_email);
         socket.emit("importDocument", res);
     });
 
@@ -252,5 +251,20 @@ pubsub.subscribe("databaseDeleteDocument", async (data) => {
     }
     catch(err){
         return "Error deleting document " + err
+    }
+});
+pubsub.subscribe("databaseImportDocument", async (data) => {
+    try{
+        const path_note = fileManager.saveWord(data.fileData, data.fileName);
+        console.log(path_note)
+        await database.createNote(path_note, data.author_email );
+        const res = await database.findNote(path_note);
+        console.log(res);
+        res.text = await fileManager.importFromDocx(path_note);
+        return res; 
+    }
+    catch(err){
+        console.error(err);
+        return "Error importing document " + err
     }
 });

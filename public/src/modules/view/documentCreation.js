@@ -1,6 +1,5 @@
 export const generateDocumentCreation = (parentElement, pubSub) => {
     pubSub.subscribe("zero-start", () => {
-        console.log("dentro")
         const modal = document.getElementById("md");
         if (modal) modal.classList.remove("is-active");
         if (document.getElementById("editor-wrapper").classList.contains("hide")) document.getElementById("editor-wrapper").classList.remove("hide");
@@ -22,7 +21,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                 <div id="body-doc" class="section has-text-centered" style="background-color:rgba(255,255,255,1) !important;">
                 <div class="file has-name">
                     <label class="file-label">
-                        <input class="file-input" type="file" accept=".docx,.doc" />
+                        <input id="file-input" class="file-input" type="file" accept=".docx,.doc" />
                         <span class="file-cta">
                         <span class="file-icon">
                             <i class="fas fa-upload"></i>
@@ -39,7 +38,6 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
             </div>
             `;
             parentElement.innerHTML = html;
-            console.log(document.getElementById("md"));
             document.getElementById("md-close").addEventListener("click", () => {
                 document.getElementById("md").classList.remove("is-active");
                 document.getElementById("editor-wrapper").classList.add("hide");
@@ -49,14 +47,18 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
             const header = document.getElementById("header");
             const body_doc = document.getElementById("body-doc");
             if (document.getElementById("submit-doc")) document.getElementById("submit-doc").onclick = () => {
-                console.log("entro onclick")
                 const fileInput = document.getElementById('file-input');
-                console.log(fileInput); //null ???
                 const file = fileInput.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (event) {
-                        pubSub.publish('uploadFile', { fileName: file.name, fileData: event.target.result });
+                        const arrayBuffer = event.target.result;
+                        const uint8Array = new Uint8Array(arrayBuffer);
+                        pubSub.publish('uploadFile', {
+                            fileName: file.name,
+                            fileData: Array.from(uint8Array),
+                        });
+
                     };
                     reader.readAsArrayBuffer(file);
                 }
@@ -71,7 +73,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                             body_doc.innerHTML = `
                             <div class="file has-name">
                                 <label class="file-label">
-                                    <input class="file-input" type="file" accept=".docx,.doc" />
+                                    <input id="file-input" class="file-input" type="file" accept=".docx,.doc" />
                                     <span class="file-cta">
                                     <span class="file-icon">
                                         <i class="fas fa-upload"></i>
@@ -84,9 +86,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                                 <button type="button" class="button is-link" id="submit-doc">SUBMIT</button>
                             </div>                           
                             `;
-                            console.log(document.getElementById("submit-doc"));
                             document.getElementById("submit-doc").onclick = () => {
-                                console.log("entro onclick")
                                 const fileInput = document.getElementById('file-input');
                                 const file = fileInput.files[0];
                                 if (file) {
