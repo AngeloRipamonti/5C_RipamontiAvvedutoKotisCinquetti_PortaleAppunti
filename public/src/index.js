@@ -14,6 +14,7 @@ import { generateFeed } from "./modules/view/feed.js";
 import { generatePostManager } from "./modules/presentation/postManager.js"
 import { generatePublisher } from "./modules/presentation/publisher.js";
 import { generateViewPublisher } from "./modules/view/viewPublisher.js";
+import { v4 as uuidv4 } from '/node_modules/uuid/dist/esm-browser/index.js';
 
 location.href = "#entry"; //se loggati #feed
 
@@ -60,7 +61,13 @@ pubsub.subscribe("isRegisted", (data) => {
 });
 //login
 pubsub.subscribe("isLogged", (data) => {
-    middleware.login(data[0], data[1]);
+    if(data[2]) {
+        const token = uuidv4();
+        sessionStorage.setItem("token", token);
+        middleware.login(data[0], data[1], token);
+    }else {
+        middleware.login(data[0], data[1]);
+    }
 });
 pubsub.subscribe("doc-creation", () => {
     createDocument.render();

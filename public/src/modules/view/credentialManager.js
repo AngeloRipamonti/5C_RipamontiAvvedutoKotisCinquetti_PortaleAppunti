@@ -7,21 +7,23 @@ export const generateCredentialManager = (parentElement, pubSub) => {
             <h1 class="title is-1">Take notes and share them with everyone</h1>
             <h2 class="subtitle is-3">Welcome on mind sharing!</h2>
           </div>
-    
           <div class="section">
             <p class="has-text-centered mb-4 is-size-4"><strong>Sign in to get started</strong></p>
-    
             <div class="field is-grouped is-grouped-centered">
-              <div class="control">
-                <input class="input" type="email" id="emailInput" placeholder="Email" required>
-                <input class="input" type="password" id="passwordInput" placeholder="Password" required>
-              </div>
-              <div class="control">
-                <button type="button" id="loginButton" class="button is-success">Login</button>
+            <div class="control">
+              <input class="input" type="email" id="emailInput" placeholder="Email" required>
+              <input class="input" type="password" id="passwordInput" placeholder="Password" required>
+              <div class="field">
+                <label class="checkbox">
+                  <input id="remember-me" type="checkbox" />
+                  Remember me
+                </label>
               </div>
             </div>
+            <div class="control">
+              <button type="button" id="loginButton" class="button is-success">Login</button>
+            </div>
           </div>
-    
           <div id="error_area" class="has-text-danger mt-2"></div>
         </div>
       `;
@@ -29,6 +31,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
       document.getElementById("loginButton").onclick = () => {
         const emailInput = document.getElementById("emailInput");
         const passwordInput = document.getElementById("passwordInput");
+        const rme = document.getElementById("remember-me");
         const errorArea = document.getElementById("error_area");
     
         if (!emailInput.checkValidity()) {
@@ -37,7 +40,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
         }
     
         errorArea.textContent = "";
-        pubSub.publish("isLogged", [emailInput.value, passwordInput.value]);
+        pubSub.publish("isLogged", [emailInput.value, passwordInput.value, rme.checked]);
       };
     },
 
