@@ -15,8 +15,11 @@ export const generateDocPresenter = (document,view) => {
       quill.root.blur();
       view.render();
     },
-    import: function () {
-
+    import: function (html) {
+      let delta = quill.clipboard.convert(html);
+      if(delta.ops){
+        quill.clipboard.dangerouslyPasteHTML(html);
+      } else quill.setContents(delta);
     },
     document: document,
   };

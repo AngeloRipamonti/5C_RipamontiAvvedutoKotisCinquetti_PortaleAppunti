@@ -80,6 +80,8 @@ socket.on("login", ([data]) => {
     user = generateUserData(null, data.email, data.username, data.bio, data.path_thumbnail);
     location.href = "#feed";
 });
-socket.on("importDocument", (data)=> {
-    console.log(data);
+socket.on("importDocument", ([data])=> {
+    createDocument.document.setValues(data);
+    createDocument.import(createDocument.document.getText());
+    pubsub.publish("importDocumentSocket");
 });

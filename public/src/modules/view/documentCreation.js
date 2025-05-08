@@ -3,8 +3,12 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
         const modal = document.getElementById("md");
         if (modal) modal.classList.remove("is-active");
         if (document.getElementById("editor-wrapper").classList.contains("hide")) document.getElementById("editor-wrapper").classList.remove("hide");
-    }
-    );
+    });
+    pubSub.subscribe("importDocumentSocket", () => {
+        const modal = document.getElementById("md");
+        if (modal) modal.classList.remove("is-active");
+        if (document.getElementById("editor-wrapper").classList.contains("hide")) document.getElementById("editor-wrapper").classList.remove("hide");
+    });
     return {
         render: function () {
             const html = `
@@ -58,7 +62,6 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                             fileName: file.name,
                             fileData: Array.from(uint8Array),
                         });
-
                     };
                     reader.readAsArrayBuffer(file);
                 }
@@ -92,7 +95,12 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                                 if (file) {
                                     const reader = new FileReader();
                                     reader.onload = function (event) {
-                                        pubSub.publish('uploadFile', { fileName: file.name, fileData: event.target.result });
+                                        const arrayBuffer = event.target.result;
+                                        const uint8Array = new Uint8Array(arrayBuffer);
+                                        pubSub.publish('uploadFile', {
+                                            fileName: file.name,
+                                            fileData: Array.from(uint8Array),
+                                        });
                                     };
                                     reader.readAsArrayBuffer(file);
                                 }

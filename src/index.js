@@ -256,10 +256,8 @@ pubsub.subscribe("databaseDeleteDocument", async (data) => {
 pubsub.subscribe("databaseImportDocument", async (data) => {
     try{
         const path_note = fileManager.saveWord(data.fileData, data.fileName);
-        console.log(path_note)
         await database.createNote(path_note, data.author_email );
         const res = await database.findNote(path_note);
-        console.log(res);
         res.text = await fileManager.importFromDocx(path_note);
         return res; 
     }
