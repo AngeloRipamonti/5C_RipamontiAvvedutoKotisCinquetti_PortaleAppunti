@@ -81,6 +81,7 @@ pubsub.subscribe('uploadFile', file => {
 /* Sockets */
 socket.on("login", ([data]) => {
     user = generateUserData(null, data.email, data.username, data.bio, data.path_thumbnail);
+    navbar.setUserData(data);
     location.href = "#feed";
 });
 socket.on("importDocument", ([data])=> {

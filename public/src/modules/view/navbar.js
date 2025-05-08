@@ -3,7 +3,7 @@ export function generateNavbar(parentElement, pubsub) {
     creation: {
       logo: true,
       right: [
-        '<a href="#feed"><a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a></a>',
+        '<a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a>',
         "<h3>Mind Sharing</h3>",
       ],
       left: ["<h3>Document Creation</h3>"],
@@ -11,19 +11,20 @@ export function generateNavbar(parentElement, pubsub) {
     personal: {
       logo: false,
       right: [
-        "<button class='button is-white u-icon'>User Icon</button>",
-        "<h3>$Username</h3>",
+        `<button class='btn is-trasparent u-icon'>$thumbnail</button>`,
+        "<h3>$username</h3>",
       ],
       left: [
         "<button class='button is-white' id='u-settings'> <i class='fa fa-gear'></i> </button>",
+        "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
         `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`
       ],
     },
     accounts: {
       logo: false,
       right: [
-        "<button class='button is-white' id='acc-icon'>User Icon</button>",
-        "<h3>$Username</h3>",
+        "<button class='btn is-trasparent' id='acc-icon'>$thumbnail</button>",
+        "<h3>$username</h3>",
       ],
       left: ["<button class='button is-rounded'>Follow</button>"],
     },
@@ -34,7 +35,7 @@ export function generateNavbar(parentElement, pubsub) {
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
-        "<button id='goProfile' class='button is-white u-icon'>User Icon</button>",
+        "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>",
       ],
     },
     entry: {
@@ -65,6 +66,19 @@ export function generateNavbar(parentElement, pubsub) {
   }
 
   return {
+    setUserData: function(user) {
+        for(const key in elements) {
+          if(key === "feed") 
+            elements[key].left = elements[key].left.map((e) => {
+            return e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`).replace("$username", user.username);
+          });
+          else
+            elements[key].right = elements[key].right.map((e) => {
+              return e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`).replace("$username", user.username);
+            })
+        }
+        this.render();
+    },
     render: function () {
       const data = elements[index];
       parentElement.innerHTML = `

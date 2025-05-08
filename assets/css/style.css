@@ -16,6 +16,13 @@ html {
     border-radius: 4px;
 }
 
+.user-icon {
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 100px;
+    max-height: 100px;
+}
+
 .preview {
     max-width: 100%;
     max-height: auto;
