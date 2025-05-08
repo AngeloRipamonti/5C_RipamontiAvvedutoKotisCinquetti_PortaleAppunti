@@ -4,7 +4,7 @@ module.exports = function mailerSender(config) {
     const transporter = nodemailer.createTransport(config);
     transporter.verify((err, success) => {
         if (err) {
-            ;
+            console.error(err);
         } else {
             console.log('Your node mailer config is correct');
         }
