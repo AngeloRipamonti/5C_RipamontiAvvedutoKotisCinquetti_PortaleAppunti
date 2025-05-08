@@ -8,8 +8,13 @@ module.exports = function middleware(pubsub) {
                 password: password
             });
         },
-        login: async function (email, password) {
-            return await pubsub.publish("databaseLoginAccount", {
+        login: async function (email, password, token) {
+            return await pubsub.publish("databaseLoginAccount", token ? {
+                email: email,
+                password: password,
+                token: token
+            } :
+            {
                 email: email,
                 password: password
             });

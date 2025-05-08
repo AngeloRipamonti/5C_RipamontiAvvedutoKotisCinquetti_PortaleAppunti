@@ -20,7 +20,7 @@ module.exports = function mailerSender(config) {
                     text: text
                 });
             } catch (error) {
-                console.error("Error sending email: " + error);
+                console.git perror("Error sending email: " + error);
                 throw error;
             }
         }
