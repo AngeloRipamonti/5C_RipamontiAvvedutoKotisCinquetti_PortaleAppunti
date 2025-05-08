@@ -98,7 +98,13 @@ io.on('connection', (socket) => {
     socket.on("createDocument", async (values) => {
         const res = await middleware.createDocument(values.email);
         socket.emit("createDocument", res)
-    })
+    });
+
+    socket.on("importDocument", async (values) => {
+        console.log(values);
+        //const res = await middleware.importDocument();
+        socket.emit("importDocument", res);
+    });
 
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
 });

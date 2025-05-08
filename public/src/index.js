@@ -69,6 +69,13 @@ pubsub.subscribe("zero-start", () => {
         createDocument.document.setValues(data);
     })
 });
+pubsub.subscribe('uploadFile', file => {
+    console.log("entro pbsb")
+
+    file.author_email = user.getEmail();
+    middleware.importDocument(file)
+});
+
 
 /* Sockets */
 socket.on("login", ([data]) => {

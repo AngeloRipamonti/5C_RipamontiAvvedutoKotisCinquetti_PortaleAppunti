@@ -34,7 +34,7 @@ export const generateMiddleware = (pubsub,socket) => {
 
         },
         importDocument : function(doc) {
-
+            socket.emit("importDocument", doc);
         },
         exportDocument : function(doc) {
 

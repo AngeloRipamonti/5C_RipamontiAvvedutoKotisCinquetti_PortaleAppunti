@@ -2,12 +2,12 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
     pubSub.subscribe("zero-start", () => {
         console.log("dentro")
         const modal = document.getElementById("md");
-        if(modal) modal.classList.remove("is-active");
-        if(document.getElementById("editor-wrapper").classList.contains("hide")) document.getElementById("editor-wrapper").classList.remove("hide");
+        if (modal) modal.classList.remove("is-active");
+        if (document.getElementById("editor-wrapper").classList.contains("hide")) document.getElementById("editor-wrapper").classList.remove("hide");
     }
-);
-    return{
-        render: function() {
+    );
+    return {
+        render: function () {
             const html = `
             <div class="modal is-active" id="md">
             <div class="modal-background"></div>
@@ -44,17 +44,29 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                 document.getElementById("md").classList.remove("is-active");
                 document.getElementById("editor-wrapper").classList.add("hide");
                 location.href = "#personal";
-            });            
+            });
             const nodes = document.querySelectorAll(".tab-doc");
             const header = document.getElementById("header");
             const body_doc = document.getElementById("body-doc");
-            if(document.getElementById("submit-doc")) document.getElementById("submit-doc").onclick = () => pubSub.publish("doc-submit");
+            if (document.getElementById("submit-doc")) document.getElementById("submit-doc").onclick = () => {
+                console.log("entro onclick")
+                const fileInput = document.getElementById('file-input');
+                console.log(fileInput); //null ???
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        pubSub.publish('uploadFile', { fileName: file.name, fileData: event.target.result });
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+            };
             nodes.forEach(element => {
                 element.onclick = () => {
-                    if(!element.parentNode.classList.contains("is-active")) {
+                    if (!element.parentNode.classList.contains("is-active")) {
                         nodes.forEach(e => e.parentNode.classList.remove("is-active"));
                         element.parentNode.classList.add("is-active");
-                        if(element.id === "upload-doc"){
+                        if (element.id === "upload-doc") {
                             header.innerText = "Upload a document";
                             body_doc.innerHTML = `
                             <div class="file has-name">
@@ -72,8 +84,21 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                                 <button type="button" class="button is-link" id="submit-doc">SUBMIT</button>
                             </div>                           
                             `;
-                        document.getElementById("submit-doc").onclick = () => pubSub.publish("doc-submit");
-                        }else {
+                            console.log(document.getElementById("submit-doc"));
+                            document.getElementById("submit-doc").onclick = () => {
+                                console.log("entro onclick")
+                                const fileInput = document.getElementById('file-input');
+                                const file = fileInput.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function (event) {
+                                        pubSub.publish('uploadFile', { fileName: file.name, fileData: event.target.result });
+                                    };
+                                    reader.readAsArrayBuffer(file);
+                                }
+                            }
+                        }
+                        else {
                             header.innerText = "From zero to hero!";
                             body_doc.innerHTML = `
                                 <button type="button" class="button is-link" id="start-zero">Start from zero</button>
