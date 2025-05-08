@@ -1,12 +1,7 @@
-import { generateDocument } from "../model/document";
+export const generateNote = (pubSub, document, view) => {
 
-export const generateNote = (pubSub) => {
-
-    let document;
-    let view;
-    
     return{
-        biuld: function() {
+        build: function() {
 
         },
         export: function(type) {

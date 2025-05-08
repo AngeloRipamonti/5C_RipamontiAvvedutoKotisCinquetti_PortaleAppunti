@@ -34,7 +34,7 @@ const fileManager = generateFileManager(pubsub);
 const database = generateDatabase(pubsub);
 database.setup(config.database);
 const encrypter = generateEncrypter(pubsub);
-let user = [];
+let users = [];
 
 // Start Server
 server.listen(5500, () => {
@@ -45,8 +45,8 @@ server.listen(5500, () => {
 io.on('connection', (socket) => {
     console.log("Socket Connected: " + socket.id);
 
-    socket.on("connect", (values) => {
-        socket.emit("connect", user.filter(user => user.token === values.token));
+    socket.on("connect_", (values) => {
+        socket.emit("connect_", users.filter(user => user.token === values.token));
     });
     // Account
     socket.on("register", async (values) => {
@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("login", async (values) => {
-        const res = await middleware.login(values.email, values.password, values);
+        const res = await middleware.login(values.email, values.password, values.token);
         socket.emit("login", res);
     });
 
@@ -148,7 +148,7 @@ pubsub.subscribe("databaseLoginAccount", async (data) => {
         const res = await database.loginUser(data.email);
         const {password, password_salt, ...user} = res;
         if(data.token) {
-            user.push({token: data.token, user: user});
+            users.push({token: data.token, user: user});
         }
         return encrypter.check(data.password, res.password_salt, res.password) ? user : "Credentials are incorrect!";
     }

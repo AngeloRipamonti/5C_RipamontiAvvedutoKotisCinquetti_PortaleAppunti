@@ -42,6 +42,8 @@ feedManager.updateFeed();
 let user;
 const socket = io();
 const middleware = generateMiddleware(pubsub, socket);
+middleware.connect();
+console.log(sessionStorage.getItem("token"));
 navbar.render();
 searchbar.render("searchbar", "search for tags or users...");
 //Login
@@ -91,10 +93,17 @@ socket.on("login", ([data]) => {
     navbar.setUserData(data);
     location.href = "#feed";
 });
-socket.on("importDocument", ([data])=> {
+socket.on("importDocument", ([data]) => {
     createDocument.document.setValues(data);
     createDocument.import(createDocument.document.getText());
     pubsub.publish("importDocumentSocket");
+});
+socket.on("connect_", (data) => {
+   if(data && data.length > 0) {
+    user = generateUserData(null, data[0].user.email, data[0].user.username, data[0].user.bio, data[0].user.path_thumbnail);
+    navbar.setUserData(data[0].user);
+    location.href = "#feed";
+   }
 });
 
 /* Callback */

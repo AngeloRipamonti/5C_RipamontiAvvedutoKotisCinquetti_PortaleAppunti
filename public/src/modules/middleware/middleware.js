@@ -3,6 +3,7 @@ export const generateMiddleware = (pubsub,socket) => {
 
     return {
         login : function(email,password,token) {
+            console.log(token)
             if(token) socket.emit("login", {email: email, password: password, token: token});
             else socket.emit("login", {email: email, password: password});
         },
@@ -63,6 +64,10 @@ export const generateMiddleware = (pubsub,socket) => {
         },
         createTag : function(tag){
             
+        },
+        connect: function() {
+            let token = sessionStorage.getItem("token");
+            if(token) socket.emit("connect_", {token});
         }
     };
 };
