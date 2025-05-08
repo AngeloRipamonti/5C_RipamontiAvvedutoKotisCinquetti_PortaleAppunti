@@ -3,6 +3,18 @@ html {
     height: 100%;
 }
 
+.preview {
+    max-width: 100%;
+    max-height: auto;
+}
+
+#doc-thumbnail {
+    max-width: 40%;
+    max-height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
 .vote-wrapper {
     display: flex !important;
     place-items: center !important;

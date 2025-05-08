@@ -1,4 +1,5 @@
 export const generateFeed = (parentElement, pubSub) => {
+    let currentRating = 0;
     function renderStars(starsAvg) {
         let stars = '';
         for (let i = 0; i < 5; i++) {
@@ -26,7 +27,7 @@ export const generateFeed = (parentElement, pubSub) => {
     }
     return{
         render: function(posts) {
-            let currentRating = 0;
+            currentRating = 0;
             let starsHTML = '';
             for (let i = 0; i < 5; i++) {
                 starsHTML += `<button class="btn-star" data-value="${i + 1}"><i class="fa-regular fa-star star"></i></button>`;
@@ -38,7 +39,9 @@ export const generateFeed = (parentElement, pubSub) => {
                         <div>${e.getAuthor()}</div>
                         <div>${renderStars(e.getStarsAvg())}</div>
                     </div>
-                    <div class="preview"></div>
+                    <div class="preview" style="text-align: center !important;">
+                        <img src="/assets/images/doc-preview.png" alt="doc-thumbnail" id="doc-thumbnail">
+                    </div>
                     <div class="vote-wrapper">
                         <span class="vote-section">${starsHTML}</span>
                         <button type="button" id="vote-button" class="button btn-transparent">
