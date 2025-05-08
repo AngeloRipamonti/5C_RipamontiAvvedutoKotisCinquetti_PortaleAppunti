@@ -13,7 +13,7 @@ import { generateDocPresenter } from "./modules/presentation/createDocPresenter.
 import { generateFeed } from "./modules/view/feed.js";
 import { generatePostManager } from "./modules/presentation/postManager.js"
 
-location.href = "#feed"; //se loggati altrimenti #entry
+location.href = "#entry"; //se loggati #feed
 
 //Container objects
 const navbarContainer = document.getElementById("navbar-container");
@@ -65,7 +65,9 @@ pubsub.subscribe("doc-creation", () => {
 });
 pubsub.subscribe("zero-start", () => {
     middleware.createDocument(user.getEmail());
-    socket.on("createDocument", console.log)
+    socket.on("createDocument", ([data])=>{
+        createDocument.document.setValues(data);
+    })
 });
 
 /* Sockets */

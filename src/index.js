@@ -231,8 +231,10 @@ pubsub.subscribe("databaseUnfollowUser", async (data) => {
 // Document
 pubsub.subscribe("databaseCreateDocument", async (data) => {
     try{
-        await database.createNote(path.join(process.cwd(), "/dist/assets/md", `${uuidv4()}.md`), data.email );
-        return "Document created successfully";
+        const path_note = path.join(process.cwd(), "/dist/assets/md", `${uuidv4()}.md`);
+        await database.createNote(path_note, data.email );
+        const res = await database.findNote(path_note);
+        return res;
     }
     catch(err){
         return "Error creating document " + err

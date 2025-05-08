@@ -134,6 +134,9 @@ module.exports = function database() {
         },
         deleteNote: async function (id){
             await db.execute("DELETE FROM notes WHERE id = ?;", [id]);
+        },
+        findNote: async function (path){
+            return await _get(`SELECT * FROM notes WHERE path_note = ?;`, [path]);
         }
     }
 }
