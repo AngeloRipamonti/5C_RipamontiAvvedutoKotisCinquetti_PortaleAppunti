@@ -95,6 +95,7 @@ io.on('connection', (socket) => {
         socket.emit("unfollowAccount", res);
     });
 
+    // Document
     socket.on("createDocument", async (values) => {
         const res = await middleware.createDocument(values.email);
         socket.emit("createDocument", res)
@@ -103,6 +104,11 @@ io.on('connection', (socket) => {
     socket.on("importDocument", async (values) => {
         const res = await middleware.importDocument(values.fileName, values.fileData, values.author_email);
         socket.emit("importDocument", res);
+    });
+
+    socket.on("saveDocument", async (values) => {
+        const res = await middleware.saveDocument(values.path_note, values.text, values.author_email);
+        socket.emit("saveDocument", res);
     });
 
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
@@ -136,7 +142,6 @@ The MindSharing Team`);
         return "Account created successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error creating account: ${err}`;
     }
 });
@@ -147,7 +152,6 @@ pubsub.subscribe("databaseLoginAccount", async (data) => {
         return encrypter.check(data.password, res.password_salt, res.password) ? user : "Credentials are incorrect!";
     }
     catch (err) {
-        console.error(err);
         return `Error logging in: ${err}`;
     }
 });
@@ -157,7 +161,6 @@ pubsub.subscribe("databaseChangeUsername", async (data) => {
         return "Username changed successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error changing username: ${err}`;
     }
 });
@@ -168,7 +171,6 @@ pubsub.subscribe("databaseChangePassword", async (data) => {
         return "Password changed successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error changing password: ${err}`;
     }
 });
@@ -179,7 +181,6 @@ pubsub.subscribe("databaseChangeThumbnail", async (data) => {
         return "Thumbnail changed successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error changing thumbnail: ${err}`;
     }
 });
@@ -189,7 +190,6 @@ pubsub.subscribe("databaseChangeBio", async (data) => {
         return "Bio changed successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error changing bio: ${err}`;
     }
 });
@@ -199,7 +199,6 @@ pubsub.subscribe("databaseDeleteAccount", async (data) => {
         return "Account deleted successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error deleting account: ${err}`;
     }
 });
@@ -209,7 +208,6 @@ pubsub.subscribe("databaseFindUser", async (data) => {
         return res;
     }
     catch (err) {
-        console.error(err);
         return `Error finding user: ${err}`;
     }
 });
@@ -219,7 +217,6 @@ pubsub.subscribe("databaseFollowUser", async (data) => {
         return "Followed user successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error following user: ${err}`;
     }
 });
@@ -229,7 +226,6 @@ pubsub.subscribe("databaseUnfollowUser", async (data) => {
         return "Unfollowed user successfully";
     }
     catch (err) {
-        console.error(err);
         return `Error unfollowing user: ${err}`;
     }
 });
@@ -262,7 +258,16 @@ pubsub.subscribe("databaseImportDocument", async (data) => {
         return res; 
     }
     catch(err){
-        console.error(err);
         return "Error importing document " + err
+    }
+});
+pubsub.subscribe("databaseSaveDocument", async (data) => {
+    try{
+        let pathNote = path.basename(data.path_note);
+        fileManager.saveInMd(data.text, pathNote );
+        return "Document saved successfully";
+    }
+    catch(err){
+        return "Error saving document " + err
     }
 });

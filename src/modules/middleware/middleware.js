@@ -70,7 +70,12 @@ module.exports = function middleware(pubsub) {
                 author_email: author_email
             });
         },
-        saveDocument: function (title) {
+        saveDocument: function (path_note, text, author_email) {
+            return pubsub.publish("databaseSaveDocument", {
+                path_note: path_note,
+                text: text,
+                author_email: author_email
+            });
         },
         getDocument: function (title) {
         },

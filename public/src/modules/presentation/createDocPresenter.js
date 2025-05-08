@@ -21,6 +21,9 @@ export const generateDocPresenter = (document,view) => {
         quill.clipboard.dangerouslyPasteHTML(html);
       } else quill.setContents(delta);
     },
+    getText: function (){
+      return quill.getText();
+    },
     document: document,
   };
 };

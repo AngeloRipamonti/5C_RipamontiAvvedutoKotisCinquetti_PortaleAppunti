@@ -12,8 +12,8 @@ export const generateMiddleware = (pubsub,socket) => {
         createDocument : function(email) {
             socket.emit("createDocument", { email });
         },
-        saveDocument : function(title) {
-
+        saveDocument : function(path_note, text, author_email) {
+            socket.emit("saveDocument", { path_note, text, author_email });
         },
         getProfile : function(username) {
 

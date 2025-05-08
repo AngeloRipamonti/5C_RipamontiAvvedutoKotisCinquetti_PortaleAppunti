@@ -85,3 +85,8 @@ socket.on("importDocument", ([data])=> {
     createDocument.import(createDocument.document.getText());
     pubsub.publish("importDocumentSocket");
 });
+
+/* Callback */
+document.getElementById("saveDocument").onclick = () => {
+    middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
+};

@@ -10,7 +10,7 @@ export const generateDocument = (path, text, title, tags, author, starsAvg) => {
         getAuthor: () => author,
         getStarsAvg: () => starsAvg,
         setValues:(data) => {
-            path = data.path;
+            path = data.path_note;
             text = data?.text ?? null ;
             author = data.author_email;
             id = data.id;
