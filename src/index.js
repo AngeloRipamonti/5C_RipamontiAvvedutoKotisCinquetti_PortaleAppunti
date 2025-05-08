@@ -120,25 +120,19 @@ pubsub.subscribe("databaseRegisterAccount", async (data) => {
     try {
         const psw = encrypter.encrypt(data.password);
         await database.registerUser(data.email, psw.hash, psw.salt, data.username);
-        await mailer.send(data.email, "Welcome! Here Are Your Login Credentials", `Hi ${data.username},
+        await mailer.send(data.email, "Benvenuto! Ecco le tue credenziali di accesso", `Ciao ${data.username},
 
-Welcome to MindSharing!
-Your account has been created and you're ready to get started.
+Benvenuto su MindSharing!
+Il tuo account è stato creato ed è pronto per essere utilizzato.
 
-Here are your login credentials:
+Ecco le tua password: ${data.password}
 
-Email: ${data.email}
-Password: ${data.password}
+Per la tua sicurezza, ti consigliamo di cambiare la password al primo accesso.
 
-For your security, please change your password upon first login.
+Se non hai richiesto questo account, ignora semplicemente questa email.
 
-You can access your account here:
-👉 https://www.mind-sharing.com/login
-
-If you did not request this account, please disregard this email.
-
-Thanks and welcome aboard!
-The MindSharing Team`);
+Grazie e benvenuto a bordo!
+Il Team di MindSharing`);
         return "Account created successfully";
     }
     catch (err) {
