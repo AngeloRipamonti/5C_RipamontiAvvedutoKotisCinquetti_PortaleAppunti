@@ -3,6 +3,21 @@ html {
     height: 100%;
 }
 
+#feed > *{
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+.post-container {
+    position: static;
+    margin-bottom: 7% !important;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+
 #body-pub > * {
     margin-bottom: 1rem;
 }

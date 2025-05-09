@@ -15,6 +15,8 @@ import { generatePostManager } from "./modules/presentation/postManager.js"
 import { generatePublisher } from "./modules/presentation/publisher.js";
 import { generateViewPublisher } from "./modules/view/viewPublisher.js";
 import { v4 as uuidv4 } from '/node_modules/uuid/dist/esm-browser/index.js';
+import { generateNote } from "./modules/presentation/note.js";
+import { generateViewNote } from "./modules/view/viewNote.js";
 
 location.href = "#entry"; //se loggati #feed
 
@@ -37,8 +39,10 @@ const navbar = generateNavbar(navbarContainer, pubsub);
 const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager (credentialContainer, pubsub);
 const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null), generateDocumentCreation(creation, pubsub));
-const feedManager = generatePostManager(pubsub,[generateDocument(null,null,null,null,"Luke",5)],generateFeed(feedContainer,pubsub));
-feedManager.updateFeed();
+const post = generateNote(pubsub,generateDocument(null,null,null,null,"Luke",5),generateViewNote(feedContainer,pubsub));
+const post2 = generateNote(pubsub,generateDocument(null,null,null,null,"alex",3),generateViewNote(feedContainer,pubsub));
+const postManager = generatePostManager(pubsub,[post,post2],generateFeed(pubsub));
+postManager.updateFeed();
 let user;
 const socket = io();
 const middleware = generateMiddleware(pubsub, socket);

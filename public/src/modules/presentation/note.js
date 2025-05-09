@@ -1,6 +1,7 @@
 export const generateNote = (pubSub, document, view) => {
 
     return{
+        render: () => view.render(document),
         build: function() {
 
         },
@@ -10,7 +11,7 @@ export const generateNote = (pubSub, document, view) => {
         archive: function() {
             
         },
-        giveFeedback: function(start) {
+        giveFeedback: function(star) {
             
         },
         save: function() {
