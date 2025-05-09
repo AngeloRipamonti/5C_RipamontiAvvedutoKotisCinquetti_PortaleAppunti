@@ -1,73 +1,70 @@
-export const generateMiddleware = (pubsub,socket) => {
-    const events = {};
-
+export const generateMiddleware = (pubsub, socket) => {
     return {
-        login : function(email,password,token) {
-            console.log(token)
-            if(token) socket.emit("login", {email: email, password: password, token: token});
-            else socket.emit("login", {email: email, password: password});
+        connect: function () {
+            let token = sessionStorage.getItem("token");
+            if (token) socket.emit("connect_", { token });
         },
 
-        register : function(usr,mail) {
-            socket.emit("register", {username:usr, email: mail});
+        //Account
+        login: function (email, password, token) {
+            console.log(token)
+            if (token) socket.emit("login", { email: email, password: password, token: token });
+            else socket.emit("login", { email: email, password: password });
         },
-        createDocument : function(email) {
+        register: function (usr, mail) {
+            socket.emit("register", { username: usr, email: mail });
+        },
+        changeUsername: async function (email, username) {
+            socket.emit("changeUsername", { email, username });
+        },
+        changePassword: async function (email, password) {
+            socket.emit("changePassword", { email, password });
+        },
+        changeThumbnail: async function (img, email) {
+            socket.emit("changeThumbnail", { thumbnail: img, email });
+        },
+        changeBio: async function (bio, email) {
+            socket.emit("changeBio", { email, bio });
+        },
+        deleteAccount: async function (email) {
+            socket.emit("deleteAccount", { email });
+        },
+        getProfile: async function (username) {
+            socket.emit("getProfile", { username });
+        },
+        followAccount: async function (email, username) {
+            socket.emit("followAccount", { email, username });
+        },
+        unfollowAccount: async function (email, username) {
+            socket.emit("unfollowAccount", { email, username });
+        },
+
+        // Document
+        createDocument: function (email) {
             socket.emit("createDocument", { email });
         },
-        saveDocument : function(path_note, text, author_email) {
+        saveDocument: function (path_note, text, author_email) {
             socket.emit("saveDocument", { path_note, text, author_email });
         },
-        getProfile : function(username) {
-
-        },
-        getDocument : function(title) {
-
-        },
-        deleteDocument : function(title) {
-
-        },
-        getDocByTag : function(tag) {
-
-        },
-        getDocByAuthor : function(author) {
-
-        },
-        changeVisibility : function(doc) {
-
-        },
-        importDocument : function(doc) {
+        importDocument: function (doc) {
             socket.emit("importDocument", doc);
         },
-        exportDocument : function(doc) {
-
+        deleteDocument: function (id) {
+            socket.emit("deleteDocument", { id });
         },
-        changeUsername : function(usr) {
-
+        getDocByAuthor: async function (author_email) {
+            socket.emit("getDocumentByAuthor", { author_email });
         },
-        changePassword : function(psw) {
-
+        
+        getDocument: function (title) {
         },
-        changeThumbnail : function(img) {
-
+        getDocTag: function (tag) {
         },
-        changeBio : function(bio) {
-
+        changeVisibility: function (doc) {
         },
-        deleteAccount : function(acc) {
-
+        exportDocument: function (doc) {
         },
-        followAccount : function(acc, target) {
-
-        },
-        unfollowAccount : function(acc, target) {
-
-        },
-        createTag : function(tag){
-            
-        },
-        connect: function() {
-            let token = sessionStorage.getItem("token");
-            if(token) socket.emit("connect_", {token});
+        createTag: function (tag) {
         }
-    };
-};
+    }
+}

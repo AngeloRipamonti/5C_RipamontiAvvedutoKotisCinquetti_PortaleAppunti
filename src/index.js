@@ -116,6 +116,11 @@ io.on('connection', (socket) => {
         socket.emit("saveDocument", res);
     });
 
+    socket.on("deleteDocument", async (values) => {
+        const res = await middleware.deleteDocument(values.id);
+        socket.emit("deleteDocument", res);
+    });
+
     socket.on("getDocumentByAuthor", async (values) => {
         const res = await middleware.getDocByAuthor(values.email);
         socket.emit("getDocumentByAuthor", res);
