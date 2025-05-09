@@ -59,7 +59,7 @@ html {
 
 .preview {
     max-width: 100%;
-    max-height: auto;
+    max-height: 100%;
 }
 
 #doc-thumbnail {

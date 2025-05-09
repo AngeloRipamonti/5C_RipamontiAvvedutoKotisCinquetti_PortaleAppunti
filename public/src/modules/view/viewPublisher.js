@@ -8,7 +8,7 @@ export const generateViewPublisher = (parentElement, pubSub) => {
             <div class="modal-content">
                 <div id="body-pub" class="section" style="background-color:rgba(255,255,255,1) !important;">
                     <h1 class="title has-text-centered has-text-black">Publish your draft</h1>
-                    <input class="input" type="text" placeholder="Text title" />
+                    <input class="input" id="title-field" type="text" placeholder="Text title" />
                     <div>
                         <label class="checkbox">
                             <input type="checkbox" />

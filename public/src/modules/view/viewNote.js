@@ -43,13 +43,22 @@ export const generateViewNote = (parentElement, pubSub) => {
                         <div class="preview" style="text-align: center !important;">
                             <img src="/assets/images/doc-preview.png" alt="doc-thumbnail" id="doc-thumbnail">
                         </div>
-                        <div class="vote-wrapper">
-                            <span class="vote-section">${starsHTML}</span>
-                            <button type="button" id="vote-button" class="button btn-transparent">
-                                <span class="icon">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-                            </button>
+                        <div class="columns">
+                            <div class="vote-wrapper column is-half">
+                                <span class="vote-section">${starsHTML}</span>
+                                <button type="button" id="vote-button" class="button btn-transparent">
+                                    <span class="icon">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="column is-half has-text-right">
+                                <button type="button" id="open-fullscreen" class="button btn-transparent">
+                                    <span class="icon">
+                                        <i class="fa-solid fa-up-right-and-down-left-from-center" style="color: #ffffff;"></i>
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -64,8 +73,11 @@ export const generateViewNote = (parentElement, pubSub) => {
                 });
             });
 
-            const vote_button = document.getElementById("vote-button");
+            const vote_button = thisPost.querySelector("#vote-button");
             vote_button.onclick = () => pubSub.publish("post-voted", {star: currentRating, id: doc.id}); //aggiungere il post votatoe freezare stelline dopo aver votato
+
+            const fullscreen_button = thisPost.querySelector("#open-fullscreen");
+            fullscreen_button.onclick = () => pubSub.publish("document-fullscreen", doc.id);
         }
     }
 }

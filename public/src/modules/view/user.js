@@ -2,10 +2,11 @@ export const generateUser = (parentElement, pubSub) => {
   return {
     render: function (userData) {
       pubSub.subscribe("user-personal-data", (user) => {
+        console.log(user)
         parentElement.innerHTML = `
                     <div id="user-stats" class="columns is-flex is-justify-content-center">
                         <div class="column is-one-third has-text-centered" id="nPosts">
-                            <h3>${user.posts.length}</h3>
+                            <h3>${user.posts[0].length}</h3>
                             <br>
                             <p>Posts</p>
                         </div>
@@ -38,49 +39,63 @@ export const generateUser = (parentElement, pubSub) => {
                                 <div class="line"></div>
                             </div>
                         </div>
-                        <div class="posts">${user.posts.map((e) => {
-                          return `
-                                    <div class="post-container">
-                                        <div class="post box" id="${e.id}">
-                                        <div class="post-tabs columns">
-                                            <div class="column is-one-third has-text-centered post-tab">
-                                                <button type="button delete-doc-button" id="${
-                                                  e.id
-                                                }" class="button btn-transparent">
-                                                    <span class="icon">
-                                                        <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                            <div class="column is-one-third has-text-centered post-tab">
-                                                <button type="button modify-doc-button" id="${
-                                                  e.id
-                                                }" class="button btn-transparent">
+                        <div class="posts columns">${user.posts[0] ? user.posts[0].map((e) => {
+                            return `
+                                        <div class="column is-half">
+                                            <div class="post box" id="${e.id}">
+                                            <div class="post-tabs columns">
+                                                <div class="column is-one-third has-text-centered post-tab">
+                                                    <button type="button delete-doc-button" id="${
+                                                    e.id
+                                                    }" class="button btn-transparent">
                                                         <span class="icon">
-                                                            <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
+                                                            <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
                                                         </span>
-                                                </button>
+                                                    </button>
+                                                </div>
+                                                <div class="column is-one-third has-text-centered post-tab">
+                                                    <button type="button modify-doc-button" id="${
+                                                    e.id
+                                                    }" class="button btn-transparent">
+                                                            <span class="icon">
+                                                                <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
+                                                            </span>
+                                                    </button>
+                                                </div>
+                                                <div class="column is-one-third post-tab">
+                                                    <div class="columns">
+                                                        <div class="column has-text-centered">
+                                                            <button type="button export-pdf-button" id="${
+                                                            e.id
+                                                            }" class="button btn-transparent">
+                                                                    <span class="icon">
+                                                                        <i class="fa-solid fa-file-pdf" style="color: #ffffff;"></i>
+                                                                    </span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="column has-text-centered">
+                                                            <button type="button export-docx-button" id="${
+                                                            e.id
+                                                            }" class="button btn-transparent">
+                                                                    <span class="icon">
+                                                                        <i class="fa-solid fa-file-word" style="color: #ffffff;"></i>
+                                                                    </span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="column is-one-third has-text-centered post-tab">
-                                                <button type="button modify-doc-button" id="${
-                                                  e.id
-                                                }" class="button btn-transparent">
-                                                        <span class="icon">
-                                                            <i class="fa-solid fa-file-export" style="color: #ffffff;"></i>
-                                                        </span>
-                                                </button>
+                                                <div class="header is-flex is-justify-content-space-between">
+                                                    <div>${userData.getUsername()}</div>
+                                                </div>
+                                                <div class="personal-preview" style="text-align: center !important;">
+                                                    <img src="/assets/images/doc-preview.png" alt="doc-thumbnail" id="doc-thumbnail">
+                                                </div>
                                             </div>
                                         </div>
-                                            <div class="header is-flex is-justify-content-space-between">
-                                                <div>${userData.getUsername()}</div>
-                                            </div>
-                                            <div class="preview" style="text-align: center !important;">
-                                                <img src="/assets/images/doc-preview.png" alt="doc-thumbnail" id="doc-thumbnail">
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                        })}</div>
+                                    `;
+                            }) : ""}
+                        </div>
                     </div>
                 `;
       });

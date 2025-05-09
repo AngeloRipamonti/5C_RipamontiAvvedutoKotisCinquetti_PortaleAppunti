@@ -123,8 +123,13 @@ socket.on("connect_", (data) => {
 });
 
 /* Callback */
-document.getElementById("saveDocument").onclick = () => {
+pubsub.subscribe("publish-button-clicked", () => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
+    document.getElementById("publish-modal").classList.remove("is-active");
+    location.href = "#feed";
+});
+
+document.getElementById("saveDocument").onclick = () => {
     const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
     document.getElementById("publish-modal").classList.add("is-active");
 };
