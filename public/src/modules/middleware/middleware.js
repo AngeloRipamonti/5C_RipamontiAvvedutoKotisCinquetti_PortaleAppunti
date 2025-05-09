@@ -14,28 +14,28 @@ export const generateMiddleware = (pubsub, socket) => {
         register: function (usr, mail) {
             socket.emit("register", { username: usr, email: mail });
         },
-        changeUsername: async function (email, username) {
+        changeUsername: function (email, username) {
             socket.emit("changeUsername", { email, username });
         },
-        changePassword: async function (email, password) {
+        changePassword: function (email, password) {
             socket.emit("changePassword", { email, password });
         },
-        changeThumbnail: async function (img, email) {
+        changeThumbnail: function (img, email) {
             socket.emit("changeThumbnail", { thumbnail: img, email });
         },
-        changeBio: async function (bio, email) {
+        changeBio: function (bio, email) {
             socket.emit("changeBio", { email, bio });
         },
-        deleteAccount: async function (email) {
+        deleteAccount: function (email) {
             socket.emit("deleteAccount", { email });
         },
-        getProfile: async function (username) {
+        getProfile: function (username) {
             socket.emit("getProfile", { username });
         },
-        followAccount: async function (email, username) {
+        followAccount: function (email, username) {
             socket.emit("followAccount", { email, username });
         },
-        unfollowAccount: async function (email, username) {
+        unfollowAccount: function (email, username) {
             socket.emit("unfollowAccount", { email, username });
         },
 
@@ -52,7 +52,7 @@ export const generateMiddleware = (pubsub, socket) => {
         deleteDocument: function (id) {
             socket.emit("deleteDocument", { id });
         },
-        getDocByAuthor: async function (author_email) {
+        getDocByAuthor: function (author_email) {
             socket.emit("getDocumentByAuthor", { author_email });
         },
         
