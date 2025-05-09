@@ -3,10 +3,29 @@ html {
     height: 100%;
 }
 
-#feed > *{
+#feed > * {
   display: flex !important;
   flex-direction: column !important;
   width: 100% !important;
+}
+
+.user-bio {
+    color: white;
+}
+
+#posts-container, #bio-container {
+    margin-top: 6%;
+}
+
+.post-tab {
+    border: 1px solid grey;
+}
+
+.line {
+    width: 100%;
+    border: 1px solid white;
+    content: "";
+    height: 0;
 }
 
 .post-container {
