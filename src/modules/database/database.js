@@ -129,10 +129,12 @@ module.exports = function database() {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
             await db.execute(`DELETE FROM follows_users WHERE email_parent = ? AND email_child = ?;`, [email, email_child]);
         },
-        getFollows: async function (email) {
+        getFollows: async function (username) {
+            const email = (await _get(`SELECT email FROM users WHERE username = ?;`, [username])).email;
             return (await _get(`SELECT COUNT(*) AS count FROM follows_users WHERE email_parent = ?;`, [email])).count;
         },
-        getFollowers: async function (email) {
+        getFollowers: async function (username) {
+            const email = (await _get(`SELECT email FROM users WHERE username = ?;`, [username])).email;
             return (await _get(`SELECT COUNT(*) AS count FROM follows_users WHERE email_child = ?;`, [email])).count;
         },
         // Notes
@@ -145,7 +147,8 @@ module.exports = function database() {
         findNote: async function (path){
             return await _get(`SELECT * FROM notes WHERE path_note = ?;`, [path]);
         },
-        findNoteByUser: async function(email){
+        findNoteByUser: async function(username){
+            const email = (await _get(`SELECT email FROM users WHERE username = ?;`, [username])).email;
             return await _get(`SELECT * FROM notes WHERE author_email = ?;`, [email]);
         }
     }

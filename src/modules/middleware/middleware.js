@@ -61,11 +61,11 @@ module.exports = function middleware(pubsub) {
                 username: username
             });
         },
-        getFollows: async function (email) {
-            return await pubsub.publish("databaseGetFollows", { email });
+        getFollows: async function (username) {
+            return await pubsub.publish("databaseGetFollows", { username });
         },
-        getFollowers: async function (email) {
-            return await pubsub.publish("databaseGetFollowers", { email });
+        getFollowers: async function (username) {
+            return await pubsub.publish("databaseGetFollowers", { username });
         },
         // Document
         createDocument: function (email) {
@@ -88,8 +88,8 @@ module.exports = function middleware(pubsub) {
                 author_email: author_email
             });
         },
-        getDocByAuthor: async function (author_email) {
-            return await pubsub.publish("databaseGetDocByAuthor", { author_email });
+        getDocByAuthor: async function (username) {
+            return await pubsub.publish("databaseGetDocByAuthor", { username });
         },
         exportDocument: async function (path_note, format, text) {
             return await pubsub.publish("databaseExportDocument", {

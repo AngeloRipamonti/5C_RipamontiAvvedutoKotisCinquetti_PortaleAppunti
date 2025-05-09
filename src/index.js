@@ -103,12 +103,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on("getFollowers", async (values) => {
-        const res = await middleware.getFollowers(values.author_email);
+        const res = await middleware.getFollowers(values.username);
         socket.emit("getFollowers", res);
     });
 
     socket.on("getFollows", async (values) => {
-        const res = await middleware.getFollows(values.author_email);
+        const res = await middleware.getFollows(values.username);
         socket.emit("getFollows", res);
     });
 
@@ -134,7 +134,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("getDocumentByAuthor", async (values) => {
-        const res = await middleware.getDocByAuthor(values.email);
+        const res = await middleware.getDocByAuthor(values.username);
         socket.emit("getDocumentByAuthor", res);
     });
 
@@ -261,7 +261,7 @@ pubsub.subscribe("databaseUnfollowUser", async (data) => {
 });
 pubsub.subscribe("databaseGetFollowers", async (data) => {
     try {
-        const res = await database.getFollowers(data.email);
+        const res = await database.getFollowers(data.username);
         return res;
     }
     catch (err) {
@@ -270,7 +270,7 @@ pubsub.subscribe("databaseGetFollowers", async (data) => {
 });
 pubsub.subscribe("databaseGetFollows", async (data) => {
     try {
-        const res = await database.getFollows(data.email);
+        const res = await database.getFollows(data.username);
         return res;
     }
     catch (err) {
@@ -321,7 +321,7 @@ pubsub.subscribe("databaseSaveDocument", async (data) => {
 });
 pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
     try{
-        const res = await database.findNoteByUser(data.author_email);
+        const res = await database.findNoteByUser(data.username);
         return res;
     }
     catch(err){
