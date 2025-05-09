@@ -11,9 +11,10 @@ export const generateViewNote = (parentElement, pubSub) => {
         }
         return stars;
     }
-    function updateStars(rating) {
+    function updateStars(rating, post) {
         currentRating = rating;
-        document.querySelectorAll('.btn-star').forEach(star => {
+        const starsBtns = post.querySelectorAll('.btn-star')
+        starsBtns.forEach(star => {
             const starValue = parseInt(star.getAttribute('data-value'));
             const icon = star.querySelector("svg");
             if (starValue <= rating) {
@@ -33,7 +34,7 @@ export const generateViewNote = (parentElement, pubSub) => {
                 starsHTML += `<button class="btn-star" data-value="${i + 1}"><i class="fa-regular fa-star star"></i></button>`;
             }
             parentElement.innerHTML += `
-                <div class="post-container">
+                <div class="post-container" id="${doc.id}">
                     <div class="post box">
                         <div class="header is-flex is-justify-content-space-between">
                             <div>${doc.getAuthor()}</div>
@@ -53,11 +54,13 @@ export const generateViewNote = (parentElement, pubSub) => {
                     </div>
                 </div>
             `;
-            const starsBtns = document.querySelectorAll('.btn-star');
+            const thisPost = document.getElementById(doc.id);
+            const starsBtns = thisPost.querySelectorAll('.btn-star');
+            console.log(starsBtns);
             starsBtns.forEach(star => {
                 star.addEventListener('click', function() {
                     let rating = parseInt(star.getAttribute('data-value'));
-                    updateStars(rating);
+                    updateStars(rating, thisPost);
                 });
             });
 
