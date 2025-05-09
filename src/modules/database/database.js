@@ -149,7 +149,7 @@ module.exports = function database() {
         },
         findNoteByUser: async function(username){
             const email = (await _get(`SELECT email FROM users WHERE username = ?;`, [username])).email;
-            return await _get(`SELECT * FROM notes WHERE author_email = ?;`, [email]);
+            return await _query(`SELECT * FROM notes WHERE author_email = ?;`, [email]);
         }
     }
 }
