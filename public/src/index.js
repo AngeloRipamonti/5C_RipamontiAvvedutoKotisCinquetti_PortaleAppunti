@@ -93,6 +93,9 @@ pubsub.subscribe('uploadFile', file => {
     file.author_email = user.getEmail();
     middleware.importDocument(file)
 });
+pubsub.subscribe("post-voted", (data) =>{
+    middleware.giveFeedback(user.author_email, data.id, data.star);
+});
 
 
 /* Sockets */

@@ -99,6 +99,9 @@ module.exports = function middleware(pubsub) {
             });
         },
 
+        giveFeedback: async function(author_email, id, n_star){
+            return await pubsub.publish("databaseGiveFeedback", { author_email, id, n_star });
+        },
 
         getDocument: function (title) {
         },

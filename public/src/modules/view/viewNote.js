@@ -62,7 +62,7 @@ export const generateViewNote = (parentElement, pubSub) => {
             });
 
             const vote_button = document.getElementById("vote-button");
-            vote_button.onclick = () => pubSub.publish("post-voted", currentRating); //aggiungere il post votatoe freezare stelline dopo aver votato
+            vote_button.onclick = () => pubSub.publish("post-voted", {star: currentRating, id: doc.id}); //aggiungere il post votatoe freezare stelline dopo aver votato
         }
     }
 }
