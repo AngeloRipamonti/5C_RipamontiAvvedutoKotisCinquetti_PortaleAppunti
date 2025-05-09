@@ -103,7 +103,8 @@ module.exports = function middleware(pubsub) {
             return await pubsub.publish("databaseGiveFeedback", { author_email, id, n_star });
         },
 
-        getDocument: function (title) {
+        getDocument: async function (path) {
+            return await pubsub.publish("databaseGetDocument", { path });
         },
         getDocTag: function (tag) {
         },
