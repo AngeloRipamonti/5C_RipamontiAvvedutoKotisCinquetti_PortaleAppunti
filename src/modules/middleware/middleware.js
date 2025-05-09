@@ -61,6 +61,12 @@ module.exports = function middleware(pubsub) {
                 username: username
             });
         },
+        getFollows: async function (email) {
+            return await pubsub.publish("databaseGetFollows", { email });
+        },
+        getFollowers: async function (email) {
+            return await pubsub.publish("databaseGetFollowers", { email });
+        },
         // Document
         createDocument: function (email) {
             return pubsub.publish("databaseCreateDocument", { email: email });
@@ -85,7 +91,13 @@ module.exports = function middleware(pubsub) {
         getDocByAuthor: async function (author_email) {
             return await pubsub.publish("databaseGetDocByAuthor", { author_email });
         },
-
+        exportDocument: async function (path_note, format, text) {
+            return await pubsub.publish("databaseExportDocument", {
+                path_note: path_note,
+                format: format,
+                text: text
+            });
+        },
 
 
         getDocument: function (title) {
@@ -93,8 +105,6 @@ module.exports = function middleware(pubsub) {
         getDocTag: function (tag) {
         },
         changeVisibility: function (doc) {
-        },
-        exportDocument: function (doc) {
         },
         createTag: function (tag) {
         }

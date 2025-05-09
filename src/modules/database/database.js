@@ -120,6 +120,7 @@ module.exports = function database() {
         getUser: async function (username) {
             return await _get(`SELECT username, bio, path_thumbnail FROM users WHERE username = ?;`, [username]);
         },
+        // Follow
         followUser: async function (email, username) {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
             await db.execute(`INSERT INTO follows_users (email_parent, email_child) VALUES (?, ?);`, [email, email_child]);
@@ -127,6 +128,12 @@ module.exports = function database() {
         unfollowUser: async function (email, username) {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
             await db.execute(`DELETE FROM follows_users WHERE email_parent = ? AND email_child = ?;`, [email, email_child]);
+        },
+        getFollows: async function (email) {
+            return (await _get(`SELECT COUNT(*) AS count FROM follows_users WHERE email_parent = ?;`, [email])).count;
+        },
+        getFollowers: async function (email) {
+            return (await _get(`SELECT COUNT(*) AS count FROM follows_users WHERE email_child = ?;`, [email])).count;
         },
         // Notes
         createNote: async function (path_note, author_email){

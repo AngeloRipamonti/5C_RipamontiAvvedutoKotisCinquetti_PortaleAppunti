@@ -21,6 +21,7 @@ app.use("/", express.static(path.join(process.cwd(), "public")));
 app.use("/docs", express.static(path.join(process.cwd(), "docs")));
 app.use("/node_modules", express.static(path.join(process.cwd(), "node_modules")));
 app.use("/assets", express.static(path.join(process.cwd(), "assets")));
+app.use("/dist", express.static(path.join(process.cwd(), "dist")));
 
 // Declarations & Initializations
 const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config.json")));
@@ -90,6 +91,7 @@ io.on('connection', (socket) => {
         socket.emit("getProfile", res);
     });
 
+    // Follow
     socket.on("followAccount", async (values) => {
         const res = await middleware.followAccount(values.email, values.username);
         socket.emit("followAccount", res);
@@ -98,6 +100,16 @@ io.on('connection', (socket) => {
     socket.on("unfollowAccount", async (values) => {
         const res = await middleware.unfollowAccount(values.email, values.username);
         socket.emit("unfollowAccount", res);
+    });
+
+    socket.on("getFollowers", async (values) => {
+        const res = await middleware.getFollowers(values.author_email);
+        socket.emit("getFollowers", res);
+    });
+
+    socket.on("getFollows", async (values) => {
+        const res = await middleware.getFollows(values.author_email);
+        socket.emit("getFollows", res);
     });
 
     // Document
@@ -124,6 +136,11 @@ io.on('connection', (socket) => {
     socket.on("getDocumentByAuthor", async (values) => {
         const res = await middleware.getDocByAuthor(values.email);
         socket.emit("getDocumentByAuthor", res);
+    });
+
+    socket.on("exportDocument", async (values) => {
+        const res = await middleware.exportDocument(values.path_note, values.format, values.text);
+        socket.emit("exportDocument", res);
     });
 
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
@@ -223,6 +240,7 @@ pubsub.subscribe("databaseFindUser", async (data) => {
         return `Error finding user: ${err}`;
     }
 });
+// Follow
 pubsub.subscribe("databaseFollowUser", async (data) => {
     try {
         await database.followUser(data.email, data.username);
@@ -239,6 +257,24 @@ pubsub.subscribe("databaseUnfollowUser", async (data) => {
     }
     catch (err) {
         return `Error unfollowing user: ${err}`;
+    }
+});
+pubsub.subscribe("databaseGetFollowers", async (data) => {
+    try {
+        const res = await database.getFollowers(data.email);
+        return res;
+    }
+    catch (err) {
+        return `Error getting followers: ${err}`;
+    }
+});
+pubsub.subscribe("databaseGetFollows", async (data) => {
+    try {
+        const res = await database.getFollows(data.email);
+        return res;
+    }
+    catch (err) {
+        return `Error getting follows: ${err}`;
     }
 });
 // Document
@@ -290,5 +326,22 @@ pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
     }
     catch(err){
         return "Error finding document " + err
+    }
+});
+pubsub.subscribe("databaseExportDocument", async (data) => {
+    try{
+        let filePath;
+        if(format === "docx"){
+            filePath = fileManager.saveInDocx(data.text, path.basename(data.path_note));
+        }
+        else if(format === "pdf"){
+            filePath = fileManager.saveInPdf(data.text, path.basename(data.path_note));
+        }
+        else return "Format not supported";
+
+        return filePath;
+    }
+    catch(err){
+        return "Error exporting document " + err
     }
 });
