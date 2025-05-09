@@ -1,4 +1,4 @@
-export const generatePubSub = () => {
+export function generatePubSub() {
     const events = {};
 
     return {
@@ -8,9 +8,9 @@ export const generatePubSub = () => {
             }
             events[eventName].push(callback);
         },
-        publish: (eventName, data) => {
+        publish: async (eventName, data) => {
             if (events[eventName]) {
-                events[eventName].forEach(callback => callback(data));
+                return Promise.all(events[eventName].map(callback => callback(data)));
             }
         }
     };

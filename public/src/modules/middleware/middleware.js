@@ -32,6 +32,9 @@ export const generateMiddleware = (pubsub, socket) => {
         getProfile: function (username) {
             socket.emit("getProfile", { username });
         },
+        getPublicData: function (username) {
+            socket.emit("getUserPublicData", username);
+        },
         followAccount: function (email, username) {
             socket.emit("followAccount", { email, username });
         },

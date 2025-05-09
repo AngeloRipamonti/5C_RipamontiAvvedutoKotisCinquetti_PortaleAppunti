@@ -91,6 +91,13 @@ io.on('connection', (socket) => {
         socket.emit("getProfile", res);
     });
 
+    socket.on("getUserPublicData", async (values) => {
+        const followers = await middleware.getFollowers(values);
+        const follows = await middleware.getFollows(values);
+        const posts = await middleware.getDocByAuthor(values);
+        socket.emit("public-data", {followers,follows,posts});
+    });
+
     // Follow
     socket.on("followAccount", async (values) => {
         const res = await middleware.followAccount(values.email, values.username);

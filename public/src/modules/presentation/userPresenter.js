@@ -1,13 +1,8 @@
-import {generateUserData} from "../model/userData";
-
-export const generateUserPresenter = (pubSub) => {
-
-   let userData;
-   let view;
+export const generateUserPresenter = (pubSub,userData,view) => {
     
     return{
-        loadProfile: function() {
-
+        render: function() {
+            view.render(userData);
         },
         follow: function (target){
 
