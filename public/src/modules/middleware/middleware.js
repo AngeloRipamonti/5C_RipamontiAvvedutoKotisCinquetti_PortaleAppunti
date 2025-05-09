@@ -62,7 +62,8 @@ export const generateMiddleware = (pubsub, socket) => {
         },
         changeVisibility: function (doc) {
         },
-        exportDocument: function (doc) {
+        exportDocument: function (path_note, format, text) {
+            socket.emit("databaseExportDocument", {path_note, format, text});
         },
         createTag: function (tag) {
         }
