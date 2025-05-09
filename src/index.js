@@ -48,6 +48,7 @@ io.on('connection', (socket) => {
     socket.on("connect_", (values) => {
         socket.emit("connect_", users.filter(user => user.token === values.token));
     });
+    
     // Account
     socket.on("register", async (values) => {
         const res = await middleware.register(values.email, values.username, uuidv4())
@@ -113,6 +114,11 @@ io.on('connection', (socket) => {
     socket.on("saveDocument", async (values) => {
         const res = await middleware.saveDocument(values.path_note, values.text, values.author_email);
         socket.emit("saveDocument", res);
+    });
+
+    socket.on("getDocumentByAuthor", async (values) => {
+        const res = await middleware.getDocByAuthor(values.email);
+        socket.emit("getDocumentByAuthor", res);
     });
 
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
@@ -270,5 +276,14 @@ pubsub.subscribe("databaseSaveDocument", async (data) => {
     }
     catch(err){
         return "Error saving document " + err
+    }
+});
+pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
+    try{
+        const res = await database.findNoteByUser(data.author_email);
+        return res;
+    }
+    catch(err){
+        return "Error finding document " + err
     }
 });

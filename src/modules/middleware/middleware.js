@@ -82,16 +82,18 @@ module.exports = function middleware(pubsub) {
                 author_email: author_email
             });
         },
-        getDocument: function (title) {
+        getDocByAuthor: async function (author_email) {
+            return await pubsub.publish("databaseGetDocByAuthor", { author_email });
         },
 
-        getDocTag: function (tag) {
+
+
+        getDocument: function (title) {
         },
-        getDocByAuthor: function (author) {
+        getDocTag: function (tag) {
         },
         changeVisibility: function (doc) {
         },
-        
         exportDocument: function (doc) {
         },
         createTag: function (tag) {

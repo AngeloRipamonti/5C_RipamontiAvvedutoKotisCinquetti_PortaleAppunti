@@ -137,6 +137,9 @@ module.exports = function database() {
         },
         findNote: async function (path){
             return await _get(`SELECT * FROM notes WHERE path_note = ?;`, [path]);
+        },
+        findNoteByUser: async function(email){
+            return await _get(`SELECT * FROM notes WHERE author_email = ?;`, [email]);
         }
     }
 }
