@@ -22,7 +22,7 @@ export const generateDocPresenter = (document,view) => {
       } else quill.setContents(delta);
     },
     getText: function (){
-      return quill.getText();
+      return quill.getContents().ops ? quill.root.innerHTML : quill.getContents();
     },
     document: document,
   };

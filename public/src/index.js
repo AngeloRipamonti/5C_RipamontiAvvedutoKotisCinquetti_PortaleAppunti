@@ -129,6 +129,27 @@ pubsub.subscribe("publish-button-clicked", () => {
     location.href = "#feed";
 });
 
+pubsub.subscribe("delete-document", (id) => {
+    middleware.deleteDocument(id);
+    middleware.getPublicData(user.getUsername());
+    socket.on("public-data", (data) => {
+        pubsub.publish("user-personal-data",data);
+    }); 
+});
+
+pubsub.subscribe("export-pdf-document", (path) => {
+    middleware.getDocument(path);
+    socket.on("getDocumentByPath", ([doc]) => {
+        middleware.exportDocument(path, "pdf", doc.text);
+        socket.on("exportDocument", (path) => {
+            const target = document.getElementById(`download-file-${doc.id}`);
+            target.href = path;
+            console.log(target);
+            target.click();
+        })
+    })
+});
+
 document.getElementById("saveDocument").onclick = () => {
     const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
     document.getElementById("publish-modal").classList.add("is-active");

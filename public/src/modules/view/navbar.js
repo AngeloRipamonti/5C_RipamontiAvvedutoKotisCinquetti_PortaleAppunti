@@ -40,7 +40,7 @@ export function generateNavbar(parentElement, pubsub) {
     },
     entry: {
       logo: true,
-      right: ['<a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a>'],
+      right: ['<img src="/assets/images/favicon.ico" id="logo">'],
       left: ["<button class='button is-white' id='register'>Sign Up</button>"],
     },
   };

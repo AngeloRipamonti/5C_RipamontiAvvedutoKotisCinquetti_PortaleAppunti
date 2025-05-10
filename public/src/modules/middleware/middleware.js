@@ -62,15 +62,15 @@ export const generateMiddleware = (pubsub, socket) => {
             socket.emit("giveFeedback", { author_email, id, n_star });
         },
         
-        getDocument: function (path) {
-            socket.emit("getDocument", { path });
+        getDocument: function (path_note) {
+            socket.emit("getDocumentByPath", { path_note });
         },
         getDocTag: function (tag) {
         },
         changeVisibility: function (doc) {
         },
         exportDocument: function (path_note, format, text) {
-            socket.emit("databaseExportDocument", {path_note, format, text});
+            socket.emit("exportDocument", {path_note, format, text});
         },
         createTag: function (tag) {
         }
