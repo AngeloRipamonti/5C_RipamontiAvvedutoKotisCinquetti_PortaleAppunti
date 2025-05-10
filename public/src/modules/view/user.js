@@ -2,7 +2,6 @@ export const generateUser = (parentElement, pubSub) => {
   return {
     render: function (userData, itsme) {
       pubSub.subscribe("user-personal-data", (user) => {
-        console.log(user)
         parentElement.innerHTML = `
                 <div class="columns">
                     <div class="column is-half has-text-left">
@@ -115,14 +114,14 @@ export const generateUser = (parentElement, pubSub) => {
             exportPdfButtons.forEach(element => {
                 element.onclick = () => {
                     console.log(element.id);
-                    pubSub.publish("export-pdf-document", user.posts[0].find(e => e.id == element.id).path_note);
+                    pubSub.publish("export-pdf-document", user.posts.find(e => e.id == element.id).path_note);
                 }
             });
 
             const exportDocxButtons = document.querySelectorAll(".export-docx-button");
             exportDocxButtons.forEach(element => {
                 element.onclick = () => {
-                    pubSub.publish("export-docx-document", user.posts[0].find(e => e.id == element.id).path_note);
+                    pubSub.publish("export-docx-document", user.posts.find(e => e.id == element.id).path_note);
                 }
             });
       });

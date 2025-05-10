@@ -86,8 +86,8 @@ pubsub.subscribe("doc-creation", () => {
 });
 pubsub.subscribe("zero-start", () => {
     middleware.createDocument(user.getEmail());
-    socket.on("createDocument", ([data])=>{
-        createDocument.document.setValues(data);
+    socket.on("createDocument", ([data]) => {
+        createDocument.document.setValues(data.response);
     })
 });
 pubsub.subscribe('uploadFile', file => {
@@ -107,16 +107,19 @@ pubsub.subscribe('onsearch-tag', (data) => {
 });
 
 pubsub.subscribe('onsearch-user', (data) => {
+    let called = true;
     console.log(user.getUsername())
     if(data.username.toLowerCase() === user.getUsername().toLowerCase()) return document.getElementById("error-div").innerText = "You are that user!";
     middleware.getPublicData(data.username); 
     socket.on("public-data", (stats) => {
+        if(!called) return;
         if(isNaN(stats.response.followers)) return document.getElementById("error-div").innerText = "No user found";
         location.href = "#search-results";
         middleware.getProfile(data.username);
         socket.on("getProfile", ([dat]) => {
             const target = generateUserPresenter(pubsub,generateUserData(null,null,dat.response.username,dat.response.bio, dat.response.path_thumbnail),generateUser(search_result, pubsub));
             target.render(false);
+            called = false;
             pubsub.publish("user-personal-data", stats.response);
         });
     }); 
@@ -147,7 +150,7 @@ socket.on("connect_", (data) => {
    if(data?.response && data?.response.length > 0) {
     user = generateUserData(null, data.response[0].user.email, data.response[0].user.username, data.response[0].user.bio, data.response[0].user.path_thumbnail);
     userObject = generateUserPresenter(pubsub,user,generateUser(personalContainer, pubsub));
-    userObject.render();
+    userObject.render(true);
     navbar.setUserData(data.response[0].user);
     location.href = "#feed";
    }
@@ -169,25 +172,34 @@ pubsub.subscribe("delete-document", (id) => {
 });
 
 pubsub.subscribe("export-pdf-document", (path) => {
+    let called = true;
     middleware.getDocument(path);
     socket.on("getDocumentByPath", ([doc]) => {
         middleware.exportDocument(path, "pdf", doc.response.text);
         socket.on("exportDocument", ([path]) => {
-            const target = document.getElementById(`download-file-${doc.response.id}`);
-            target.href = path.response;
-            target.click();
+            if(called) {
+                const target = document.getElementById(`download-file-${doc.response.id}`);
+                target.href = path.response;
+                target.click();
+                called = false;
+            }
         })
     })
 });
 
 pubsub.subscribe("export-docx-document", (path) => {
+    let called = true;
     middleware.getDocument(path);
     socket.on("getDocumentByPath", ([doc]) => {
+        console.log(doc);
         middleware.exportDocument(path, "docx", doc.response.text);
         socket.on("exportDocument", ([path]) => {
-            const target = document.getElementById(`download-file-${doc.response.id}`);
-            target.href = path.response;
-            target.click();
+            if(called) {
+                const target = document.getElementById(`download-file-${doc.response.id}`);
+                target.href = path.response;
+                target.click();
+                called = false;
+            }
         })
     })
 });
@@ -201,7 +213,6 @@ window.addEventListener("popstate", () => {
     if(new URL(location.href).hash === "#personal") {
         middleware.getPublicData(user.getUsername());
         socket.on("public-data", (data) => {
-            console.log(data)
             pubsub.publish("user-personal-data",data.response);
         }); 
     }
