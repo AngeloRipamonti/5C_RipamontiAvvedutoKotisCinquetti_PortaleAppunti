@@ -47,10 +47,10 @@ module.exports = function fileManager() {
             return `/dist/assets/images/${filename}`;
         },
         importFromMd: function (filepath) {
-            return fs.readFileSync(filepath).toString();
+            return fs.readFileSync(path.join(process.cwd(), filepath)).toString();
         },
         importFromDocx: async function (filepath) {
-            const result = await mammoth.convertToHtml({ path: filepath }, { styleMap: ["u => u"] });
+            const result = await mammoth.convertToHtml({ path: path.join(process.cwd(), filepath) }, { styleMap: ["u => u"] });
             return result.value;
         }
     }
