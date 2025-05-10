@@ -19,6 +19,8 @@ import { generateNote } from "./modules/presentation/note.js";
 import { generateViewNote } from "./modules/view/viewNote.js";
 import { generateUserPresenter } from "./modules/presentation/userPresenter.js";
 import { generateUser } from "./modules/view/user.js";
+import { generateUserSettingsPresenter } from "./modules/presentation/userSettingsPresenter.js";
+import { generateUserSettings } from "./modules/view/userSettings.js";
 
 location.href = "#entry"; //se loggati #feed
 
@@ -128,7 +130,7 @@ pubsub.subscribe('onsearch-user', (data) => {
             pubsub.subscribe("follow_user", async () => {
                 middleware.followAccount(user.getEmail(), target.follow());
                 socket.on("followAccount", ([data]) => {
-                    if(data?.response) pubsub.publish("follow_user_success", data.response);
+                    if (data?.response) pubsub.publish("follow_user_success", data.response);
                 });
             });
         });
@@ -185,7 +187,13 @@ pubsub.subscribe("export-docx-document", (path) => {
         })
     })
 });
+pubsub.subscribe("user-settings", value => {
+    location.href = "#settings";
+    let uSettings = generateUserSettingsPresenter(pubsub, generateUserSettings(document.getElementById("settings"), pubsub), user);
+    uSettings.renderSettings();
+})
 
+/* Calllback */
 document.getElementById("saveDocument").onclick = () => {
     const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
     document.getElementById("publish-modal").classList.add("is-active");

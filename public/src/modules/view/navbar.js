@@ -121,7 +121,7 @@ export function generateNavbar(parentElement, pubsub) {
       }
       if (document.getElementById("follow_user")) document.getElementById("follow_user").onclick = () => pubsub.publish("follow_user");
       pubsub.subscribe("follow_user_success", () => document.getElementById("follow_user").innerHTML = `<i class="fa-solid fa-check" style="color: #ffffff;"></i>`);
-
+      if(document.getElementById("u-settings")) document.getElementById("u-settings").onclick = () => pubsub.publish("user-settings");
       pubsub.subscribe("newHash", (page) => {
         build(page);
         this.render();

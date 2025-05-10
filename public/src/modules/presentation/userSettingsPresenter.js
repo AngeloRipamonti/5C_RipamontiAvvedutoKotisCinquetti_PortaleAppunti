@@ -1,9 +1,4 @@
-import {generateUserData} from "../model/userData";
-
-export const generateUserSettingsPresenter = (pubSub) => {
-
-    let userData;
-    let view;
+export const generateUserSettingsPresenter = (pubSub, view, userData) => {
     
     return{
         changeBio: function() {
@@ -19,7 +14,7 @@ export const generateUserSettingsPresenter = (pubSub) => {
 
         },
         renderSettings: function() {
-
+            view.render(userData);
         }
     }
 }
