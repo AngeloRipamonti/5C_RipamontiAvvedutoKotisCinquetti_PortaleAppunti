@@ -20,13 +20,16 @@ export function generateNavbar(parentElement, pubsub) {
         `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`
       ],
     },
-    accounts: {
+    "search-results": {
       logo: false,
       right: [
         "<button class='btn is-trasparent' id='acc-icon'>$thumbnail</button>",
         "<h3>$username</h3>",
       ],
-      left: ["<button class='button is-rounded'>Follow</button>"],
+      left: [,
+          "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
+          "<button class='button is-rounded'>Follow</button>"
+        ]
     },
     feed: {
       logo: true,

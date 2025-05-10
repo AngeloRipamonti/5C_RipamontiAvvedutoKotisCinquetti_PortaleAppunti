@@ -2,11 +2,16 @@ export const generateUser = (parentElement, pubSub) => {
   return {
     render: function (userData, itsme) {
       pubSub.subscribe("user-personal-data", (user) => {
+        console.log(user)
         parentElement.innerHTML = `
-                <h1 class="title has-text-white">${userData.getUsername()}</h1>
+                <div class="columns">
+                    <div class="column is-half has-text-left">
+                        <h1 class="title has-text-white">${userData.getUsername()}</h1>
+                    </div>
+                </div>
                 <div id="user-stats" class="columns is-flex is-justify-content-center">
                     <div class="column is-one-third has-text-centered" id="nPosts">
-                        <h3>${user.posts[0].length}</h3>
+                        <h3>${user.posts?.length}</h3>
                         <br>
                         <p>Posts</p>
                     </div>
@@ -39,7 +44,7 @@ export const generateUser = (parentElement, pubSub) => {
                             <div class="line"></div>
                         </div>
                     </div>
-                    ${user.posts[0] ? user.posts[0].map((e, index) => {
+                    ${user.posts ? user.posts.map((e, index) => {
                             return `
                                 ${index % 2 === 0 ? "<div class='columns'>" : ""}
                                 <div class="column is-half">
@@ -89,7 +94,7 @@ export const generateUser = (parentElement, pubSub) => {
                                 </div>
                                 ${index % 2 === 1 ? "</div>" : ""}
                             `;
-                        }).join("") + (user.posts[0].length % 2 === 1 ? "</div>" : "") : ""}
+                        }).join("") + (user.posts.length % 2 === 1 ? "</div>" : "") : ""}
                 </div>
             `;
             const deleteButtons = document.querySelectorAll(".delete-doc-button");

@@ -111,13 +111,13 @@ pubsub.subscribe('onsearch-user', (data) => {
     if(data.username.toLowerCase() === user.getUsername().toLowerCase()) return document.getElementById("error-div").innerText = "You are that user!";
     middleware.getPublicData(data.username); 
     socket.on("public-data", (stats) => {
-        if(isNaN(stats.followers)) return document.getElementById("error-div").innerText = "No user found";
+        if(isNaN(stats.response.followers)) return document.getElementById("error-div").innerText = "No user found";
         location.href = "#search-results";
         middleware.getProfile(data.username);
-        socket.on("getProfile", (dat) => {
-            userObject = generateUserPresenter(pubsub,generateUserData(null,null,data.username,dat.bio, dat.path_thumbnail),generateUser(search_result, pubsub));
-            userObject.render(false);
-            pubsub.publish("user-personal-data", stats);
+        socket.on("getProfile", ([dat]) => {
+            const target = generateUserPresenter(pubsub,generateUserData(null,null,dat.response.username,dat.response.bio, dat.response.path_thumbnail),generateUser(search_result, pubsub));
+            target.render(false);
+            pubsub.publish("user-personal-data", stats.response);
         });
     }); 
 });
@@ -129,23 +129,26 @@ pubsub.subscribe('oncancel', (data) => {
 
 /* Sockets */
 socket.on("login", ([data]) => {
-    user = generateUserData(null, data.email, data.username, data.bio, data.path_thumbnail);
+    if(data.error) return document.getElementById("error_area").innerHTML = "<p class='has-text-red'>Wrong credential!</p>";
+    user = generateUserData(null, data.response.email, data.response.username, data.response.bio, data.response.path_thumbnail);
     userObject = generateUserPresenter(pubsub,user,generateUser(personalContainer, pubsub));
     userObject.render(true);
-    navbar.setUserData(data);
+    navbar.setUserData(data.response);
     location.href = "#feed";
 });
 socket.on("importDocument", ([data]) => {
-    createDocument.document.setValues(data);
+    if(data.error) return;
+    createDocument.document.setValues(data.response);
     createDocument.import(createDocument.document.getText());
     pubsub.publish("importDocumentSocket");
 });
 socket.on("connect_", (data) => {
-   if(data && data.length > 0) {
-    user = generateUserData(null, data[0].user.email, data[0].user.username, data[0].user.bio, data[0].user.path_thumbnail);
+    console.log(data.response)
+   if(data?.response && data?.response.length > 0) {
+    user = generateUserData(null, data.response[0].user.email, data.response[0].user.username, data.response[0].user.bio, data.response[0].user.path_thumbnail);
     userObject = generateUserPresenter(pubsub,user,generateUser(personalContainer, pubsub));
     userObject.render();
-    navbar.setUserData(data[0].user);
+    navbar.setUserData(data.response[0].user);
     location.href = "#feed";
    }
 });
@@ -161,17 +164,17 @@ pubsub.subscribe("delete-document", (id) => {
     middleware.deleteDocument(id);
     middleware.getPublicData(user.getUsername());
     socket.on("public-data", (data) => {
-        pubsub.publish("user-personal-data",data);
+        pubsub.publish("user-personal-data",data.response);
     }); 
 });
 
 pubsub.subscribe("export-pdf-document", (path) => {
     middleware.getDocument(path);
     socket.on("getDocumentByPath", ([doc]) => {
-        middleware.exportDocument(path, "pdf", doc.text);
-        socket.on("exportDocument", (path) => {
-            const target = document.getElementById(`download-file-${doc.id}`);
-            target.href = path;
+        middleware.exportDocument(path, "pdf", doc.response.text);
+        socket.on("exportDocument", ([path]) => {
+            const target = document.getElementById(`download-file-${doc.response.id}`);
+            target.href = path.response;
             target.click();
         })
     })
@@ -180,11 +183,10 @@ pubsub.subscribe("export-pdf-document", (path) => {
 pubsub.subscribe("export-docx-document", (path) => {
     middleware.getDocument(path);
     socket.on("getDocumentByPath", ([doc]) => {
-        console.log(doc);
-        middleware.exportDocument(path, "docx", doc.text);
-        socket.on("exportDocument", (path) => {
-            const target = document.getElementById(`download-file-${doc.id}`);
-            target.href = path;
+        middleware.exportDocument(path, "docx", doc.response.text);
+        socket.on("exportDocument", ([path]) => {
+            const target = document.getElementById(`download-file-${doc.response.id}`);
+            target.href = path.response;
             target.click();
         })
     })
@@ -199,7 +201,8 @@ window.addEventListener("popstate", () => {
     if(new URL(location.href).hash === "#personal") {
         middleware.getPublicData(user.getUsername());
         socket.on("public-data", (data) => {
-            pubsub.publish("user-personal-data",data);
+            console.log(data)
+            pubsub.publish("user-personal-data",data.response);
         }); 
     }
 });

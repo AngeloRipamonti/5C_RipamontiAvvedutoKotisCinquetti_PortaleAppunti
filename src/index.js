@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
     console.log("Socket Connected: " + socket.id);
 
     socket.on("connect_", (values) => {
-        socket.emit("connect_", users.filter(user => user.token === values.token));
+        socket.emit("connect_", {response: users.filter(user => user.token === values.token)});
     });
 
     // Account
@@ -92,14 +92,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on("getUserPublicData", async (values) => {
-        const followers = await middleware.getFollowers(values);
-        const follows = await middleware.getFollows(values);
-        const posts = await middleware.getDocByAuthor(values);
+        const [followers] = await middleware.getFollowers(values);
+        const [follows] = await middleware.getFollows(values);
+        const [posts] = await middleware.getDocByAuthor(values);
         if(followers?.error || follows?.error || posts?.error) {
-            socket.emit("public-data", { followers: [], follows: [], posts: [] });
+            socket.emit("public-data", {response: { followers: [], follows: [], posts: [] }});
             return;
         }
-        socket.emit("public-data", { followers: followers.response, follows: follows.response, posts: posts.response });
+        socket.emit("public-data", {response: { followers: followers.response, follows: follows.response, posts: posts.response }});
     });
 
     // Follow
