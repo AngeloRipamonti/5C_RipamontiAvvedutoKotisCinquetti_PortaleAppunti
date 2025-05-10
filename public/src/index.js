@@ -96,6 +96,26 @@ pubsub.subscribe('uploadFile', file => {
 pubsub.subscribe("post-voted", (data) =>{
     middleware.giveFeedback(user.author_email, data.id, data.star);
 });
+//SearchBar
+pubsub.subscribe('onsearch-tag', (data) => {
+    console.log('Ricerca per tag:', data.tag);
+    middleware.getDocTag(data.tag);
+    socket.on("public-data", (data) => {
+        console.log(data); 
+    }); 
+});
+
+pubsub.subscribe('onsearch-user', (data) => {
+    console.log('Ricerca per utente:', data.username);
+    middleware.getPublicData(data.username); 
+    socket.on("public-data", (data) => {
+        console.log(data); 
+    }); 
+});
+
+pubsub.subscribe('oncancel', (data) => {
+    console.log('Cancellazione ricerca per:', data.id);
+});
 
 
 /* Sockets */
