@@ -88,11 +88,16 @@ pubsub.subscribe("zero-start", () => {
     middleware.createDocument(user.getEmail());
     socket.on("createDocument", ([data]) => {
         createDocument.document.setValues(data.response);
-    })
+        const discardButton = document.getElementById("discard-button");
+        discardButton.addEventListener("click",() => {
+                middleware.deleteDocument(createDocument.document.getID());
+                createDocument.import("");
+            })    
+        })
 });
 pubsub.subscribe('uploadFile', file => {
     file.author_email = user.getEmail();
-    middleware.importDocument(file)
+    middleware.importDocument(file);
 });
 pubsub.subscribe("post-voted", (data) =>{
     middleware.giveFeedback(user.author_email, data.id, data.star);
@@ -144,6 +149,11 @@ socket.on("importDocument", ([data]) => {
     createDocument.document.setValues(data.response);
     createDocument.import(createDocument.document.getText());
     pubsub.publish("importDocumentSocket");
+    const discardButton = document.getElementById("discard-button");
+    discardButton.addEventListener("click",() => {
+        middleware.deleteDocument(createDocument.document.getID());
+        createDocument.import("");
+    })
 });
 socket.on("connect_", (data) => {
     console.log(data.response)
@@ -160,6 +170,7 @@ socket.on("connect_", (data) => {
 pubsub.subscribe("publish-button-clicked", () => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
     document.getElementById("publish-modal").classList.remove("is-active");
+    createDocument.import("");
     location.href = "#feed";
 });
 
