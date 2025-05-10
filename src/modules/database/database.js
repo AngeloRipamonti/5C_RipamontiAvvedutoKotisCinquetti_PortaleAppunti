@@ -123,11 +123,11 @@ module.exports = function database() {
         // Follow
         followUser: async function (email, username) {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
-            await db.execute(`INSERT INTO follows_users (email_parent, email_child) VALUES (?, ?);`, [email, email_child]);
+            await db.execute(`INSERT INTO follows_users (email_parent, email_child) VALUES (?, ?);`, [email, email_child.email]);
         },
         unfollowUser: async function (email, username) {
             const email_child = await _get(`SELECT email FROM users WHERE username = ?;`, [username]);
-            await db.execute(`DELETE FROM follows_users WHERE email_parent = ? AND email_child = ?;`, [email, email_child]);
+            await db.execute(`DELETE FROM follows_users WHERE email_parent = ? AND email_child = ?;`, [email, email_child.email]);
         },
         getFollows: async function (username) {
             const email = (await _get(`SELECT email FROM users WHERE username = ?;`, [username])).email;

@@ -7,7 +7,6 @@ export const generateMiddleware = (pubsub, socket) => {
 
         //Account
         login: function (email, password, token) {
-            console.log(token)
             if (token) socket.emit("login", { email: email, password: password, token: token });
             else socket.emit("login", { email: email, password: password });
         },

@@ -41,13 +41,13 @@ const navigator = generateNavigator(pages, pubsub);
 //Components
 const navbar = generateNavbar(navbarContainer, pubsub);
 const searchbar = generateSearchbar(searchbarContainer, pubsub);
-const credential = generateCredentialManager (credentialContainer, pubsub);
+const credential = generateCredentialManager(credentialContainer, pubsub);
 let userObject;
 
-const createDocument = generateDocPresenter(generateDocument(null,null,null,null,null,null), generateDocumentCreation(creation, pubsub));
-const post = generateNote(pubsub,generateDocument(null,null,null,null,"Luke",5),generateViewNote(feedContainer,pubsub));
-const post2 = generateNote(pubsub,generateDocument(null,null,null,null,"alex",3),generateViewNote(feedContainer,pubsub));
-const postManager = generatePostManager(pubsub,[post,post2],generateFeed(pubsub));
+const createDocument = generateDocPresenter(generateDocument(null, null, null, null, null, null), generateDocumentCreation(creation, pubsub));
+const post = generateNote(pubsub, generateDocument(null, null, null, null, "Luke", 5), generateViewNote(feedContainer, pubsub));
+const post2 = generateNote(pubsub, generateDocument(null, null, null, null, "alex", 3), generateViewNote(feedContainer, pubsub));
+const postManager = generatePostManager(pubsub, [post, post2], generateFeed(pubsub));
 postManager.updateFeed();
 
 let user;
@@ -68,15 +68,15 @@ pubsub.subscribe("close-modal", () => {
 });
 //registrazione
 pubsub.subscribe("isRegisted", (data) => {
-    middleware.register(data[0],data[1]);
+    middleware.register(data[0], data[1]);
 });
 //login
 pubsub.subscribe("isLogged", (data) => {
-    if(data[2]) {
+    if (data[2]) {
         const token = uuidv4();
         sessionStorage.setItem("token", token);
         middleware.login(data[0], data[1], token);
-    }else {
+    } else {
         middleware.login(data[0], data[1]);
     }
 });
@@ -89,17 +89,17 @@ pubsub.subscribe("zero-start", () => {
     socket.on("createDocument", ([data]) => {
         createDocument.document.setValues(data.response);
         const discardButton = document.getElementById("discard-button");
-        discardButton.addEventListener("click",() => {
-                middleware.deleteDocument(createDocument.document.getID());
-                createDocument.import("");
-            })    
+        discardButton.addEventListener("click", () => {
+            middleware.deleteDocument(createDocument.document.getID());
+            createDocument.import("");
         })
+    })
 });
 pubsub.subscribe('uploadFile', file => {
     file.author_email = user.getEmail();
     middleware.importDocument(file);
 });
-pubsub.subscribe("post-voted", (data) =>{
+pubsub.subscribe("post-voted", (data) => {
     middleware.giveFeedback(user.author_email, data.id, data.star);
 });
 //SearchBar
@@ -107,66 +107,38 @@ pubsub.subscribe('onsearch-tag', (data) => {
     console.log('Ricerca per tag:', data.tag);
     middleware.getDocTag(data.tag);
     socket.on("public-data", (data) => {
-        console.log(data); 
-    }); 
+        console.log(data);
+    });
 });
 
 pubsub.subscribe('onsearch-user', (data) => {
     let called = true;
-    console.log(user.getUsername())
-    if(data.username.toLowerCase() === user.getUsername().toLowerCase()) return document.getElementById("error-div").innerText = "You are that user!";
-    middleware.getPublicData(data.username); 
+    if (data.username.toLowerCase() === user.getUsername().toLowerCase()) return document.getElementById("error-div").innerText = "You are that user!";
+    middleware.getPublicData(data.username);
     socket.on("public-data", (stats) => {
-        if(!called) return;
-        if(isNaN(stats.response.followers)) return document.getElementById("error-div").innerText = "No user found";
+        if (!called) return;
+        if (isNaN(stats.response.followers)) return document.getElementById("error-div").innerText = "No user found";
         location.href = "#search-results";
         middleware.getProfile(data.username);
         socket.on("getProfile", ([dat]) => {
-            const target = generateUserPresenter(pubsub,generateUserData(null,null,dat.response.username,dat.response.bio, dat.response.path_thumbnail),generateUser(search_result, pubsub));
+            const target = generateUserPresenter(pubsub, generateUserData(null, null, dat.response.username, dat.response.bio, dat.response.path_thumbnail), generateUser(search_result, pubsub));
             target.render(false);
             called = false;
             pubsub.publish("user-personal-data", stats.response);
+            pubsub.subscribe("follow_user", async () => {
+                middleware.followAccount(user.getEmail(), target.follow());
+                socket.on("followAccount", ([data]) => {
+                    if(data?.response) pubsub.publish("follow_user_success", data.response);
+                });
+            });
         });
-    }); 
+    });
 });
 
 pubsub.subscribe('oncancel', (data) => {
     console.log('Cancellazione ricerca per:', data.id);
 });
 
-
-/* Sockets */
-socket.on("login", ([data]) => {
-    if(data.error) return document.getElementById("error_area").innerHTML = "<p class='has-text-red'>Wrong credential!</p>";
-    user = generateUserData(null, data.response.email, data.response.username, data.response.bio, data.response.path_thumbnail);
-    userObject = generateUserPresenter(pubsub,user,generateUser(personalContainer, pubsub));
-    userObject.render(true);
-    navbar.setUserData(data.response);
-    location.href = "#feed";
-});
-socket.on("importDocument", ([data]) => {
-    if(data.error) return;
-    createDocument.document.setValues(data.response);
-    createDocument.import(createDocument.document.getText());
-    pubsub.publish("importDocumentSocket");
-    const discardButton = document.getElementById("discard-button");
-    discardButton.addEventListener("click",() => {
-        middleware.deleteDocument(createDocument.document.getID());
-        createDocument.import("");
-    })
-});
-socket.on("connect_", (data) => {
-    console.log(data.response)
-   if(data?.response && data?.response.length > 0) {
-    user = generateUserData(null, data.response[0].user.email, data.response[0].user.username, data.response[0].user.bio, data.response[0].user.path_thumbnail);
-    userObject = generateUserPresenter(pubsub,user,generateUser(personalContainer, pubsub));
-    userObject.render(true);
-    navbar.setUserData(data.response[0].user);
-    location.href = "#feed";
-   }
-});
-
-/* Callback */
 pubsub.subscribe("publish-button-clicked", () => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
     document.getElementById("publish-modal").classList.remove("is-active");
@@ -178,8 +150,8 @@ pubsub.subscribe("delete-document", (id) => {
     middleware.deleteDocument(id);
     middleware.getPublicData(user.getUsername());
     socket.on("public-data", (data) => {
-        pubsub.publish("user-personal-data",data.response);
-    }); 
+        pubsub.publish("user-personal-data", data.response);
+    });
 });
 
 pubsub.subscribe("export-pdf-document", (path) => {
@@ -188,7 +160,7 @@ pubsub.subscribe("export-pdf-document", (path) => {
     socket.on("getDocumentByPath", ([doc]) => {
         middleware.exportDocument(path, "pdf", doc.response.text);
         socket.on("exportDocument", ([path]) => {
-            if(called) {
+            if (called) {
                 const target = document.getElementById(`download-file-${doc.response.id}`);
                 target.href = path.response;
                 target.click();
@@ -202,10 +174,9 @@ pubsub.subscribe("export-docx-document", (path) => {
     let called = true;
     middleware.getDocument(path);
     socket.on("getDocumentByPath", ([doc]) => {
-        console.log(doc);
         middleware.exportDocument(path, "docx", doc.response.text);
         socket.on("exportDocument", ([path]) => {
-            if(called) {
+            if (called) {
                 const target = document.getElementById(`download-file-${doc.response.id}`);
                 target.href = path.response;
                 target.click();
@@ -220,11 +191,43 @@ document.getElementById("saveDocument").onclick = () => {
     document.getElementById("publish-modal").classList.add("is-active");
 };
 
+/* EVENT LISTENER */
 window.addEventListener("popstate", () => {
-    if(new URL(location.href).hash === "#personal") {
+    if (new URL(location.href).hash === "#personal") {
         middleware.getPublicData(user.getUsername());
         socket.on("public-data", (data) => {
-            pubsub.publish("user-personal-data",data.response);
-        }); 
+            pubsub.publish("user-personal-data", data.response);
+        });
+    }
+});
+
+
+/* Sockets */
+socket.on("login", ([data]) => {
+    if (data.error) return document.getElementById("error_area").innerHTML = "<p class='has-text-red'>Wrong credential!</p>";
+    user = generateUserData(null, data.response.email, data.response.username, data.response.bio, data.response.path_thumbnail);
+    userObject = generateUserPresenter(pubsub, user, generateUser(personalContainer, pubsub));
+    userObject.render(true);
+    navbar.setUserData(data.response);
+    location.href = "#feed";
+});
+socket.on("importDocument", ([data]) => {
+    if (data.error) return;
+    createDocument.document.setValues(data.response);
+    createDocument.import(createDocument.document.getText());
+    pubsub.publish("importDocumentSocket");
+    const discardButton = document.getElementById("discard-button");
+    discardButton.addEventListener("click", () => {
+        middleware.deleteDocument(createDocument.document.getID());
+        createDocument.import("");
+    })
+});
+socket.on("connect_", (data) => {
+    if (data?.response && data?.response.length > 0) {
+        user = generateUserData(null, data.response[0].user.email, data.response[0].user.username, data.response[0].user.bio, data.response[0].user.path_thumbnail);
+        userObject = generateUserPresenter(pubsub, user, generateUser(personalContainer, pubsub));
+        userObject.render(true);
+        navbar.setUserData(data.response[0].user);
+        location.href = "#feed";
     }
 });

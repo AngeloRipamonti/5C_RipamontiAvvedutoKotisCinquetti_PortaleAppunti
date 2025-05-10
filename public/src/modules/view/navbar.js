@@ -27,9 +27,9 @@ export function generateNavbar(parentElement, pubsub) {
         "<h3>$username</h3>",
       ],
       left: [,
-          "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
-          "<button class='button is-rounded'>Follow</button>"
-        ]
+        "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
+        "<button id='follow_user' class='button is-rounded'>Follow</button>"
+      ]
     },
     feed: {
       logo: true,
@@ -69,18 +69,18 @@ export function generateNavbar(parentElement, pubsub) {
   }
 
   return {
-    setUserData: function(user) {
-        for(const key in elements) {
-          if(key === "feed") 
-            elements[key].left = elements[key].left.map((e) => {
+    setUserData: function (user) {
+      for (const key in elements) {
+        if (key === "feed")
+          elements[key].left = elements[key].left.map((e) => {
             return e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`).replace("$username", user.username);
           });
-          else
-            elements[key].right = elements[key].right.map((e) => {
-              return e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`).replace("$username", user.username);
-            })
-        }
-        this.render();
+        else
+          elements[key].right = elements[key].right.map((e) => {
+            return e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`).replace("$username", user.username);
+          })
+      }
+      this.render();
     },
     render: function () {
       const data = elements[index];
@@ -115,10 +115,12 @@ export function generateNavbar(parentElement, pubsub) {
 
       if (index === "entry") document.getElementById("register").onclick = () => pubsub.publish("sign-up");
       if (document.getElementById("goProfile")) document.getElementById("goProfile").onclick = () => location.href = "#personal";
-      if(document.getElementById("doc-creation")) document.getElementById("doc-creation").onclick = () => {
+      if (document.getElementById("doc-creation")) document.getElementById("doc-creation").onclick = () => {
         pubsub.publish("doc-creation");
         document.getElementById("md").classList.add("is-active");
       }
+      if (document.getElementById("follow_user")) document.getElementById("follow_user").onclick = () => pubsub.publish("follow_user");
+      pubsub.subscribe("follow_user_success", () => document.getElementById("follow_user").innerHTML = `<i class="fa-solid fa-check" style="color: #ffffff;"></i>`);
 
       pubsub.subscribe("newHash", (page) => {
         build(page);

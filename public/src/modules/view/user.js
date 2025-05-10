@@ -113,7 +113,6 @@ export const generateUser = (parentElement, pubSub) => {
             const exportPdfButtons = document.querySelectorAll(".export-pdf-button");
             exportPdfButtons.forEach(element => {
                 element.onclick = () => {
-                    console.log(element.id);
                     pubSub.publish("export-pdf-document", user.posts.find(e => e.id == element.id).path_note);
                 }
             });

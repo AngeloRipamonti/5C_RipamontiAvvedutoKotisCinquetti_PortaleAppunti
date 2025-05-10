@@ -67,7 +67,6 @@ export const generateViewNote = (parentElement, pubSub) => {
                 </div>
             `;
             const thisPost = document.getElementById(doc.getID());
-            console.log(thisPost)
             const starsBtns = thisPost.querySelectorAll('.btn-star');
             starsBtns.forEach(star => {
                 star.addEventListener('click', function() {
