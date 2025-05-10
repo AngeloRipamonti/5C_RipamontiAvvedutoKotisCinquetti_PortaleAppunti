@@ -26,8 +26,8 @@ module.exports = function fileManager() {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
             return path.join(process.cwd(), `/dist/assets/docx/${filename}`);
         },
-        saveInPdf: function (html, filename) {
-            htmlPdf.create(html, {
+        saveInPdf: async function (html, filename) {
+            await htmlPdf.create(html, {
                 format: 'A4',
                 border: {
                     top: '10mm',
@@ -40,6 +40,7 @@ module.exports = function fileManager() {
                     if (err) throw err;
                     return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
                 });
+             return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
         },
         saveImage: function (img, filename) {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${filename}`), Buffer.from(img));

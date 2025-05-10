@@ -157,7 +157,7 @@ io.on('connection', (socket) => {
 
     socket.on("getDocumentByPath", async (values) => {
         const res = await middleware.getDocument(values.path_note);
-        socket.emit("getDocumentById", res);
+        socket.emit("getDocumentByPath", res);
     });
 
     // Tag
@@ -353,16 +353,13 @@ pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
 });
 pubsub.subscribe("databaseExportDocument", async (data) => {
     try{
-        let filePath;
-        if(format === "docx"){
-            filePath = fileManager.saveInDocx(data.text, path.basename(data.path_note));
+        if(data.format == 'docx'){
+            return await fileManager.saveInDocx(data.text, path.basename(data.path_note) + ".docx");
         }
-        else if(format === "pdf"){
-            filePath = fileManager.saveInPdf(data.text, path.basename(data.path_note));
+        else if(data.format == 'pdf'){
+            return await fileManager.saveInPdf(data.text, path.basename(data.path_note) + ".pdf");
         }
         else return "Format not supported";
-
-        return filePath;
     }
     catch(err){
         return "Error exporting document " + err
