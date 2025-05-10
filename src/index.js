@@ -150,6 +150,17 @@ io.on('connection', (socket) => {
         socket.emit("exportDocument", res);
     });
 
+    socket.on("changeVisibility", async (values) => {
+        const res = await middleware.changeVisibility(values.id, values.visibility);
+        socket.emit("changeVisibility", res);
+    });
+
+    // Tag
+    socket.on("createTag", async (values) => {
+        const res = await middleware.createTag(values.tag);
+        socket.emit("createTag", res);
+    });
+
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
 });
 
@@ -361,3 +372,12 @@ pubsub.subscribe("databaseChangeVisibility", async (data) => {
         return "Error changing visibility " + err
     }
 }); 
+pubsub.subscribe("databaseCreateTag", async (data) => {
+    try{
+        await database.createTag(data.tag);
+        return "Tag created successfully";
+    }
+    catch(err){
+        return "Error creating tag " + err;
+    }
+});

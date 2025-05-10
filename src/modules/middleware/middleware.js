@@ -107,10 +107,11 @@ module.exports = function middleware(pubsub) {
         changeVisibility: async function (id, visibility) {
             return await pubsub.publish("databaseChangeVisibility", { id, visibility });
         },
-
-        getDocTag: function (tag) {
-        },
+        // Tag
         createTag: function (tag) {
+            return pubsub.publish("databaseCreateTag", { tag });
+        },
+        getDocTag: function (tag) {
         }
     }
 }

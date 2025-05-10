@@ -153,6 +153,10 @@ module.exports = function database() {
         },
         changeVisibility: async function (id, visibility) {
             await db.execute("UPDATE notes SET visibility = ? WHERE id = ?", [visibility, id]);
+        },
+        // Tag
+        createTag: async function (tag) {
+            await db.execute("INSERT INTO tags (name) VALUES (?);", [tag]);
         }
     }
 }
