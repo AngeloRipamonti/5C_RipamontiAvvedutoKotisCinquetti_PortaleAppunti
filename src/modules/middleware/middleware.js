@@ -112,6 +112,7 @@ module.exports = function middleware(pubsub) {
             return pubsub.publish("databaseCreateTag", { tag });
         },
         getDocTag: function (tag) {
+            return pubsub.publish("databaseGetDocTag", { tag });
         }
     }
 }
