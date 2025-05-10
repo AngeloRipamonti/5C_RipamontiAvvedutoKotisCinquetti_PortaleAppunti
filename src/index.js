@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     socket.on("connect_", (values) => {
         socket.emit("connect_", users.filter(user => user.token === values.token));
     });
-    
+
     // Account
     socket.on("register", async (values) => {
         const res = await middleware.register(values.email, values.username, uuidv4())
@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
         const followers = await middleware.getFollowers(values);
         const follows = await middleware.getFollows(values);
         const posts = await middleware.getDocByAuthor(values);
-        socket.emit("public-data", {followers,follows,posts});
+        socket.emit("public-data", { followers, follows, posts });
     });
 
     // Follow
@@ -188,210 +188,212 @@ Se non hai richiesto questo account, ignora semplicemente questa email.
 
 Grazie e benvenuto a bordo!
 Il Team di MindSharing`);
-        return "Account created successfully";
+        return { response: "Account created successfully" };
     }
     catch (err) {
-        return `Error creating account: ${err}`;
+        return { error: `Error creating account: ${err}` };
     }
 });
 pubsub.subscribe("databaseLoginAccount", async (data) => {
     try {
         const res = await database.loginUser(data.email);
-        const {password, password_salt, ...user} = res;
-        if(data.token) {
-            users.push({token: data.token, user: user});
+        const { password, password_salt, ...user } = res;
+        if (data.token) {
+            users.push({ token: data.token, user: user });
         }
-        return encrypter.check(data.password, res.password_salt, res.password) ? user : "Credentials are incorrect!";
+        return encrypter.check(data.password, res.password_salt, res.password) ? { response: user } : { error: "Credentials are incorrect!" };
     }
     catch (err) {
-        return `Error logging in: ${err}`;
+        return { error: `Error logging in: ${err}` };
     }
 });
 pubsub.subscribe("databaseChangeUsername", async (data) => {
     try {
         await database.updateUserUsername(data.email, data.username);
-        return "Username changed successfully";
+        return { response: "Username changed successfully" };
     }
     catch (err) {
-        return `Error changing username: ${err}`;
+        return { error: `Error changing username: ${err}` };
     }
 });
 pubsub.subscribe("databaseChangePassword", async (data) => {
     try {
         const psw = encrypter.encrypt(data.password);
         await database.updateUserPassword(data.email, psw.hash, psw.salt);
-        return "Password changed successfully";
+        return { response: "Password changed successfully" };
     }
     catch (err) {
-        return `Error changing password: ${err}`;
+        return { error: `Error changing password: ${err}` };
     }
 });
 pubsub.subscribe("databaseChangeThumbnail", async (data) => {
     try {
         const thumbnail = fileManager.saveImage(data.thumbnail, `${uuidv4()}.png`); //estensione ? 
         await database.updateUserThumbnail(data.email, thumbnail);
-        return "Thumbnail changed successfully";
+        return { response: "Thumbnail changed successfully" };
     }
     catch (err) {
-        return `Error changing thumbnail: ${err}`;
+        return { error: `Error changing thumbnail: ${err}` };
     }
 });
 pubsub.subscribe("databaseChangeBio", async (data) => {
     try {
         await database.updateUserBio(data.email, data.bio);
-        return "Bio changed successfully";
+        return { response: "Bio changed successfully" };
     }
     catch (err) {
-        return `Error changing bio: ${err}`;
+        return { error: `Error changing bio: ${err}` };
     }
 });
 pubsub.subscribe("databaseDeleteAccount", async (data) => {
     try {
         await database.deleteUser(data.email);
-        return "Account deleted successfully";
+        return { response: "Account deleted successfully" };
     }
     catch (err) {
-        return `Error deleting account: ${err}`;
+        return { error: `Error deleting account: ${err}` };
     }
 });
 pubsub.subscribe("databaseFindUser", async (data) => {
     try {
-        const res = await database.getUser(data.username);
-        return res;
+        const response = await database.getUser(data.username);
+        return { response };
     }
     catch (err) {
-        return `Error finding user: ${err}`;
+        return { error: `Error finding user: ${err}` };
     }
 });
 // Follow
 pubsub.subscribe("databaseFollowUser", async (data) => {
     try {
         await database.followUser(data.email, data.username);
-        return "Followed user successfully";
+        return { response: "Followed user successfully" };
     }
     catch (err) {
-        return `Error following user: ${err}`;
+        return { error: `Error following user: ${err}` };
     }
 });
 pubsub.subscribe("databaseUnfollowUser", async (data) => {
     try {
         await database.unfollowUser(data.email, data.username);
-        return "Unfollowed user successfully";
+        return { response: "Unfollowed user successfully" };
     }
     catch (err) {
-        return `Error unfollowing user: ${err}`;
+        return { error: `Error unfollowing user: ${err}` };
     }
 });
 pubsub.subscribe("databaseGetFollowers", async (data) => {
     try {
-        const res = await database.getFollowers(data.username);
-        return res;
+        const response = await database.getFollowers(data.username);
+        return { response };
     }
     catch (err) {
-        return `Error getting followers: ${err}`;
+        return { error: `Error getting followers: ${err}` };
     }
 });
 pubsub.subscribe("databaseGetFollows", async (data) => {
     try {
-        const res = await database.getFollows(data.username);
-        return res;
+        const response = await database.getFollows(data.username);
+        return { response };
     }
     catch (err) {
-        return `Error getting follows: ${err}`;
+        return { error: `Error getting follows: ${err}` };
     }
 });
 // Document
 pubsub.subscribe("databaseCreateDocument", async (data) => {
-    try{
+    try {
         const path_note = `/dist/assets/md/${uuidv4()}.md`;
-        await database.createNote(path_note, data.email );
-        const res = await database.findNote(path_note);
-        return res;
+        await database.createNote(path_note, data.email);
+        const response = await database.findNote(path_note);
+        return { response };
     }
-    catch(err){
-        return "Error creating document " + err
+    catch (err) {
+        return { error: "Error creating document " + err };
     }
 });
 pubsub.subscribe("databaseDeleteDocument", async (data) => {
-    try{
+    try {
         await database.deleteNote(data.id);
+        return { response: "Document deleted successfully" };
     }
-    catch(err){
-        return "Error deleting document " + err
+    catch (err) {
+        return { error: "Error deleting document " + err };
     }
 });
 pubsub.subscribe("databaseImportDocument", async (data) => {
-    try{
+    try {
         const path_note = fileManager.saveWord(data.fileData, data.fileName);
-        await database.createNote(path_note, data.author_email );
-        const res = await database.findNote(path_note);
-        res.text = await fileManager.importFromDocx(path_note);
-        return res; 
+        await database.createNote(path_note, data.author_email);
+        const response = await database.findNote(path_note);
+        response.text = await fileManager.importFromDocx(path_note);
+        return { response };
     }
-    catch(err){
-        return "Error importing document " + err
+    catch (err) {
+        return { error: "Error importing document " + err };
     }
 });
 pubsub.subscribe("databaseSaveDocument", async (data) => {
-    try{
+    try {
         let pathNote = path.basename(data.path_note);
-        fileManager.saveInMd(data.text, pathNote );
-        return "Document saved successfully";
+        fileManager.saveInMd(data.text, pathNote);
+        return { response: "Document saved successfully" };
     }
-    catch(err){
-        return "Error saving document " + err
+    catch (err) {
+        return { error: "Error saving document " + err };
     }
 });
 pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
-    try{
-        const res = await database.findNoteByUser(data.username);
-        return res;
+    try {
+        const response = await database.findNoteByUser(data.username);
+        return { response };
     }
-    catch(err){
-        return "Error finding document " + err
+    catch (err) {
+        return { error: "Error finding document " + err };
     }
 });
 pubsub.subscribe("databaseExportDocument", async (data) => {
-    try{
-        console.log(data);
-        if(data.format == 'docx'){
-            return await fileManager.saveInDocx(data.text, path.basename(data.path_note) + ".docx");
+    try {
+        if (data.format == 'docx') {
+            const response = await fileManager.saveInDocx(data.text, path.basename(data.path_note) + ".docx")
+            return { response };
         }
-        else if(data.format == 'pdf'){
-            return await fileManager.saveInPdf(data.text, path.basename(data.path_note) + ".pdf");
+        else if (data.format == 'pdf') {
+            const response = await fileManager.saveInPdf(data.text, path.basename(data.path_note) + ".pdf");
+            return { response };
         }
-        else return "Format not supported";
+        else return { response: "Format not supported" };
     }
-    catch(err){
-        return "Error exporting document " + err
+    catch (err) {
+        return { error: "Error exporting document " + err };
     }
 });
 pubsub.subscribe("databaseChangeVisibility", async (data) => {
-    try{
+    try {
         await database.changeVisibility(data.id, data.visibility);
-        return "Visibility changed successfully";
+        return { response: "Visibility changed successfully" };
     }
-    catch(err){
-        return "Error changing visibility " + err
+    catch (err) {
+        return { error: "Error changing visibility " + err };
     }
-}); 
+});
 pubsub.subscribe("databaseGetDocument", async (data) => {
-    try{
-        const res = await database.findNote(data.path_note);
-        res.text = fileManager.importFromMd(data.path_note);
-        return res;
+    try {
+        const response = await database.findNote(data.path_note);
+        response.text = fileManager.importFromMd(data.path_note);
+        return { response };
     }
-    catch(err){
-        return "Error finding document " + err
+    catch (err) {
+        return { error: "Error finding document " + err };
     }
 });
 // Tag
 pubsub.subscribe("databaseCreateTag", async (data) => {
-    try{
+    try {
         await database.createTag(data.tag);
-        return "Tag created successfully";
+        return { response: "Tag created successfully" };
     }
-    catch(err){
-        return "Error creating tag " + err;
+    catch (err) {
+        return { error: "Error creating tag " + err };
     }
 });
