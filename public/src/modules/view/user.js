@@ -1,9 +1,9 @@
 export const generateUser = (parentElement, pubSub) => {
   return {
-    render: function (userData) {
+    render: function (userData, itsme) {
       pubSub.subscribe("user-personal-data", (user) => {
-        console.log(user)
         parentElement.innerHTML = `
+                <h1 class="title has-text-white">${userData.getUsername()}</h1>
                 <div id="user-stats" class="columns is-flex is-justify-content-center">
                     <div class="column is-one-third has-text-centered" id="nPosts">
                         <h3>${user.posts[0].length}</h3>
@@ -45,7 +45,7 @@ export const generateUser = (parentElement, pubSub) => {
                                 <div class="column is-half">
                                     <a class="hidden" id="download-file-${e.id}" target="_blank" download></a>
                                     <div class="post box" id="${e.id}">
-                                        <div class="post-tabs columns">
+                                        ${itsme ? `<div class="post-tabs columns">
                                             <div class="column is-one-third has-text-centered post-tab">
                                                 <button type="button" class="delete-doc-button" id="${e.id}" class="button btn-transparent">
                                                     <span class="icon">
@@ -78,7 +78,7 @@ export const generateUser = (parentElement, pubSub) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>` : "" }
                                         <div class="header is-flex is-justify-content-space-between">
                                             <div>${userData.getUsername()}</div>
                                         </div>

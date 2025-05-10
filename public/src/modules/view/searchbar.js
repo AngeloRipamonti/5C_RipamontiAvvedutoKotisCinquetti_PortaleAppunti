@@ -10,7 +10,9 @@ export const generateSearchbar = (parentElement, pubsub) => {
                             <span class="icon is-right clickableIcon" id="$IDCancelSearch">
                                 <i class="fa-solid fa-xmark"></i>
                             </span>
-                        </p>`.replaceAll("$ID", id).replace("$PLACEHOLDER", placeholder);
+                        </p>
+                        <div id="error-div"></div>
+                        `.replaceAll("$ID", id).replace("$PLACEHOLDER", placeholder);
             parentElement.innerHTML = html;
 
             const searchBar = document.getElementById(id);

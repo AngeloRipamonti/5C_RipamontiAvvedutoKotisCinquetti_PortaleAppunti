@@ -32,6 +32,7 @@ const creation = document.getElementById("creation-start");
 const feedContainer = document.getElementById("posts");
 const publisherContainer = document.getElementById("publisher");
 const personalContainer = document.getElementById("personal");
+const search_result = document.getElementById("search-results")
 
 //pubSub and Navigator
 const pubsub = generatePubSub();
@@ -106,10 +107,18 @@ pubsub.subscribe('onsearch-tag', (data) => {
 });
 
 pubsub.subscribe('onsearch-user', (data) => {
-    console.log('Ricerca per utente:', data.username);
+    console.log(user.getUsername())
+    if(data.username.toLowerCase() === user.getUsername().toLowerCase()) return document.getElementById("error-div").innerText = "You are that user!";
     middleware.getPublicData(data.username); 
-    socket.on("public-data", (data) => {
-        console.log(data); 
+    socket.on("public-data", (stats) => {
+        if(isNaN(stats.followers)) return document.getElementById("error-div").innerText = "No user found";
+        location.href = "#search-results";
+        middleware.getProfile(data.username);
+        socket.on("getProfile", (dat) => {
+            userObject = generateUserPresenter(pubsub,generateUserData(null,null,data.username,dat.bio, dat.path_thumbnail),generateUser(search_result, pubsub));
+            userObject.render(false);
+            pubsub.publish("user-personal-data", stats);
+        });
     }); 
 });
 
@@ -122,7 +131,7 @@ pubsub.subscribe('oncancel', (data) => {
 socket.on("login", ([data]) => {
     user = generateUserData(null, data.email, data.username, data.bio, data.path_thumbnail);
     userObject = generateUserPresenter(pubsub,user,generateUser(personalContainer, pubsub));
-    userObject.render();
+    userObject.render(true);
     navbar.setUserData(data);
     location.href = "#feed";
 });
@@ -133,7 +142,6 @@ socket.on("importDocument", ([data]) => {
 });
 socket.on("connect_", (data) => {
    if(data && data.length > 0) {
-    console.log(data);
     user = generateUserData(null, data[0].user.email, data[0].user.username, data[0].user.bio, data[0].user.path_thumbnail);
     userObject = generateUserPresenter(pubsub,user,generateUser(personalContainer, pubsub));
     userObject.render();

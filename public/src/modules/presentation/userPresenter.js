@@ -1,8 +1,8 @@
 export const generateUserPresenter = (pubSub,userData,view) => {
     
     return{
-        render: function() {
-            view.render(userData);
+        render: function(itsme) {
+            view.render(userData, itsme);
         },
         follow: function (target){
 
