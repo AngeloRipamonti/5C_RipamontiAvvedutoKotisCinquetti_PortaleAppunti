@@ -352,3 +352,12 @@ pubsub.subscribe("databaseExportDocument", async (data) => {
         return "Error exporting document " + err
     }
 });
+pubsub.subscribe("databaseChangeVisibility", async (data) => {
+    try{
+        await database.changeVisibility(data.id, data.visibility);
+        return "Visibility changed successfully";
+    }
+    catch(err){
+        return "Error changing visibility " + err
+    }
+}); 

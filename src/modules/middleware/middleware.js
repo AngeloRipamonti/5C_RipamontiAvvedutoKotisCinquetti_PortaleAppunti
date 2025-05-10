@@ -98,17 +98,17 @@ module.exports = function middleware(pubsub) {
                 text: text
             });
         },
-
         giveFeedback: async function(author_email, id, n_star){
             return await pubsub.publish("databaseGiveFeedback", { author_email, id, n_star });
         },
-
         getDocument: async function (path) {
             return await pubsub.publish("databaseGetDocument", { path });
         },
-        getDocTag: function (tag) {
+        changeVisibility: async function (id, visibility) {
+            return await pubsub.publish("databaseChangeVisibility", { id, visibility });
         },
-        changeVisibility: function (doc) {
+
+        getDocTag: function (tag) {
         },
         createTag: function (tag) {
         }

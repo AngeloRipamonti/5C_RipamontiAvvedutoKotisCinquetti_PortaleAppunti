@@ -150,6 +150,9 @@ module.exports = function database() {
         findNoteByUser: async function(username){
             const email = (await _get(`SELECT email FROM users WHERE username = ?;`, [username])).email;
             return await _query(`SELECT * FROM notes WHERE author_email = ?;`, [email]);
+        },
+        changeVisibility: async function (id, visibility) {
+            await db.execute("UPDATE notes SET visibility = ? WHERE id = ?", [visibility, id]);
         }
     }
 }
