@@ -117,7 +117,7 @@ export const generateUser = (parentElement, pubSub) => {
             const exportDocxButtons = document.querySelectorAll(".export-docx-button");
             exportDocxButtons.forEach(element => {
                 element.onclick = () => {
-                    pubSub.publish("export-docx-document", element.id);
+                    pubSub.publish("export-docx-document", user.posts[0].find(e => e.id == element.id).path_note);
                 }
             });
       });

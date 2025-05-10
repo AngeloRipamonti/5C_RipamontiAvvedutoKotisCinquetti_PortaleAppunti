@@ -144,7 +144,19 @@ pubsub.subscribe("export-pdf-document", (path) => {
         socket.on("exportDocument", (path) => {
             const target = document.getElementById(`download-file-${doc.id}`);
             target.href = path;
-            console.log(target);
+            target.click();
+        })
+    })
+});
+
+pubsub.subscribe("export-docx-document", (path) => {
+    middleware.getDocument(path);
+    socket.on("getDocumentByPath", ([doc]) => {
+        console.log(doc);
+        middleware.exportDocument(path, "docx", doc.text);
+        socket.on("exportDocument", (path) => {
+            const target = document.getElementById(`download-file-${doc.id}`);
+            target.href = path;
             target.click();
         })
     })

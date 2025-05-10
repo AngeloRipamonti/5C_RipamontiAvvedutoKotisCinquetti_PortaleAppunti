@@ -353,6 +353,7 @@ pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
 });
 pubsub.subscribe("databaseExportDocument", async (data) => {
     try{
+        console.log(data);
         if(data.format == 'docx'){
             return await fileManager.saveInDocx(data.text, path.basename(data.path_note) + ".docx");
         }
