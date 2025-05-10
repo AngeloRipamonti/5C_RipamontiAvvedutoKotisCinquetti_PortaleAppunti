@@ -1,5 +1,6 @@
 export const generateViewNote = (parentElement, pubSub) => {
     let currentRating = 0;
+
     function renderStars(starsAvg) {
         let stars = '';
         for (let i = 0; i < 5; i++) {
@@ -53,19 +54,21 @@ export const generateViewNote = (parentElement, pubSub) => {
                                 </button>
                             </div>
                             <div class="column is-half has-text-right">
-                                <button type="button" id="open-fullscreen" class="button btn-transparent">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-up-right-and-down-left-from-center" style="color: #ffffff;"></i>
-                                    </span>
-                                </button>
+                               <button type="button" id="open-fullscreen">
+                                    <a href="#fullscreen-view" class="button btn-transparent">
+                                        <span class="icon">
+                                            <i class="fa-solid fa-up-right-and-down-left-from-center" style="color: #ffffff;"></i>
+                                        </span>
+                                    </a>
+                               </button>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
-            const thisPost = document.getElementById(doc.id);
+            const thisPost = document.getElementById(doc.getID());
+            console.log(thisPost)
             const starsBtns = thisPost.querySelectorAll('.btn-star');
-            console.log(starsBtns);
             starsBtns.forEach(star => {
                 star.addEventListener('click', function() {
                     let rating = parseInt(star.getAttribute('data-value'));
@@ -77,7 +80,7 @@ export const generateViewNote = (parentElement, pubSub) => {
             vote_button.onclick = () => pubSub.publish("post-voted", {star: currentRating, id: doc.id}); //aggiungere il post votatoe freezare stelline dopo aver votato
 
             const fullscreen_button = thisPost.querySelector("#open-fullscreen");
-            fullscreen_button.onclick = () => pubSub.publish("document-fullscreen", doc.id);
+            fullscreen_button.onclick = () => document.getElementById("fullscreen-view").innerHTML = doc.getText();
         }
     }
 }
