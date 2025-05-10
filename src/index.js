@@ -95,7 +95,11 @@ io.on('connection', (socket) => {
         const followers = await middleware.getFollowers(values);
         const follows = await middleware.getFollows(values);
         const posts = await middleware.getDocByAuthor(values);
-        socket.emit("public-data", { followers, follows, posts });
+        if(followers?.error || follows?.error || posts?.error) {
+            socket.emit("public-data", { followers: [], follows: [], posts: [] });
+            return;
+        }
+        socket.emit("public-data", { followers: followers.response, follows: follows.response, posts: posts.response });
     });
 
     // Follow
