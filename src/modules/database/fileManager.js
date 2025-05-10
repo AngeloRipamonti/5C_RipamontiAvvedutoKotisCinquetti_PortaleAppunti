@@ -15,16 +15,16 @@ module.exports = function fileManager() {
             const bufferData = Buffer.from(fileData); 
             fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${fileName}`), bufferData);
-            return path.join(process.cwd(), `/dist/assets/docx/${fileName}`);
+            return `/dist/assets/docx/${fileName}`;
         },
         saveInMd: function (html, filename) {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/md/${filename}`), html);
-            return path.join(process.cwd(), `/dist/assets/md/${filename}`);
+            return `/dist/assets/md/${filename}`;
         },
         saveInDocx: async function (html, filename) {
             const docxBuffer = await htmlDocx(html);
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
-            return path.join(process.cwd(), `/dist/assets/docx/${filename}`);
+            return `/dist/assets/docx/${filename}`;
         },
         saveInPdf: async function (html, filename) {
             await htmlPdf.create(html, {
@@ -38,13 +38,13 @@ module.exports = function fileManager() {
             })
                 .toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
                     if (err) throw err;
-                    return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
+                    return `/dist/assets/pdf/${filename}`;
                 });
-             return path.join(process.cwd(), `/dist/assets/pdf/${filename}`);
+             return `/dist/assets/pdf/${filename}`;
         },
         saveImage: function (img, filename) {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${filename}`), Buffer.from(img));
-            return path.join(process.cwd(), `/dist/assets/images/${filename}`);
+            return `/dist/assets/images/${filename}`;
         },
         importFromMd: function (filepath) {
             return fs.readFileSync(filepath).toString();
