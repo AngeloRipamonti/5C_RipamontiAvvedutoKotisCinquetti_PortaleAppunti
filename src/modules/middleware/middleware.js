@@ -101,8 +101,8 @@ module.exports = function middleware(pubsub) {
         giveFeedback: async function(author_email, id, n_star){
             return await pubsub.publish("databaseGiveFeedback", { author_email, id, n_star });
         },
-        getDocument: async function (path) {
-            return await pubsub.publish("databaseGetDocument", { path });
+        getDocument: async function (path_note) {
+            return await pubsub.publish("databaseGetDocument", { path_note });
         },
         changeVisibility: async function (id, visibility) {
             return await pubsub.publish("databaseChangeVisibility", { id, visibility });

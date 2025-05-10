@@ -155,6 +155,11 @@ io.on('connection', (socket) => {
         socket.emit("changeVisibility", res);
     });
 
+    socket.on("getDocumentByPath", async (values) => {
+        const res = await middleware.getDocument(values.path_note);
+        socket.emit("getDocumentById", res);
+    });
+
     // Tag
     socket.on("createTag", async (values) => {
         const res = await middleware.createTag(values.tag);
@@ -372,6 +377,17 @@ pubsub.subscribe("databaseChangeVisibility", async (data) => {
         return "Error changing visibility " + err
     }
 }); 
+pubsub.subscribe("databaseGetDocument", async (data) => {
+    try{
+        const res = await database.findNote(data.path_note);
+        res.text = fileManager.importFromMd(data.path_note);
+        return res;
+    }
+    catch(err){
+        return "Error finding document " + err
+    }
+});
+// Tag
 pubsub.subscribe("databaseCreateTag", async (data) => {
     try{
         await database.createTag(data.tag);
