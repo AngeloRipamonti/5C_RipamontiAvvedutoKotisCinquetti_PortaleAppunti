@@ -2,62 +2,67 @@ export const generateUserSettings = (parentElement, pubSub) => {
 
     return {
         render: function (uData) {
-            parentElement.innerHTML = `<div class="columns m-6">
-                                        <div class="column is-5">
+            parentElement.innerHTML = `
+                <h1 class="title has-text-white">Settings</h1>
+                <div class="columns mt-6">
+                    <div class="column is-half">
+                        <div class="columns is-vcentered">
+                            <div class="column">
+                                <label class="label" for="usernameChange">Username</label>
+                                <input id="usernameChange" class="input" type="text" value="${uData.getUsername()}"> 
+                            </div>
+                            <div class="column is-narrow">
+                                <button id="changeUsername" class="button is-primary">Change Username</button>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                                <label class="label" for="oldPassword">Old password</label>
+                                <input id="oldPassword" class="input" type="text" placeholder="Insert your old password"/>
+                            </div>
+                            </div>
 
-                                            <div class="group">
-                                                <div></div>
-                                                <h1 class="title"> Settings </h1>
-                                            </div>
+                            <div class="columns">
+                            <div class="column">
+                                <label class="label" for="newPassword">New password</label>
+                                <input id="newPassword" class="input" type="text" placeholder="Insert your new password"/> 
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                                <label class="label" for="confirmPassword">Confirm password</label>
+                                <input id="confirmPassword" class="input" type="text" placeholder="Confirm your new password"/>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                                <button id="changePassword" class="button is-primary mt-4">Change Password</button>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-one-fifth">
+                                <img class="user-icon" src="${uData.getThumbnail()}">
+                            </div>
+                            <div class="column">
+                                <button id="changeThumb" class="button is-primary mt-5">Change Thumbnail</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <textarea id="bioChange" class="textarea mt-4">${uData.getBio() || ""}</textarea>
+                        <div class="mt-4">
+                            <button id="changeBio" class="button is-primary">Change Bio</button>
+                        </div>
 
-                                            <div class="field">
-                                                <label class="label">Username</label>
-                                                <div class="control">
-                                                    <input id="usernameChange" class="input" type="text" value="${uData.getUsername()}"> 
-                                                    <button id="changeUsername"  class="button is-primary">Change Username</button>
-                                                </div>
-                                            </div>
+                        <div class="mt-4">
+                            <button class="button is-danger">Logout</button>
+                        </div>
 
-                                            
-                                            <div class="field">
-                                                <label class="label">Old password</label>
-                                                <div class="control">
-                                                    <input id="oldPassword" class="input" type="text" placeholder="Insert your old password"/>
-                                                </div>
-                                            </div>
-                                            
-
-                                            <div class="field">
-                                                <label class="label">New password</label>
-                                                <div class="control">
-                                                    <input id="newPassword" class="input" type="text" placeholder="Insert your new password"/> 
-                                                </div>
-                                            </div>
-
-                                            <div class="field">
-                                                <label class="label">Confirm password</label>
-                                                <div class="control">
-                                                    <input id="confirmPassword" class="input" type="text" placeholder="Confirm your new password"/>
-                                                    <button id="changePsw" class="button is-primary">Change Password</button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="column is-1">
-                                            2
-                                        </div>
-                                        <div class="column is-5">
-                                        <img class="user-icon" src="${uData.getThumbnail()}">
-                                            <button id="changeThumb" class="button is-primary">Change Thumbnail</button> 
-
-                                            <textarea id="bioChange" class="textarea" value="${uData.getBio()}"></textarea>
-                                            <button id="changeBio" class="button is-primary">Change Bio</button>
-                                        </div>
-
-                                        <button class="button is-danger">Logout</button>
-                                        <button class="button is-danger">Delete Account</button>
-                                    </div>`;
-
+                        <div class="mt-4">
+                            <button class="button is-danger">Delete Account</button>
+                        </div>
+                    </div>
+                </div>`;
             document.getElementById("changeUsername").onclick =  () => pubSub.publish("changeUsername", document.getElementById("usernameChange").value);
             document.getElementById("changePassword").onclick =  () => {
                 if(document.getElementById("newPassword").value === document.getElementById("confirmPassword").value) pubSub.publish("changePassword", [document.getElementById("oldPassword").value, document.getElementById("newPassword").value]);
