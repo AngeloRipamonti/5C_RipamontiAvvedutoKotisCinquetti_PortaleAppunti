@@ -303,7 +303,7 @@ pubsub.subscribe("databaseGetFollows", async (data) => {
 // Document
 pubsub.subscribe("databaseCreateDocument", async (data) => {
     try{
-        const path_note = path.join(process.cwd(), "/dist/assets/md", `${uuidv4()}.md`);
+        const path_note = `/dist/assets/md/${uuidv4()}.md`;
         await database.createNote(path_note, data.email );
         const res = await database.findNote(path_note);
         return res;
