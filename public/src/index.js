@@ -224,8 +224,7 @@ pubsub.subscribe("changeBio", (bio) =>{
 pubsub.subscribe("changeThumbnail", (thumbnail) => {
     middleware.changeThumbnail(thumbnail.fileName, thumbnail.fileData, user.getEmail());
     socket.on("changeThumbnail", ([data]) => {
-        console.log(data);
-        if(data?.response) user.setThumbnail(thumbnail);
+        if(data?.response) user.setThumbnail(data.response);
     })
 });
 

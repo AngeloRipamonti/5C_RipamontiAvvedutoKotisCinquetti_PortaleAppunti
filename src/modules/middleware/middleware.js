@@ -31,11 +31,8 @@ module.exports = function middleware(pubsub) {
                 password: password
             });
         },
-        changeThumbnail: async function (img, email) {
-            return await pubsub.publish("databaseChangeThumbnail", {
-                email: email,
-                thumbnail: img
-            });
+        changeThumbnail: async function (fileName, fileData, email) {
+            return await pubsub.publish("databaseChangeThumbnail", { email, fileName, fileData });
         },
         changeBio: async function (bio, email) {
             return await pubsub.publish("databaseChangeBio", {

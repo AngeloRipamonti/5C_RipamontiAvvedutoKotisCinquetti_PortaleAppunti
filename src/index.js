@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("changeThumbnail", async (values) => {
-        const res = await middleware.changeThumbnail(values.img, values.email);
+        const res = await middleware.changeThumbnail(values.fileName, values.fileData, values.email);
         socket.emit("changeThumbnail", res);
     });
 
@@ -248,7 +248,7 @@ pubsub.subscribe("checkFollow", async (me, user) => {
         return { response: response };
     }
     catch (err) {
-        return { error: `Error changing username: ${err}` };
+        return { error: `Error check follow: ${err}` };
     }
 });
 
@@ -264,9 +264,9 @@ pubsub.subscribe("databaseChangePassword", async (data) => {
 });
 pubsub.subscribe("databaseChangeThumbnail", async (data) => {
     try {
-        const thumbnail = fileManager.saveImage(data.thumbnail, `${uuidv4()}.png`); //estensione ? 
+        const thumbnail = fileManager.saveImage(data.fileData, data.fileName);
         await database.updateUserThumbnail(data.email, thumbnail);
-        return { response: "Thumbnail changed successfully" };
+        return { response: thumbnail };
     }
     catch (err) {
         return { error: `Error changing thumbnail: ${err}` };

@@ -4,6 +4,20 @@ export const generateUserSettings = (parentElement, pubSub) => {
         render: function (uData) {
             parentElement.innerHTML = `
                 <h1 class="title has-text-white">Settings</h1>
+                <div id="formThumbnail" class="is-hidden">
+                    <div class="file is-normal is-boxed">
+                        <label class="file-label">
+                            <input id="thumbnailUpload" class="file-input" accept="image/*" type="file" name="resume" />
+                            <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label"> Thumbnail </span>
+                              <button id="thumbnailConfirm" class="button is-primary">Submit</button>
+                            </span>
+                        </label>
+                    </div>
+                </div>
                 <div class="columns mt-6">
                     <div class="column is-half">
                         <div class="columns is-vcentered">
@@ -63,17 +77,26 @@ export const generateUserSettings = (parentElement, pubSub) => {
                         </div>
                     </div>
                 </div>`;
-            document.getElementById("changeUsername").onclick =  () => pubSub.publish("changeUsername", document.getElementById("usernameChange").value);
-            document.getElementById("changePassword").onclick =  () => {
-                if(document.getElementById("newPassword").value === document.getElementById("confirmPassword").value) pubSub.publish("changePassword", [document.getElementById("oldPassword").value, document.getElementById("newPassword").value]);
+            document.getElementById("changeUsername").onclick = () => pubSub.publish("changeUsername", document.getElementById("usernameChange").value);
+            document.getElementById("changePassword").onclick = () => {
+                if (document.getElementById("newPassword").value === document.getElementById("confirmPassword").value) pubSub.publish("changePassword", [document.getElementById("oldPassword").value, document.getElementById("newPassword").value]);
                 else alert("Passwords don't match");
             }
-            document.getElementById("changeThumb").onclick =  () => {
-                // form ecc
+            document.getElementById("changeThumb").onclick = () => {
+                document.getElementById("formThumbnail").classList.remove("is-hidden");
+                document.getElementById("thumbnailConfirm").onclick = () => {
+                    const fileInput = document.getElementById("thumbnailUpload");
+                    const file = fileInput.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            pubSub.publish('changeThumbnail', { fileName: file.name, fileData: event.target.result });
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+                document.getElementById("changeBio").onclick = () => pubSub.publish("changeBio", document.getElementById("bioChange").value);
             }
-            document.getElementById("changeBio").onclick =  () => pubSub.publish("changeBio", document.getElementById("bioChange").value);
-
-            
         }
     }
 }

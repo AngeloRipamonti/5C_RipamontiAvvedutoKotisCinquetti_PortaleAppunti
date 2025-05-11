@@ -42,9 +42,12 @@ module.exports = function fileManager() {
                 });
              return `/dist/assets/pdf/${filename}`;
         },
-        saveImage: function (img, filename) {
-            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${filename}`), Buffer.from(img));
-            return `/dist/assets/images/${filename}`;
+        saveImage: function (fileData, fileName) {
+            const base64 = fileData.split(',')[1];
+            const bufferData = Buffer.from(base64, 'base64');
+            fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
+            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${fileName}`), bufferData);
+            return `/dist/assets/images/${fileName}`;
         },
         importFromMd: function (filepath) {
             return fs.readFileSync(path.join(process.cwd(), filepath)).toString();

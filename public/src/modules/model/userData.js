@@ -6,6 +6,7 @@ export const generateUserData = (postManager, email, username, bio, thumbnail) =
         getBio: () => bio,
         setBio: (value) => bio = value,
         getThumbnail: () => thumbnail,
+        setThumbnail: (value) => thumbnail = value,
         toString: () => {
             return `Email: ${email}
                     Username: ${username}
