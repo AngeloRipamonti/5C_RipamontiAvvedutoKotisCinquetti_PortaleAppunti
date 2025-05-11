@@ -211,6 +211,12 @@ pubsub.subscribe("post-voted", (result) => {
         called = false;
     }
 });
+pubsub.subscribe("changeBio", (bio) =>{
+    middleware.changeBio(bio, user.getEmail());
+    socket.on("changeBio", ([data]) => {
+        if(data?.response) user.setBio(bio);
+    })
+});
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
