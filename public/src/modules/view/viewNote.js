@@ -35,7 +35,7 @@ export const generateViewNote = (parentElement, pubSub) => {
                 starsHTML += `<button class="btn-star" data-value="${i + 1}"><i class="fa-regular fa-star star"></i></button>`;
             }
             parentElement.innerHTML += `
-                <div class="post-container" id="${doc.id}">
+                <div class="post-container" id="${doc.getID()}">
                     <div class="post box">
                         <div class="header is-flex is-justify-content-space-between">
                             <div>${doc.getAuthor()}</div>
@@ -79,7 +79,7 @@ export const generateViewNote = (parentElement, pubSub) => {
             vote_button.onclick = () => pubSub.publish("post-voted", {star: currentRating, id: doc.id}); //aggiungere il post votatoe freezare stelline dopo aver votato
 
             const fullscreen_button = thisPost.querySelector("#open-fullscreen");
-            fullscreen_button.onclick = () => pubSub.publish("open-document-fullscreen");
+            fullscreen_button.onclick = () => pubSub.publish("open-document-fullscreen",doc.getPath());
         }
     }
 }

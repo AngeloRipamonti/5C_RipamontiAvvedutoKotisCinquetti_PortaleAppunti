@@ -412,7 +412,7 @@ pubsub.subscribe("databaseGetFollowDocuments", async (data) => {
 });
 pubsub.subscribe("fileGetDocumentText", async (data) => {
     try {
-        const response = fileManager.importFromMd(path.join(process.cwd(), data.path_note));
+        const response = fileManager.importFromMd(data.path_note);
         return { response };
     }
     catch (err) {

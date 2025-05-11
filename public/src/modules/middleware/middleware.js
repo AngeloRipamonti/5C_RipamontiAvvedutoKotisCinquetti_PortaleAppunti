@@ -64,6 +64,11 @@ export const generateMiddleware = (pubsub, socket) => {
         getDocument: function (path_note) {
             socket.emit("getDocumentByPath", { path_note });
         },
+
+        getDocumentText: function (path_note) {
+            socket.emit("getDocumentText", { path_note });
+        },
+        
         getDocTag: function (tag) {
             socket.emit("getDocTag", { tag });
         },

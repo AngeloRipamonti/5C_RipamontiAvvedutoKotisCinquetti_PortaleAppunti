@@ -197,6 +197,15 @@ pubsub.subscribe("export-docx-document", (path) => {
         })
     })
 });
+
+pubsub.subscribe("open-document-fullscreen", (path) => {
+    middleware.getDocumentText(path);
+    socket.on("getDocumentText", ([data]) => {
+        console.log(data)
+        document.getElementById("fullscreen-view").innerHTML = data.response;
+    });
+});
+
 pubsub.subscribe("user-settings", value => {
     location.href = "#settings";
     let uSettings = generateUserSettingsPresenter(pubsub, generateUserSettings(document.getElementById("settings"), pubsub), user);
