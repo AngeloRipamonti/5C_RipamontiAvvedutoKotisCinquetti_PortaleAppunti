@@ -1,5 +1,5 @@
-export const generateDocPresenter = (document,view) => {
-  const quill = new Quill("#editor", {
+export const generateDocPresenter = (editor, document,view) => {
+  const quill = new Quill(editor, {
     modules: {
       toolbar: [
         ["bold", "italic", "underline"]
@@ -13,7 +13,7 @@ export const generateDocPresenter = (document,view) => {
 
     render: function () {
       quill.root.blur();
-      view.render();
+      if(view) view.render();
     },
     import: function (html) {
       let delta = quill.clipboard.convert(html);

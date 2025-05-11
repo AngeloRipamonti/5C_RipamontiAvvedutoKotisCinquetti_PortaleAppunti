@@ -9,6 +9,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
         if (modal) modal.classList.remove("is-active");
         if (document.getElementById("editor-wrapper").classList.contains("hide")) document.getElementById("editor-wrapper").classList.remove("hide");
     });
+    
     return {
         render: function () {
             const html = `

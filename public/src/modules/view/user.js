@@ -106,7 +106,8 @@ export const generateUser = (parentElement, pubSub) => {
             const modifyButtons = document.querySelectorAll(".modify-doc-button");
             modifyButtons.forEach(element => {
                 element.onclick = () => {
-                    pubSub.publish("modify-document", element.id);
+                   const post = user.posts.find(e => e.id == element.id);
+                    pubSub.publish("modify-document", post.path_note);
                 }
             });
 
