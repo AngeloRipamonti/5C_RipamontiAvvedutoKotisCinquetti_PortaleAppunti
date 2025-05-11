@@ -155,7 +155,7 @@ module.exports = function database() {
             await db.execute("UPDATE notes SET visibility = ? WHERE id = ?", [visibility, id]);
         },
         getFollowDocuments: async function (email) {
-            return await _query(`SELECT n.* FROM follows_users AS f JOIN notes AS n ON f.email_child = n.author_email WHERE f.email_parent = ? AND n.visibility = 1;`, [email]);
+            return await _query(`SELECT n.id, n.path_note, n.created_at, n.visibility, n.author_email, AVG(fb.n_star) AS average_stars, GROUP_CONCAT(DISTINCT nt.name) AS tags FROM follows_users AS f JOIN notes AS n ON f.email_child = n.author_email LEFT JOIN feedbacks AS fb ON fb.id = n.id LEFT JOIN notes_tags AS nt ON nt.id = n.id WHERE f.email_parent = ? AND n.visibility = 1 GROUP BY n.id;`, [email]);
         },
         // Tag
         createTag: async function (tag) {
