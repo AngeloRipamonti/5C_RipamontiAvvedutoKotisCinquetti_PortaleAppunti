@@ -110,6 +110,9 @@ module.exports = function middleware(pubsub) {
         getFollowDocuments: async function (email) {
             return await pubsub.publish("databaseGetFollowDocuments", { email });
         },
+        getDocumentText: async function (path_note) {
+            return await pubsub.publish("fileGetDocumentText", { path_note });
+        },
         // Tag
         createTag: function (tag) {
             return pubsub.publish("databaseCreateTag", { tag });
