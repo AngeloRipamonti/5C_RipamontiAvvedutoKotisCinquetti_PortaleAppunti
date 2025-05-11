@@ -68,7 +68,7 @@ module.exports = function database() {
                             author_email VARCHAR(255),
                             id INT,
                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                            PRIMARY KEY (author_email, id),
+                            PRIMARY KEY (author_email, id, created_at),
                             CONSTRAINT fk_notes_edit_author FOREIGN KEY (author_email) REFERENCES users(email)
                                 ON DELETE RESTRICT
                                 ON UPDATE CASCADE,
@@ -172,6 +172,10 @@ module.exports = function database() {
         // Feedback
         createFeedback: async function (id, n_star, author_email) {
             await db.execute("INSERT INTO feedbacks (id, author_email, n_star) VALUES (?, ?, ?);", [id, author_email, n_star]);
+        },
+        // Notes Edit
+        editNote: async function(id, author_email) {
+            await db.execute("INSERT INTO notes_edit (id, author_email) VALUES(?, ?);", [id, author_email]);
         }
     }
 }

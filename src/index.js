@@ -189,6 +189,12 @@ io.on('connection', (socket) => {
         socket.emit("getDocTag", res);
     });
 
+    // Dcoument Edit
+    socket.on("modifyDocument", async (values) => {
+        const res = await middleware.updateDocument(values.id, values.path_note, values.text, values.author_email);
+        socket.emit("modifyDocument", res);
+    });
+
     // Feedback
     socket.on("giveFeedback", async (values) => {
         const res = await middleware.giveFeedback(values.id, values.author_email, values.star);
@@ -477,5 +483,16 @@ pubsub.subscribe("databaseGiveFeedback", async (data) => {
     }
     catch (err) {
         return { error: "Error giving feedback " + err };
+    }
+});
+// Note Edit
+pubsub.subscribe("databaseUpdateDocument", async (data) => {
+    try {
+        fileManager.saveInMd(data.text, data.path_note);
+        await database.editNote(data.id, data.author_email);        
+        return { response: "Note edited successfully" };
+    }
+    catch (err) {
+        return { error: "Error editing note " + err };
     }
 });

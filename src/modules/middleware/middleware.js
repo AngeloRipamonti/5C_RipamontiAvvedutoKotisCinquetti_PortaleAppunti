@@ -119,5 +119,9 @@ module.exports = function middleware(pubsub) {
         giveFeedback: async function(id, author_email, star){
             return await pubsub.publish("databaseGiveFeedback", { id, author_email, star });
         },
+        // Edit Note
+        updateDocument: async function (id, path_note, text, author_email) {
+            return await pubsub.publish("databaseUpdateDocument", { id, path_note, text, author_email });
+        }
     }
 }
