@@ -1,9 +1,8 @@
 export function generateNavbar(parentElement, pubsub) {
 
   pubsub.subscribe("navbar-follows", (res) => {
-    console.log(res);
-     if(res.response) elements["search-results"].left[1] = `<button id='unFollow_user' class='button is-rounded'><i class="fa-solid fa-check" style="color: #ffffff;"></i></button>`;
-     if(res.response) console.log("dentro");
+     if(res.response) elements["search-results"].left[1] = `<button id='unFollow_user' class='button is-rounded'> <i class="fa-solid fa-check" style="color: #ffffff;"></i> </button>`;
+     else elements["search-results"].left[1] = "<button id='follow_user' class='button is-rounded'>Follow</button>";
      pubsub.publish("render-nav");
   });
 
@@ -130,7 +129,6 @@ export function generateNavbar(parentElement, pubsub) {
       }
       if (document.getElementById("follow_user")) document.getElementById("follow_user").onclick = () => pubsub.publish("follow_user");
       if (document.getElementById("unFollow_user")) document.getElementById("unFollow_user").onclick = () => pubsub.publish("unFollow_user");
-      pubsub.subscribe("follow_user_success", () => document.getElementById("follow_user").innerHTML = `<i class="fa-solid fa-check" style="color: #ffffff;"></i>`);
       if(document.getElementById("u-settings")) document.getElementById("u-settings").onclick = () => pubsub.publish("user-settings");
       pubsub.subscribe("newHash", (page) => {
         build(page);

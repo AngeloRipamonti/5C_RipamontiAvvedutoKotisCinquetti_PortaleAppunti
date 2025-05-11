@@ -130,10 +130,12 @@ pubsub.subscribe('onsearch-user', (data) => {
                 pubsub.subscribe("follow_user", async () => {
                     middleware.followAccount(user.getEmail(), target.follow());
                     socket.on("followAccount", ([data]) => {
-                        if (data?.response) pubsub.publish("follow_user_success", data.response);
+                        console.log(data);
+                        if (data?.response) pubsub.publish("navbar-follows", true);
                     });
                 });
                 pubsub.subscribe("unFollow_user", async () => {
+                    console.log("dentro")
                     middleware.unfollowAccount(user.getEmail(), target.follow());
                     pubsub.publish("navbar-follows", false);
                 });
@@ -261,6 +263,9 @@ window.addEventListener("popstate", () => {
         socket.on("public-data", (data) => {
             pubsub.publish("user-personal-data", data.response);
         });
+    }else if (new URL(location.href).hash === "#feed") {
+        getFeed(user);
+        console.log("dentro");
     }
 });
 
@@ -300,8 +305,8 @@ socket.on("connect_", (data) => {
 function getFeed(user) {
     middleware.getFeed(user.getEmail());
     const posts = [];
-    feedContainer.innerHTML = "";
     socket.on("getFollowDocuments", ([res]) => {
+        feedContainer.innerHTML = "";
         res.response.forEach(e => feedContainer.innerHTML += `<div id="${e.id}"></div>`)
         res.response.forEach(e => posts.push(generateNote(pubsub, generateDocument(e.id, e.created_at, e.visibility, e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(document.getElementById(e.id), pubsub))));
         const postManager = generatePostManager(pubsub, posts, generateFeed(pubsub));
