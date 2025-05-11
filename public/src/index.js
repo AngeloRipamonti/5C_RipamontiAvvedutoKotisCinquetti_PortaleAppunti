@@ -130,12 +130,10 @@ pubsub.subscribe('onsearch-user', (data) => {
                 pubsub.subscribe("follow_user", async () => {
                     middleware.followAccount(user.getEmail(), target.follow());
                     socket.on("followAccount", ([data]) => {
-                        console.log(data);
                         if (data?.response) pubsub.publish("navbar-follows", true);
                     });
                 });
                 pubsub.subscribe("unFollow_user", async () => {
-                    console.log("dentro")
                     middleware.unfollowAccount(user.getEmail(), target.follow());
                     pubsub.publish("navbar-follows", false);
                 });
@@ -148,6 +146,7 @@ pubsub.subscribe('oncancel', (data) => {
     console.log('Cancellazione ricerca per:', data.id);
 });
 
+//Publisher and tags
 pubsub.subscribe("publish-button-clicked", (checked) => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
     if(checked) middleware.changeVisibility(createDocument.document.getID(), checked);
@@ -155,6 +154,20 @@ pubsub.subscribe("publish-button-clicked", (checked) => {
          document.getElementById("publish-modal").classList.remove("is-active");
         createDocument.import("");
         location.href = "#feed";
+    })
+});
+
+
+pubsub.subscribe("search-tag", (tag)=>{
+    middleware.getDocTag(tag);
+    socket.on("getDocTag", ([values])=>{
+        pubsub.publish("tags-result", [values.response, tag]);
+    })
+});
+
+pubsub.subscribe("create-new-tag", (tag)=>{
+    middleware.createTag(tag);
+    socket.on("createTag", ([values])=>{
     })
 });
 
@@ -242,7 +255,6 @@ pubsub.subscribe("changeUsername", (username)=>{
 pubsub.subscribe("changePassword", ([oldPassword, newPassword]) => {
     middleware.changePassword(user.getEmail(), oldPassword, newPassword);
     socket.on("changePassword", ([data]) => {
-        console.log(data);
         if(data?.response) {
             location.href = "#entry";
         }
@@ -265,7 +277,6 @@ window.addEventListener("popstate", () => {
         });
     }else if (new URL(location.href).hash === "#feed") {
         getFeed(user);
-        console.log("dentro");
     }
 });
 

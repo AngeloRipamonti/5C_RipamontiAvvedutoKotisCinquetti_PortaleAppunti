@@ -76,12 +76,14 @@ export const generateViewPublisher = (parentElement, pubSub) => {
                 pubSub.publish("publish-button-clicked", visibility.checked);
             };
 
-            pubSub.subscribe("tags-result", (tags) => {
+            pubSub.subscribe("tags-result", ([tags, tag]) => {
                 search_container.classList.remove("hide");
 
-                if (tags && tags.length > 0) {
-                    search_result.innerHTML = tags.map((tag) => {
-                        return `<div class="tag-display clickableTag">${tag}</div>`;
+                const filter = tags.filter(e => e.name == tag);
+
+                if (filter && filter.length > 0) {
+                    search_result.innerHTML = filter.map((tag) => {
+                        return `<div class="tag-display clickableTag">${tag.name}</div>`;
                     }).join('');
 
                     // Aggiunge il tag cliccato

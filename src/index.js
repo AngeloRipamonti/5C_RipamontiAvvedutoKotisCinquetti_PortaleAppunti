@@ -185,9 +185,7 @@ io.on('connection', (socket) => {
         socket.emit("createTag", res);
     });
     socket.on("getDocTag", async (values) =>{
-        console.log(values);
         const res = await middleware.getDocTag(values.tag);
-        console.log(res);
         socket.emit("getDocTag", res);
     });
 
@@ -474,7 +472,6 @@ pubsub.subscribe("databaseGetDocTag", async (data) => {
 // Feedback
 pubsub.subscribe("databaseGiveFeedback", async (data) => {
     try {
-        console.log(data)
         await database.createFeedback(data.id, data.star, data.author_email );
         return { response: "Feedback created successfully" };
     }
