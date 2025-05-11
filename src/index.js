@@ -184,6 +184,12 @@ io.on('connection', (socket) => {
         const res = await middleware.createTag(values.tag);
         socket.emit("createTag", res);
     });
+    socket.on("getDocTag", async (values) =>{
+        console.log(values);
+        const res = await middleware.getDocTag(values.tag);
+        console.log(res);
+        socket.emit("getDocTag", res);
+    });
 
     // Feedback
     socket.on("giveFeedback", async (values) => {
@@ -450,6 +456,16 @@ pubsub.subscribe("databaseCreateTag", async (data) => {
     try {
         await database.createTag(data.tag);
         return { response: "Tag created successfully" };
+    }
+    catch (err) {
+        return { error: "Error creating tag " + err };
+    }
+});
+
+pubsub.subscribe("databaseGetDocTag", async (data) => {
+    try {
+        const getDoc= await database.getDocTag(data.tag);
+        return { response: getDoc };
     }
     catch (err) {
         return { error: "Error creating tag " + err };

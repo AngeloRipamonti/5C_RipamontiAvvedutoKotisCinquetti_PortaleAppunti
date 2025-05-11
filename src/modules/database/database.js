@@ -167,7 +167,7 @@ module.exports = function database() {
             await db.execute("INSERT INTO tags (name) VALUES (?);", [tag]);
         },
         getDocTag: async function (tag) {
-            await db.execute("SELECT * FROM tags", [tag]);
+            return await _query("SELECT * FROM tags", [tag]);
         },
         // Feedback
         createFeedback: async function (id, n_star, author_email) {
