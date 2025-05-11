@@ -65,7 +65,7 @@ export const generateMiddleware = (pubsub, socket) => {
             socket.emit("getDocumentByPath", { path_note });
         },
         checkFollow: function (me, user) {
-            socket.emit("checkFollow", me, user);
+            socket.emit("checkFollow", {me, user});
         },
         getDocumentText: function (path_note) {
             socket.emit("getDocumentText", { path_note });

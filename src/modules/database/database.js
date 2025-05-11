@@ -138,9 +138,9 @@ module.exports = function database() {
             return (await _get(`SELECT COUNT(*) AS count FROM follows_users WHERE email_child = ?;`, [email])).count;
         },
         checkFollow: async function (me, user) {
-            const me_mail = await _get(`SELECT email WHERE username = ?`, [me]);
-            const target_mail = await _get(`SELECT email WHERE username = ?`, [user]);
-            return await _get(`SELECT * FROM follow_users WHERE email_parent = ? AND email_child = ?;`, [me_mail, target_mail]);
+            const me_mail = await _get(`SELECT email FROM users WHERE username = ?`, [me]);
+            const target_mail = await _get(`SELECT email FROM users WHERE username = ?`, [user]);
+            return await _get(`SELECT * FROM follows_users WHERE email_parent = ? AND email_child = ?;`, [me_mail.email, target_mail.email]);
         },
         // Notes
         createNote: async function (path_note, author_email){

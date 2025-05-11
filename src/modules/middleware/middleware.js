@@ -65,7 +65,7 @@ module.exports = function middleware(pubsub) {
             return await pubsub.publish("databaseGetFollowers", { username });
         },
         checkFollow: async function (me, user) {
-            return await pubsub.publish("checkFollow", { me, user });
+            return await pubsub.publish("checkFollow", { me: me, user: user });
         },
         
         // Document

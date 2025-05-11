@@ -91,8 +91,8 @@ io.on('connection', (socket) => {
         socket.emit("getProfile", res);
     });
 
-    socket.on("checkFollow", async (me, user) => {
-        const res = await middleware.checkFollow(me, user);
+    socket.on("checkFollow", async (values) => {
+        const res = await middleware.checkFollow(values.me, values.user);
         socket.emit("checkFollow", res);
     })
 
@@ -242,9 +242,9 @@ pubsub.subscribe("databaseChangeUsername", async (data) => {
     }
 });
 
-pubsub.subscribe("checkFollow", async (me, user) => {
+pubsub.subscribe("checkFollow", async (params) => {
     try {
-        const response = (await database.checkFollow(me, user)) || false;
+        const response = (await database.checkFollow(params.me, params.user)) ? true : false;
         return { response: response };
     }
     catch (err) {

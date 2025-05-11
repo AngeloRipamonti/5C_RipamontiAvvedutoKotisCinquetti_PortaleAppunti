@@ -133,6 +133,10 @@ pubsub.subscribe('onsearch-user', (data) => {
                         if (data?.response) pubsub.publish("follow_user_success", data.response);
                     });
                 });
+                pubsub.subscribe("unFollow_user", async () => {
+                    middleware.unfollowAccount(user.getEmail(), target.follow());
+                    pubsub.publish("navbar-follows", false);
+                });
             })
         });
     });
