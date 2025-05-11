@@ -106,7 +106,7 @@ pubsub.subscribe('onsearch-tag', (data) => {
     console.log('Ricerca per tag:', data.tag);
     middleware.getDocTag(data.tag);
     socket.on("public-data", (data) => {
-        console.log(data);
+        console.log(data); //da implementare
     });
 });
 
