@@ -8,10 +8,9 @@ export const generateViewPublisher = (parentElement, pubSub) => {
             <div class="modal-content">
                 <div id="body-pub" class="section" style="background-color:rgba(255,255,255,1) !important;">
                     <h1 class="title has-text-centered has-text-black">Publish your draft</h1>
-                    <input class="input" id="title-field" type="text" placeholder="Text title" />
                     <div>
                         <label class="checkbox">
-                            <input type="checkbox" />
+                            <input type="checkbox" id="vis_toggle" />
                             Public post
                         </label>
                     </div>
@@ -56,8 +55,9 @@ export const generateViewPublisher = (parentElement, pubSub) => {
             }
 
             const publish_post = document.getElementById("publish-post");
+            const visibility = document.getElementById("vis_toggle");
             publish_post.onclick = () => {
-                pubSub.publish("publish-button-clicked");
+                pubSub.publish("publish-button-clicked", visibility.checked);
             }
 
             pubSub.subscribe("tags-result", (tags) => {

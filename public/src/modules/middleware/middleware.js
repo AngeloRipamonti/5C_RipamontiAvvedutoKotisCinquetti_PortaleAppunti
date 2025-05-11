@@ -67,13 +67,17 @@ export const generateMiddleware = (pubsub, socket) => {
         getDocTag: function (tag) {
             socket.emit("getDocTag", { tag });
         },
-        changeVisibility: function (doc) {
+        changeVisibility: function (doc, visibility) {
+            socket.emit("changeVisibility", {id: doc, visibility});
         },
         exportDocument: function (path_note, format, text) {
             socket.emit("exportDocument", {path_note, format, text});
         },
         createTag: function (tag) {
             socket.emit("createTag", { tag });
+        },
+        getFeed: function (email) {
+            socket.emit("getFollowDocuments", { email });
         }
     }
 }

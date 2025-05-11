@@ -22,6 +22,16 @@ import { generateUser } from "./modules/view/user.js";
 import { generateUserSettingsPresenter } from "./modules/presentation/userSettingsPresenter.js";
 import { generateUserSettings } from "./modules/view/userSettings.js";
 
+function getFeed(user) {
+    middleware.getFeed(user.getEmail());
+    socket.on("getFollowDocuments", ([res]) => {
+        const posts = [];
+        res.response.forEach(e => posts.push(generateNote(pubsub, generateDocument(e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(feedContainer, pubsub))));
+        const postManager = generatePostManager(pubsub, posts, generateFeed(pubsub));
+        postManager.updateFeed();
+    });
+}
+
 location.href = "#entry"; //se loggati #feed
 
 //Container objects
@@ -47,10 +57,7 @@ const credential = generateCredentialManager(credentialContainer, pubsub);
 let userObject;
 
 const createDocument = generateDocPresenter(generateDocument(null, null, null, null, null, null), generateDocumentCreation(creation, pubsub));
-const post = generateNote(pubsub, generateDocument(null, null, null, null, "Luke", 5), generateViewNote(feedContainer, pubsub));
-const post2 = generateNote(pubsub, generateDocument(null, null, null, null, "alex", 3), generateViewNote(feedContainer, pubsub));
-const postManager = generatePostManager(pubsub, [post, post2], generateFeed(pubsub));
-postManager.updateFeed();
+
 
 let user;
 const socket = io();
@@ -141,11 +148,14 @@ pubsub.subscribe('oncancel', (data) => {
     console.log('Cancellazione ricerca per:', data.id);
 });
 
-pubsub.subscribe("publish-button-clicked", () => {
+pubsub.subscribe("publish-button-clicked", (checked) => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
-    document.getElementById("publish-modal").classList.remove("is-active");
-    createDocument.import("");
-    location.href = "#feed";
+    if(checked) middleware.changeVisibility(createDocument.document.getID(), checked);
+    socket.on("changeVisibility", () => {
+         document.getElementById("publish-modal").classList.remove("is-active");
+        createDocument.import("");
+        location.href = "#feed";
+    })
 });
 
 pubsub.subscribe("delete-document", (id) => {
@@ -217,6 +227,7 @@ socket.on("login", ([data]) => {
     userObject = generateUserPresenter(pubsub, user, generateUser(personalContainer, pubsub));
     userObject.render(true);
     navbar.setUserData(data.response);
+    getFeed(user);
     location.href = "#feed";
 });
 socket.on("importDocument", ([data]) => {
@@ -236,6 +247,7 @@ socket.on("connect_", (data) => {
         userObject = generateUserPresenter(pubsub, user, generateUser(personalContainer, pubsub));
         userObject.render(true);
         navbar.setUserData(data.response[0].user);
+        getFeed(user);
         location.href = "#feed";
     }
 });

@@ -1,11 +1,10 @@
-export const generateDocument = (path, text, title, tags, author, starsAvg) => {
+export const generateDocument = (path, text, tags, author, starsAvg) => {
     let id;
     let created_at;
     let visibility;
     return {
         getPath: () => path,
         getText: () => text,
-        getTitle: () => title,
         getTags: () => tags,
         getAuthor: () => author,
         getID: () => id, 

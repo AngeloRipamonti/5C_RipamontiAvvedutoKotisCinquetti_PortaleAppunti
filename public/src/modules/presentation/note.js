@@ -1,7 +1,8 @@
 export const generateNote = (pubSub, document, view) => {
-
     return{
-        render: () => view.render(document),
+        render: () => {
+            view.render(document)
+        },
         export: function(type) {
             
         },

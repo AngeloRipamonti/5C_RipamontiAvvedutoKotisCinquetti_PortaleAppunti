@@ -79,7 +79,7 @@ export const generateViewNote = (parentElement, pubSub) => {
             vote_button.onclick = () => pubSub.publish("post-voted", {star: currentRating, id: doc.id}); //aggiungere il post votatoe freezare stelline dopo aver votato
 
             const fullscreen_button = thisPost.querySelector("#open-fullscreen");
-            fullscreen_button.onclick = () => document.getElementById("fullscreen-view").innerHTML = doc.getText();
+            fullscreen_button.onclick = () => pubSub.publish("open-document-fullscreen");
         }
     }
 }
