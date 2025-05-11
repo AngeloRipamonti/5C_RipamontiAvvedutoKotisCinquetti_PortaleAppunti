@@ -201,6 +201,12 @@ io.on('connection', (socket) => {
         socket.emit("giveFeedback", res);
     });
 
+    // Notes Tag
+    socket.on("addNoteTag", async (values) => {
+        const res = await middleware.addNoteTag(values.id, values.tag);
+        socket.emit("addNoteTag", res);
+    });
+
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
 });
 
@@ -494,5 +500,15 @@ pubsub.subscribe("databaseUpdateDocument", async (data) => {
     }
     catch (err) {
         return { error: "Error editing note " + err };
+    }
+});
+// Note Tag
+pubsub.subscribe("databaseAddTag", async (data) => {
+    try {
+        await database.addTagToNote(data.id, data.tag);
+        return { response: "Tag added to note successfully" };
+    }
+    catch (err) {
+        return { error: "Error adding tag to note " + err };
     }
 });

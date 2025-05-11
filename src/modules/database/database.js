@@ -176,6 +176,10 @@ module.exports = function database() {
         // Notes Edit
         editNote: async function(id, author_email) {
             await db.execute("INSERT INTO notes_edit (id, author_email) VALUES(?, ?);", [id, author_email]);
+        },
+        // Notes Tags
+        addTagToNote: async function (id, tag) {
+            await db.execute("INSERT INTO notes_tags (id, name) VALUES (?, ?);", [id, tag]);
         }
     }
 }
