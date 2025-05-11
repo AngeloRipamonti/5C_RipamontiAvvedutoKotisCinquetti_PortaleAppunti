@@ -107,6 +107,9 @@ module.exports = function middleware(pubsub) {
         changeVisibility: async function (id, visibility) {
             return await pubsub.publish("databaseChangeVisibility", { id, visibility });
         },
+        getFollowDocuments: async function (email) {
+            return await pubsub.publish("databaseGetFollowDocuments", { email });
+        },
         // Tag
         createTag: function (tag) {
             return pubsub.publish("databaseCreateTag", { tag });

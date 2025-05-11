@@ -164,6 +164,11 @@ io.on('connection', (socket) => {
         socket.emit("getDocumentByPath", res);
     });
 
+    socket.on("getFollowDocuments", async (values) => {
+        const res = await middleware.getFollowDocuments(values.email);
+        socket.emit("getFollowDocuments", res);
+    });
+
     // Tag
     socket.on("createTag", async (values) => {
         const res = await middleware.createTag(values.tag);
@@ -389,6 +394,15 @@ pubsub.subscribe("databaseGetDocument", async (data) => {
     }
     catch (err) {
         return { error: "Error finding document " + err };
+    }
+});
+pubsub.subscribe("databaseGetFollowDocuments", async (data) => {
+    try {
+        const response = await database.getFollowDocuments(data.email);
+        return { response };
+    }
+    catch (err) {
+        return { error: "Error finding documents " + err };
     }
 });
 // Tag
