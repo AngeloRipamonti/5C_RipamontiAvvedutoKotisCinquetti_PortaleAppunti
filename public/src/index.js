@@ -221,6 +221,13 @@ pubsub.subscribe("changeBio", (bio) =>{
         if(data?.response) user.setBio(bio);
     })
 });
+pubsub.subscribe("changeThumbnail", (thumbnail) => {
+    middleware.changeThumbnail(thumbnail.fileName, thumbnail.fileData, user.getEmail());
+    socket.on("changeThumbnail", ([data]) => {
+        console.log(data);
+        if(data?.response) user.setThumbnail(thumbnail);
+    })
+});
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
