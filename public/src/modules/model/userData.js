@@ -3,6 +3,7 @@ export const generateUserData = (postManager, email, username, bio, thumbnail) =
         getPostManager: () => postManager,
         getEmail: () => email,
         getUsername: () => username,
+        setUsername: (value) => username = value,
         getBio: () => bio,
         setBio: (value) => bio = value,
         getThumbnail: () => thumbnail,

@@ -121,7 +121,7 @@ pubsub.subscribe('onsearch-user', (data) => {
         middleware.getProfile(data.username);
         socket.on("getProfile", ([dat]) => {
             middleware.checkFollow(user.getUsername(), dat.response.username);
-            socket.on("checkFollow", (res) => {
+            socket.on("checkFollow", ([res]) => {
                 pubsub.publish("navbar-follows", res);
                 const target = generateUserPresenter(pubsub, generateUserData(null, null, dat.response.username, dat.response.bio, dat.response.path_thumbnail), generateUser(search_result, pubsub));
                 target.render(false);
@@ -231,6 +231,12 @@ pubsub.subscribe("changeThumbnail", (thumbnail) => {
         if(data?.response) user.setThumbnail(data.response);
     })
 });
+pubsub.subscribe("changeUsername", (username)=>{
+    middleware.changeUsername(user.getEmail(), username);
+    socket.on("changeUsername", ([data]) => {
+        if(data?.response) user.setUsername(username);
+    })
+})
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
