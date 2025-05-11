@@ -22,16 +22,6 @@ import { generateUser } from "./modules/view/user.js";
 import { generateUserSettingsPresenter } from "./modules/presentation/userSettingsPresenter.js";
 import { generateUserSettings } from "./modules/view/userSettings.js";
 
-function getFeed(user) {
-    middleware.getFeed(user.getEmail());
-    socket.on("getFollowDocuments", ([res]) => {
-        const posts = [];
-        res.response.forEach(e => posts.push(generateNote(pubsub, generateDocument(e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(feedContainer, pubsub))));
-        const postManager = generatePostManager(pubsub, posts, generateFeed(pubsub));
-        postManager.updateFeed();
-    });
-}
-
 location.href = "#entry"; //se loggati #feed
 
 //Container objects
@@ -56,7 +46,7 @@ const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager(credentialContainer, pubsub);
 let userObject;
 
-const createDocument = generateDocPresenter(generateDocument(null, null, null, null, null, null), generateDocumentCreation(creation, pubsub));
+const createDocument = generateDocPresenter(generateDocument(), generateDocumentCreation(creation, pubsub));
 
 
 let user;
@@ -109,7 +99,7 @@ pubsub.subscribe('uploadFile', file => {
     middleware.importDocument(file);
 });
 pubsub.subscribe("post-voted", (data) => {
-    middleware.giveFeedback(user.author_email, data.id, data.star);
+    middleware.giveFeedback(user.getEmail(), data.id, data.star);
 });
 //SearchBar
 pubsub.subscribe('onsearch-tag', (data) => {
@@ -201,7 +191,6 @@ pubsub.subscribe("export-docx-document", (path) => {
 pubsub.subscribe("open-document-fullscreen", (path) => {
     middleware.getDocumentText(path);
     socket.on("getDocumentText", ([data]) => {
-        console.log(data)
         document.getElementById("fullscreen-view").innerHTML = data.response;
     });
 });
@@ -210,7 +199,18 @@ pubsub.subscribe("user-settings", value => {
     location.href = "#settings";
     let uSettings = generateUserSettingsPresenter(pubsub, generateUserSettings(document.getElementById("settings"), pubsub), user);
     uSettings.renderSettings();
-})
+});
+
+pubsub.subscribe("post-voted", (result) => {
+    let called = true;
+    if(called) {
+        middleware.giveFeedback(user.getEmail(), result.id, result.star);
+        socket.on("giveFeedback", ([data]) => {
+            if(data.response) getFeed(user);
+        });
+        called = false;
+    }
+});
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
@@ -260,3 +260,15 @@ socket.on("connect_", (data) => {
         location.href = "#feed";
     }
 });
+
+function getFeed(user) {
+    middleware.getFeed(user.getEmail());
+    const posts = [];
+    feedContainer.innerHTML = "";
+    socket.on("getFollowDocuments", ([res]) => {
+        res.response.forEach(e => feedContainer.innerHTML += `<div id="${e.id}"></div>`)
+        res.response.forEach(e => posts.push(generateNote(pubsub, generateDocument(e.id, e.created_at, e.visibility, e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(document.getElementById(e.id), pubsub))));
+        const postManager = generatePostManager(pubsub, posts, generateFeed(pubsub));
+        postManager.updateFeed();
+    });
+}

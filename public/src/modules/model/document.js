@@ -1,7 +1,4 @@
-export const generateDocument = (path, text, tags, author, starsAvg) => {
-    let id;
-    let created_at;
-    let visibility;
+export const generateDocument = (id, created_at, visibility, path, text, tags, author, starsAvg) => {
     return {
         getPath: () => path,
         getText: () => text,
@@ -16,6 +13,15 @@ export const generateDocument = (path, text, tags, author, starsAvg) => {
             id = data.id;
             created_at = data.created_at;
             visibility = data.visibility;
+        },
+        toString: () => {
+            return `${path} 
+                    ${text}, 
+                    ${tags}
+                    ${id},
+                    ${author},
+                    ${starsAvg}
+                    `;
         }
     }
 }

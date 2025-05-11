@@ -57,8 +57,8 @@ export const generateMiddleware = (pubsub, socket) => {
         getDocByAuthor: function (author_email) {
             socket.emit("getDocumentByAuthor", { author_email });
         },
-        giveFeedback: function(author_email, id, n_star){
-            socket.emit("giveFeedback", { author_email, id, n_star });
+        giveFeedback: function(author_email, id, star){
+            socket.emit("giveFeedback", { id, author_email, star });
         },
         
         getDocument: function (path_note) {

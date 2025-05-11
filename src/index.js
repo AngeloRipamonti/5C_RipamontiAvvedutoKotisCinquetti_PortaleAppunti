@@ -438,7 +438,8 @@ pubsub.subscribe("databaseCreateTag", async (data) => {
 // Feedback
 pubsub.subscribe("databaseGiveFeedback", async (data) => {
     try {
-        await database.createFeedback(data.id, data.author_email, data.star );
+        console.log(data)
+        await database.createFeedback(data.id, data.star, data.author_email );
         return { response: "Feedback created successfully" };
     }
     catch (err) {
