@@ -70,7 +70,9 @@ export const generateMiddleware = (pubsub, socket) => {
         getDocumentText: function (path_note) {
             socket.emit("getDocumentText", { path_note });
         },
-        
+        modifyDocument: function (path_note, id ,text, author_email) {
+            socket.emit("modifyDocument", { path_note, id, text, author_email });
+        },
         getDocTag: function (tag) {
             socket.emit("getDocTag", { tag });
         },

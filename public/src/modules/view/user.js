@@ -107,7 +107,7 @@ export const generateUser = (parentElement, pubSub) => {
             modifyButtons.forEach(element => {
                 element.onclick = () => {
                    const post = user.posts.find(e => e.id == element.id);
-                    pubSub.publish("modify-document", post.path_note);
+                    pubSub.publish("modify-document", [post.path_note, post.id]);
                 }
             });
 

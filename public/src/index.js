@@ -181,15 +181,17 @@ pubsub.subscribe("delete-document", (id) => {
     });
 });
 
-pubsub.subscribe("modify-document", (path) => {
-    middleware.getDocumentText(path);
+pubsub.subscribe("modify-document", (values) => {
+    middleware.getDocumentText(values[0]);
     socket.on("getDocumentText", ([data]) => {
         const createDocument = generateDocPresenter(modify_editor, generateDocument(null,null,null,null,data.response,null,null,null));
         createDocument.import(data.response);
         createDocument.render();
         location.href = "#modify";
         document.getElementById("saveModify").onclick = () => {
-            
+            middleware.modifyDocument(values[0], values[1] ,createDocument.getText(), user.getEmail());
+            socket.on("modifyDocument", (res) => console.log(res));
+            location.href = "#feed";
         };
     })
 })
