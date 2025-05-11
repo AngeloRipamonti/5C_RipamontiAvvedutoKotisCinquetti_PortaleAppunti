@@ -149,11 +149,13 @@ pubsub.subscribe('oncancel', (data) => {
 });
 
 //Publisher and tags
-pubsub.subscribe("publish-button-clicked", (checked) => {
+pubsub.subscribe("publish-button-clicked", (data) => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
-    if(checked) middleware.changeVisibility(createDocument.document.getID(), checked);
+    if(data[0]) middleware.changeVisibility(createDocument.document.getID(), data[0]);
+    data[1].forEach(e => middleware.databaseAddTag(createDocument.document.getID(), e));
+    socket.on("addNoteTag",(res)=>console.log(res))
     socket.on("changeVisibility", () => {
-         document.getElementById("publish-modal").classList.remove("is-active");
+        document.getElementById("publish-modal").classList.remove("is-active");
         createDocument.import("");
         location.href = "#feed";
     })

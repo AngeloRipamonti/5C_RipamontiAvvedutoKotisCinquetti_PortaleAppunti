@@ -87,6 +87,9 @@ export const generateMiddleware = (pubsub, socket) => {
         },
         getFeed: function (email) {
             socket.emit("getFollowDocuments", { email });
+        },
+        databaseAddTag: function (id, tag) {
+            socket.emit("addNoteTag", {id, tag});
         }
     }
 }

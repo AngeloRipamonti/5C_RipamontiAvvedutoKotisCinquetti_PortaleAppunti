@@ -124,7 +124,7 @@ module.exports = function middleware(pubsub) {
             return await pubsub.publish("databaseUpdateDocument", { id, path_note, text, author_email });
         },
         // Note Tag
-        addTag: async function (id, tag) {
+        addNoteTag: async function (id, tag) {
             return await pubsub.publish("databaseAddTag", { id, tag });
         }
     }

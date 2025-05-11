@@ -47,8 +47,9 @@ export const generateViewPublisher = (parentElement, pubSub) => {
             const search_icon = document.getElementById("search-icon");
             const search_result = document.getElementById("search-result");
             const tags_container = document.getElementById("tags-container");
-
             const addTag = document.getElementById("add-tag");
+
+            const tgs = [];
             addTag.onclick = () => {
                 search_container.classList.remove("hide");
                 search_input.focus();
@@ -73,7 +74,7 @@ export const generateViewPublisher = (parentElement, pubSub) => {
             const publish_post = document.getElementById("publish-post");
             const visibility = document.getElementById("vis_toggle");
             publish_post.onclick = () => {
-                pubSub.publish("publish-button-clicked", visibility.checked);
+                pubSub.publish("publish-button-clicked",[ visibility.checked, tgs]);
             };
 
             pubSub.subscribe("tags-result", ([tags, tag]) => {
@@ -89,6 +90,8 @@ export const generateViewPublisher = (parentElement, pubSub) => {
                     // Aggiunge il tag cliccato
                     document.querySelectorAll(".clickableTag").forEach((el) => {
                         el.onclick = () => {
+                            tgs.push(el.textContent);
+                            console.log(tgs)
                             tags_container.innerHTML += `
                                 <span class="tag is-info m-1">${el.textContent}</span>
                             `;
