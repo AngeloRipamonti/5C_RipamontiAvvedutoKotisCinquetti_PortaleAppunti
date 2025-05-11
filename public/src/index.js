@@ -237,6 +237,16 @@ pubsub.subscribe("changeUsername", (username)=>{
         if(data?.response) user.setUsername(username);
     })
 })
+pubsub.subscribe("changePassword", ([oldPassword, newPassword]) => {
+    middleware.changePassword(user.getEmail(), oldPassword, newPassword);
+    socket.on("changePassword", ([data]) => {
+        console.log(data);
+        if(data?.response) {
+            location.href = "#entry";
+        }
+    })
+});
+
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {

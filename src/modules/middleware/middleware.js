@@ -25,11 +25,8 @@ module.exports = function middleware(pubsub) {
                 username: username
             });
         },
-        changePassword: async function (email, password) {
-            return await pubsub.publish("databaseChangePassword", {
-                email: email,
-                password: password
-            });
+        changePassword: async function (email, oldPassword, newPassword) {
+            return await pubsub.publish("databaseChangePassword", { email, oldPassword, newPassword });
         },
         changeThumbnail: async function (fileName, fileData, email) {
             return await pubsub.publish("databaseChangeThumbnail", { email, fileName, fileData });

@@ -32,20 +32,20 @@ export const generateUserSettings = (parentElement, pubSub) => {
                         <div class="columns">
                             <div class="column">
                                 <label class="label" for="oldPassword">Old password</label>
-                                <input id="oldPassword" class="input" type="text" placeholder="Insert your old password"/>
+                                <input id="oldPassword" class="input" type="password" placeholder="Insert your old password"/>
                             </div>
                             </div>
 
                             <div class="columns">
                             <div class="column">
                                 <label class="label" for="newPassword">New password</label>
-                                <input id="newPassword" class="input" type="text" placeholder="Insert your new password"/> 
+                                <input id="newPassword" class="input" type="password" placeholder="Insert your new password"/> 
                             </div>
                         </div>
                         <div class="columns">
                             <div class="column">
                                 <label class="label" for="confirmPassword">Confirm password</label>
-                                <input id="confirmPassword" class="input" type="text" placeholder="Confirm your new password"/>
+                                <input id="confirmPassword" class="input" type="password" placeholder="Confirm your new password"/>
                             </div>
                         </div>
                         <div class="columns">

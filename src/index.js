@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("changePassword", async (values) => {
-        const res = await middleware.changePassword(values.email, values.password);
+        const res = await middleware.changePassword(values.email, values.oldPassword, values.newPassword);
         socket.emit("changePassword", res);
     });
 
@@ -254,9 +254,13 @@ pubsub.subscribe("checkFollow", async (me, user) => {
 
 pubsub.subscribe("databaseChangePassword", async (data) => {
     try {
-        const psw = encrypter.encrypt(data.password);
-        await database.updateUserPassword(data.email, psw.hash, psw.salt);
-        return { response: "Password changed successfully" };
+        const res = await database.loginUser(data.email);
+        if(encrypter.check(data.oldPassword, res.password_salt, res.password)){
+            const psw = encrypter.encrypt(data.newPassword);
+            await database.updateUserPassword(data.email, psw.hash, psw.salt);
+            return { response: "Password changed successfully" };
+        }
+        else return { error: "Old password is incorrect!" };
     }
     catch (err) {
         return { error: `Error changing password: ${err}` };

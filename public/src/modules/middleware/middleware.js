@@ -16,8 +16,8 @@ export const generateMiddleware = (pubsub, socket) => {
         changeUsername: function (email, username) {
             socket.emit("changeUsername", { email, username });
         },
-        changePassword: function (email, password) {
-            socket.emit("changePassword", { email, password });
+        changePassword: function (email, oldPassword, newPassword) {
+            socket.emit("changePassword", { email, oldPassword, newPassword });
         },
         changeThumbnail: function (fileName, fileData, email) {
             socket.emit("changeThumbnail", { fileName, fileData, email });
