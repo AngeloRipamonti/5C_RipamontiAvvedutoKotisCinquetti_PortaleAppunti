@@ -34,7 +34,9 @@ const creation = document.getElementById("creation-start");
 const feedContainer = document.getElementById("posts");
 const publisherContainer = document.getElementById("publisher");
 const personalContainer = document.getElementById("personal");
-const search_result = document.getElementById("search-results")
+const search_result = document.getElementById("search-results");
+const modify_doc = document.getElementById("modify");
+const modify_editor = document.getElementById("modify-editor");
 
 //pubSub and Navigator
 const pubsub = generatePubSub();
@@ -46,7 +48,7 @@ const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager(credentialContainer, pubsub);
 let userObject;
 
-const createDocument = generateDocPresenter(generateDocument(), generateDocumentCreation(creation, pubsub));
+const createDocument = generateDocPresenter(editor, generateDocument(), generateDocumentCreation(creation, pubsub));
 
 
 let user;
@@ -179,6 +181,19 @@ pubsub.subscribe("delete-document", (id) => {
     });
 });
 
+pubsub.subscribe("modify-document", (path) => {
+    middleware.getDocumentText(path);
+    socket.on("getDocumentText", ([data]) => {
+        const createDocument = generateDocPresenter(modify_editor, generateDocument(null,null,null,null,data.response,null,null,null));
+        createDocument.import(data.response);
+        createDocument.render();
+        location.href = "#modify";
+        document.getElementById("saveModify").onclick = () => {
+            
+        };
+    })
+})
+
 pubsub.subscribe("export-pdf-document", (path) => {
     let called = true;
     middleware.getDocument(path);
@@ -267,6 +282,8 @@ document.getElementById("saveDocument").onclick = () => {
     const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
     document.getElementById("publish-modal").classList.add("is-active");
 };
+
+
 
 /* EVENT LISTENER */
 window.addEventListener("popstate", () => {

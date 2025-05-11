@@ -95,7 +95,7 @@ div#credential-container {
     margin-bottom: 5% !important;
 }
 
-#editor-wrapper {
+#editor-wrapper, #modify {
     height: 65vh !important;
 }
 
