@@ -91,6 +91,11 @@ io.on('connection', (socket) => {
         socket.emit("getProfile", res);
     });
 
+    socket.on("checkFollow", async (me, user) => {
+        const res = await middleware.checkFollow(me, user);
+        socket.emit("checkFollow", res);
+    })
+
     socket.on("getUserPublicData", async (values) => {
         const [followers] = await middleware.getFollowers(values);
         const [follows] = await middleware.getFollows(values);
@@ -236,6 +241,17 @@ pubsub.subscribe("databaseChangeUsername", async (data) => {
         return { error: `Error changing username: ${err}` };
     }
 });
+
+pubsub.subscribe("checkFollow", async (me, user) => {
+    try {
+        const response = (await database.checkFollow(me, user)) || false;
+        return { response: response };
+    }
+    catch (err) {
+        return { error: `Error changing username: ${err}` };
+    }
+});
+
 pubsub.subscribe("databaseChangePassword", async (data) => {
     try {
         const psw = encrypter.encrypt(data.password);

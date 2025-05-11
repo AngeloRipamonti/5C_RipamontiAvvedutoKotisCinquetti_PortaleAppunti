@@ -1,4 +1,10 @@
 export function generateNavbar(parentElement, pubsub) {
+
+  pubsub.subscribe("navbar-follows", (res) => {
+     if(res) elements["search-results"].left[1] = `<button id='unFollow_user' class='button is-rounded'><i class="fa-solid fa-check" style="color: #ffffff;"></i></button>`;
+     pubsub.publish("render-nav");
+  });
+
   const elements = {
     creation: {
       logo: true,
@@ -26,7 +32,7 @@ export function generateNavbar(parentElement, pubsub) {
         "<button class='btn is-trasparent' id='acc-icon'>$thumbnail</button>",
         "<h3>$username</h3>",
       ],
-      left: [,
+      left: [
         "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
         "<button id='follow_user' class='button is-rounded'>Follow</button>"
       ]
@@ -83,6 +89,7 @@ export function generateNavbar(parentElement, pubsub) {
       this.render();
     },
     render: function () {
+      pubsub.subscribe("render-nav", () => this.render());
       const data = elements[index];
       parentElement.innerHTML = `
               <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">

@@ -120,16 +120,20 @@ pubsub.subscribe('onsearch-user', (data) => {
         location.href = "#search-results";
         middleware.getProfile(data.username);
         socket.on("getProfile", ([dat]) => {
-            const target = generateUserPresenter(pubsub, generateUserData(null, null, dat.response.username, dat.response.bio, dat.response.path_thumbnail), generateUser(search_result, pubsub));
-            target.render(false);
-            called = false;
-            pubsub.publish("user-personal-data", stats.response);
-            pubsub.subscribe("follow_user", async () => {
-                middleware.followAccount(user.getEmail(), target.follow());
-                socket.on("followAccount", ([data]) => {
-                    if (data?.response) pubsub.publish("follow_user_success", data.response);
+            middleware.checkFollow(user.getUsername(), dat.response.username);
+            socket.on("checkFollow", (res) => {
+                pubsub.publish("navbar-follows", res);
+                const target = generateUserPresenter(pubsub, generateUserData(null, null, dat.response.username, dat.response.bio, dat.response.path_thumbnail), generateUser(search_result, pubsub));
+                target.render(false);
+                called = false;
+                pubsub.publish("user-personal-data", stats.response);
+                pubsub.subscribe("follow_user", async () => {
+                    middleware.followAccount(user.getEmail(), target.follow());
+                    socket.on("followAccount", ([data]) => {
+                        if (data?.response) pubsub.publish("follow_user_success", data.response);
+                    });
                 });
-            });
+            })
         });
     });
 });
