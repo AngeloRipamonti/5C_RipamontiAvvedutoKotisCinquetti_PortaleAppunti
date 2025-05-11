@@ -163,6 +163,10 @@ module.exports = function database() {
         },
         getDocTag: async function (tag) {
             await db.execute("SELECT name FROM tags WHERE name = ?", [tag]);
+        },
+        // Feedback
+        createFeedback: async function (id, n_star, author_email) {
+            await db.execute("INSERT INTO feedbacks (id, author_email, n_star) VALUES (?, ?, ?);", [id, author_email, n_star]);
         }
     }
 }

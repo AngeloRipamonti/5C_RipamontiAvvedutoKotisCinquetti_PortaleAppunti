@@ -180,6 +180,12 @@ io.on('connection', (socket) => {
         socket.emit("createTag", res);
     });
 
+    // Feedback
+    socket.on("giveFeedback", async (values) => {
+        const res = await middleware.giveFeedback(values.id, values.author_email, values.star);
+        socket.emit("giveFeedback", res);
+    });
+
     socket.on("disconnect", () => console.log("socket disconnected: " + socket.id));
 });
 
@@ -427,5 +433,15 @@ pubsub.subscribe("databaseCreateTag", async (data) => {
     }
     catch (err) {
         return { error: "Error creating tag " + err };
+    }
+});
+// Feedback
+pubsub.subscribe("databaseGiveFeedback", async (data) => {
+    try {
+        await database.createFeedback(data.id, data.author_email, data.star );
+        return { response: "Feedback created successfully" };
+    }
+    catch (err) {
+        return { error: "Error giving feedback " + err };
     }
 });

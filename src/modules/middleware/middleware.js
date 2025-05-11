@@ -98,9 +98,6 @@ module.exports = function middleware(pubsub) {
                 text: text
             });
         },
-        giveFeedback: async function(author_email, id, n_star){
-            return await pubsub.publish("databaseGiveFeedback", { author_email, id, n_star });
-        },
         getDocument: async function (path_note) {
             return await pubsub.publish("databaseGetDocument", { path_note });
         },
@@ -119,6 +116,10 @@ module.exports = function middleware(pubsub) {
         },
         getDocTag: function (tag) {
             return pubsub.publish("databaseGetDocTag", { tag });
-        }
+        },
+        // Feedback
+        giveFeedback: async function(id, author_email, star){
+            return await pubsub.publish("databaseGiveFeedback", { id, author_email, star });
+        },
     }
 }
