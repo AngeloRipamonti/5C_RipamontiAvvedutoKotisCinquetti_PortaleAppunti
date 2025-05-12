@@ -3,6 +3,7 @@ export const generateNote = (pubSub, document, view) => {
         render: () => {
             view.render(document)
         },
+        /*
         export: function(type) {
             
         },
@@ -11,6 +12,6 @@ export const generateNote = (pubSub, document, view) => {
         },
         save: function() {
             
-        }
+        }*/
     }
 }

@@ -5,9 +5,10 @@ export const generateUserPresenter = (pubSub,userData,view) => {
             view.render(userData, itsme);
         },
         follow: () => userData.getUsername(),
+        /*
         unfollow: function (target){
 
-        }
+        }*/
 
     }
 }

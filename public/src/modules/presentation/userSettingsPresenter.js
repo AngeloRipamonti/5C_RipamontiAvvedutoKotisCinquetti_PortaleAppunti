@@ -1,6 +1,7 @@
 export const generateUserSettingsPresenter = (pubSub, view, userData) => {
     
     return{
+        /*
         changeBio: function() {
 
         },
@@ -12,7 +13,7 @@ export const generateUserSettingsPresenter = (pubSub, view, userData) => {
         },
         changePassword: function(psw) {
 
-        },
+        },*/
         renderSettings: function() {
             view.render(userData);
         }
