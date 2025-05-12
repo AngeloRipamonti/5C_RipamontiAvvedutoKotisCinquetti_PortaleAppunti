@@ -103,12 +103,21 @@ pubsub.subscribe('uploadFile', file => {
 pubsub.subscribe("post-voted", (data) => {
     middleware.giveFeedback(user.getEmail(), data.id, data.star);
 });
+
 //SearchBar
 pubsub.subscribe('onsearch-tag', (data) => {
-    console.log('Ricerca per tag:', data.tag);
-    middleware.getDocTag(data.tag);
-    socket.on("public-data", (data) => {
-        console.log(data); //da implementare
+    let called = true;
+    document.getElementById("error-div").innerText = ""; 
+    middleware.getDocTag(data.tag); 
+
+    socket.on("public-data", (stats) => {
+        if (!called) return;
+        if (!Array.isArray(stats.response) || stats.response.length === 0) {
+            return document.getElementById("error-div").innerText = "No content found for this tag";
+        }
+        location.href = "#search-results";
+        pubsub.publish("tagged-content", stats.response); 
+        called = false;
     });
 });
 
