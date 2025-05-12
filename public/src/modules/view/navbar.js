@@ -45,6 +45,7 @@ export function generateNavbar(parentElement, pubsub) {
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
+        `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`,
         "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>",
       ],
     },
