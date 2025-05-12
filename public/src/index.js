@@ -283,6 +283,7 @@ pubsub.subscribe("changePassword", ([oldPassword, newPassword]) => {
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
+    //Modale intermedia in cui si chiede se vuole pubblicare il documento, e allora crea publisher, altrimenti salva come privato
     const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
     document.getElementById("publish-modal").classList.add("is-active");
 };
