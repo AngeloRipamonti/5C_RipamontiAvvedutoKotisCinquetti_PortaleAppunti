@@ -22,7 +22,7 @@ import { generateUser } from "./modules/view/user.js";
 import { generateUserSettingsPresenter } from "./modules/presentation/userSettingsPresenter.js";
 import { generateUserSettings } from "./modules/view/userSettings.js";
 
-location.href = "#entry"; //se loggati #feed
+location.href = "#entry"; 
 
 //Container objects
 const navbarContainer = document.getElementById("navbar-container");
@@ -161,13 +161,15 @@ pubsub.subscribe('oncancel', (data) => {
 pubsub.subscribe("publish-button-clicked", (data) => {
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
     if(data[0]) middleware.changeVisibility(createDocument.document.getID(), data[0]);
-    data[1].forEach(e => middleware.databaseAddTag(createDocument.document.getID(), e));
-    socket.on("addNoteTag",(res)=>console.log(res))
-    socket.on("changeVisibility", () => {
-        document.getElementById("publish-modal").classList.remove("is-active");
-        createDocument.import("");
-        location.href = "#feed";
-    })
+    if(data[1]){
+        data[1].forEach(e => middleware.databaseAddTag(createDocument.document.getID(), e));
+        socket.on("addNoteTag",(res)=>console.log(res))
+        socket.on("changeVisibility", () => {
+            document.getElementById("publish-modal").classList.remove("is-active");
+            createDocument.import("");
+            location.href = "#personal";
+        })
+    }
 });
 
 
@@ -202,7 +204,7 @@ pubsub.subscribe("modify-document", (values) => {
         document.getElementById("saveModify").onclick = () => {
             middleware.modifyDocument(values[0], values[1] ,createDocument.getText(), user.getEmail());
             socket.on("modifyDocument", (res) => console.log(res));
-            location.href = "#feed";
+            location.href = "#personal";
         };
     })
 })
@@ -292,9 +294,23 @@ pubsub.subscribe("changePassword", ([oldPassword, newPassword]) => {
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
-    //Modale intermedia in cui si chiede se vuole pubblicare il documento, e allora crea publisher, altrimenti salva come privato
-    const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
-    document.getElementById("publish-modal").classList.add("is-active");
+    publisherContainer.innerHTML = `<div class="modal is-active">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-content">
+                                            <button id="continue_publish" class="button is-success is-dark">Continue to Publish</button>
+                                            <button id="continue_private" class="button is-danger is-dark">Archive document as private</button>
+                                        </div>
+                                        <button class="modal-close is-large" aria-label="close"></button>
+                                    </div>`;
+    document.getElementById("continue_publish").onclick = () => {
+        publisherContainer.querySelector(".modal-close").click();
+        const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
+        document.getElementById("publish-modal").classList.add("is-active");    
+    }
+    document.getElementById("continue_private").onclick = () => {
+        pubsub.publish("publish-button-clicked",[false]);
+        publisherContainer.querySelector(".modal-close").click();
+    }
 };
 
 
@@ -320,7 +336,7 @@ socket.on("login", ([data]) => {
     userObject.render(true);
     navbar.setUserData(data.response);
     getFeed(user);
-    location.href = "#feed";
+    location.href = "#personal";
 });
 socket.on("importDocument", ([data]) => {
     if (data.error) return;
@@ -340,7 +356,7 @@ socket.on("connect_", (data) => {
         userObject.render(true);
         navbar.setUserData(data.response[0].user);
         getFeed(user);
-        location.href = "#feed";
+        location.href = "#personal";
     }
 });
 
