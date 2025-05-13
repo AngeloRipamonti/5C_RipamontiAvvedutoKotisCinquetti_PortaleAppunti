@@ -116,6 +116,16 @@ a.tab-doc {
     color:white !important;
 }
 
+div#middle-modal-content {
+    background-color: white;
+    max-width: none;
+    max-height: none !important;
+    width: max-content;
+    height: max-content !important;
+    padding: 1rem 1.5rem;
+    margin: auto;
+}
+
 div#body-doc, div#body-pub {
     width: 100% !important;
     max-height: 100% !important;

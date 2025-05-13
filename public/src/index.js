@@ -315,23 +315,32 @@ pubsub.subscribe("changePassword", ([oldPassword, newPassword]) => {
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
-    publisherContainer.innerHTML = `<div class="modal is-active">
+    document.getElementById("publisher").classList.remove("is-hidden");
+    publisherContainer.innerHTML = `<div class="modal is-active" id="middle-modal">
                                         <div class="modal-background"></div>
-                                        <div class="modal-content">
-                                            <button id="continue_publish" class="button is-success is-dark">Continue to Publish</button>
-                                            <button id="continue_private" class="button is-danger is-dark">Archive document as private</button>
+                                        <div class="modal-content" id="middle-modal-content">
+                                            <h1 class="title has-text-black has-text-center">Wanna publish it?</h1>
+                                            <div class="columns">
+                                                <div class="column has-text-center">
+                                                    <button id="continue_publish" class="button is-link">Publish</button>
+                                                </div>
+                                                <div class="column has-text-center">
+                                                    <button id="continue_private" class="button is-black">Archive</button>
+                                                </div>
+                                            </div>
+                                            <button id="close-middle-modal" class="btn is-trasparent">Back to editor <i class="fa-solid fa-arrow-right"></i></button>
                                         </div>
-                                        <button class="modal-close is-large" aria-label="close"></button>
                                     </div>`;
+                                    
+    document.getElementById("close-middle-modal").onclick = () => document.getElementById("middle-modal").classList.remove("is-active");
     document.getElementById("continue_publish").onclick = () => {
-        publisherContainer.querySelector(".modal-close").click();
         const publisher = generatePublisher(pubsub, createDocument.document, generateViewPublisher(publisherContainer, pubsub));
         document.getElementById("publish-modal").classList.add("is-active");    
     }
     document.getElementById("continue_private").onclick = () => {
         pubsub.publish("publish-button-clicked",[false]);
-        document.getElementById("publisher").classList.remove("is-active");  
-        //publisherContainer.querySelector(".modal-close").click();
+        document.getElementById("publisher").classList.add("is-hidden");
+        location.href = "#personal"  
     }
 };
 
