@@ -380,12 +380,17 @@ pubsub.subscribe("databaseDeleteDocument", async (data) => {
 pubsub.subscribe("databaseImportDocument", async (data) => {
     try {
         const path_note = fileManager.saveWord(data.fileData, data.fileName);
-        await database.createNote(path_note, data.author_email);
-        const response = await database.findNote(path_note);
-        response.text = await fileManager.importFromDocx(path_note);
+        const text = await fileManager.importFromDocx(path_note);
+        const pathNote = fileManager.saveInMd(text, path.basename(path_note));
+        await database.createNote(pathNote, data.author_email);
+        const response = await database.findNote(pathNote);
+        response.text = text;
+        console.log(response)
         return { response };
     }
     catch (err) {
+                console.log(err)
+
         return { error: "Error importing document " + err };
     }
 });
