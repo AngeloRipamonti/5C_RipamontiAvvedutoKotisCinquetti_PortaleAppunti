@@ -415,9 +415,7 @@ pubsub.subscribe("databaseExportDocument", async (data) => {
             return { response };
         }
         else if (data.format == 'pdf') {
-            console.log(data.text)
             const response = await fileManager.saveInPdf(data.text, path.basename(data.path_note) + ".pdf");
-            console.log(response)
             return { response };
         }
         else return { response: "Format not supported" };
