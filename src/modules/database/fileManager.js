@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const htmlDocx = require('html-to-docx');
-const htmlPdf = require('html-pdf');
 const mammoth = require("mammoth");
+const { spawn } = require('child_process');
 
 module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/docx`)) fs.mkdirSync(`${process.cwd()}/dist/assets/docx`, { recursive: true });
@@ -11,8 +11,8 @@ module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/images`)) fs.mkdirSync(`${process.cwd()}/dist/assets/images`, { recursive: true });
 
     return {
-        saveWord: function (fileData, fileName){
-            const bufferData = Buffer.from(fileData); 
+        saveWord: function (fileData, fileName) {
+            const bufferData = Buffer.from(fileData);
             fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${fileName}`), bufferData);
             return `/dist/assets/docx/${fileName}`;
@@ -27,20 +27,24 @@ module.exports = function fileManager() {
             return `/dist/assets/docx/${filename}`;
         },
         saveInPdf: async function (html, filename) {
-            await htmlPdf.create(html, {
-                format: 'A4',
-                border: {
-                    top: '10mm',
-                    right: '10mm',
-                    bottom: '10mm',
-                    left: '10mm'
-                }
-            })
-                .toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
-                    if (err) throw err;
-                    return `/dist/assets/pdf/${filename}`;
-                });
-             return `/dist/assets/pdf/${filename}`;
+            const child = spawn('node', [path.join(process.cwd(), "service/pdfExporter.js"), html, filename]);
+
+            child.stderr.on('data', (data) => {
+                console.error(`Errore: ${data}`);
+                throw new Error(data);
+            });
+
+            child.on('close', (code) => {
+                console.log(`Processo terminato con codice: ${code}`);
+            });
+
+            return child.stdout.on('data', (data) => {
+                const result = data.toString().trim();
+                console.log(`Risultato ottenuto da child: ${result}`);
+                return result;
+            });
+
+
         },
         saveImage: function (fileData, fileName) {
             const base64 = fileData.split(',')[1];
