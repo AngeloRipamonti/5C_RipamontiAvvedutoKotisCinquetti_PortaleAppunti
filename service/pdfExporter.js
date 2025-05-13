@@ -11,12 +11,11 @@ htmlPdf.create(html, {
         left: '10mm'
     }
 })
-    .toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
-        if (err) {
-            console.error(err);
-            process.exit(1);   
-        }
-        return `/dist/assets/pdf/${filename}`;
-    });
-console.log(`/dist/assets/pdf/${filename}`);
-process.exit(0);
+.toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
+    if (err) {
+        console.error(err);
+        process.exit(1);   
+    }
+    console.log(`/dist/assets/pdf/${filename}`);
+    process.exit(0);
+});

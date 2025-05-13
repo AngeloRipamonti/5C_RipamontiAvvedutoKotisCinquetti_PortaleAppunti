@@ -26,25 +26,22 @@ module.exports = function fileManager() {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
             return `/dist/assets/docx/${filename}`;
         },
-        saveInPdf: async function (html, filename) {
-            const child = spawn('node', [path.join(process.cwd(), "service/pdfExporter.js"), html, filename]);
+        saveInPdf: function (html, filename) {
+            return new Promise((resolve, reject) => {
+                const child = spawn('node', [path.join(process.cwd(), "service/pdfExporter.js"), html, filename]);
+                let result;
+                child.stderr.on('data', (data) => {
+                    reject(data);
+                });
 
-            child.stderr.on('data', (data) => {
-                console.error(`Errore: ${data}`);
-                throw new Error(data);
+                child.on('close', (code) => {
+                    resolve(result);
+                });
+
+                child.stdout.on('data', (data) => {
+                    result = data.toString().trim();
+                });
             });
-
-            child.on('close', (code) => {
-                console.log(`Processo terminato con codice: ${code}`);
-            });
-
-            return child.stdout.on('data', (data) => {
-                const result = data.toString().trim();
-                console.log(`Risultato ottenuto da child: ${result}`);
-                return result;
-            });
-
-
         },
         saveImage: function (fileData, fileName) {
             const base64 = fileData.split(',')[1];
