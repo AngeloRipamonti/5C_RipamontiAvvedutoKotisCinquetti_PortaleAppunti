@@ -16,7 +16,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
             <div class="modal is-active" id="md">
             <div class="modal-background"></div>
             <div class="modal-content">
-             <h1 id="header" class="title has-text-centered">From zero to hero!</h1>
+             <h1 id="header" class="title has-text-centered">Upload a document</h1>
                 <div class="tabs is-centered is-toggle is-toggle-rounded">
                     <ul>
                         <li class="is-active"><a class="tab-doc" id="upload-doc">Upload a document</a></li>

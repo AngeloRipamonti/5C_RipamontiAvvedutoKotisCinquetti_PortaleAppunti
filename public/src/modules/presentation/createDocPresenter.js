@@ -1,16 +1,5 @@
-export const generateDocPresenter = (editor, document,view) => {
-  const quill = new Quill(editor, {
-    modules: {
-      toolbar: [
-        ["bold", "italic", "underline"]
-      ]
-    },
-    placeholder: "Write something...",
-    theme: "snow"
-  });  
-
+export const generateDocPresenter = (quill, document,view) => {
   return {
-
     render: function () {
       quill.root.blur();
       if(view) view.render();

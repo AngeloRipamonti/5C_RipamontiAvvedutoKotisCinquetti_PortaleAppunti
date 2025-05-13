@@ -118,7 +118,8 @@ a.tab-doc {
 
 div#body-doc, div#body-pub {
     width: 100% !important;
-    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: hidden !important;
 }
 
 div#body-pub {

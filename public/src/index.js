@@ -48,7 +48,6 @@ const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager(credentialContainer, pubsub);
 let userObject;
 
-const createDocument = generateDocPresenter(editor, generateDocument(), generateDocumentCreation(creation, pubsub));
 
 
 let user;
@@ -58,6 +57,28 @@ middleware.connect();
 navbar.render();
 searchbar.render("searchbar", "search for tags or users...");
 credential.renderLogin();
+
+const quillAdd = new Quill(editor, {
+    modules: {
+      toolbar: [
+        ["bold", "italic", "underline"]
+      ]
+    },
+    placeholder: "Write something...",
+    theme: "snow"
+});  
+
+const quillModify = new Quill(modify_editor, {
+    modules: {
+      toolbar: [
+        ["bold", "italic", "underline"]
+      ]
+    },
+    placeholder: "Write something...",
+    theme: "snow"
+});  
+
+const createDocument = generateDocPresenter(quillAdd, generateDocument(), generateDocumentCreation(creation, pubsub));
 
 
 //Apertura e Chiusura della modale di registrazione
@@ -110,7 +131,7 @@ pubsub.subscribe('onsearch-tag', (data) => {
     document.getElementById("error-div").innerText = ""; 
     middleware.getDocTag(data.tag); 
 
-    socket.on("public-data", (stats) => {
+    socket.on("getDocByTag", (stats) => {
         if (!called) return;
         if (!Array.isArray(stats.response) || stats.response.length === 0) {
             return document.getElementById("error-div").innerText = "No content found for this tag";
@@ -197,7 +218,7 @@ pubsub.subscribe("delete-document", (id) => {
 pubsub.subscribe("modify-document", (values) => {
     middleware.getDocumentText(values[0]);
     socket.on("getDocumentText", ([data]) => {
-        const createDocument = generateDocPresenter(modify_editor, generateDocument(null,null,null,null,data.response,null,null,null));
+        const createDocument = generateDocPresenter(quillModify, generateDocument(null,null,null,null,data.response,null,null,null));
         createDocument.import(data.response);
         createDocument.render();
         location.href = "#modify";
@@ -309,7 +330,8 @@ document.getElementById("saveDocument").onclick = () => {
     }
     document.getElementById("continue_private").onclick = () => {
         pubsub.publish("publish-button-clicked",[false]);
-        publisherContainer.querySelector(".modal-close").click();
+        document.getElementById("publisher").classList.remove("is-active");  
+        //publisherContainer.querySelector(".modal-close").click();
     }
 };
 

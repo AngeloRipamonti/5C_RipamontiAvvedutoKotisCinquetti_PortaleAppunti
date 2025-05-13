@@ -23,7 +23,7 @@ export function generateNavbar(parentElement, pubsub) {
       ],
       left: [
         "<button class='button is-white' id='u-settings'> <i class='fa fa-gear'></i> </button>",
-        "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
+        "<a href='#personal'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
         `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`
       ],
     },
@@ -34,7 +34,7 @@ export function generateNavbar(parentElement, pubsub) {
         "<h3>$username</h3>",
       ],
       left: [
-        "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
+        "<a href='#personal'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
         "<button id='follow_user' class='button is-rounded'>Follow</button>"
       ]
     },
@@ -45,8 +45,7 @@ export function generateNavbar(parentElement, pubsub) {
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
-        `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`,
-        "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>",
+        "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>"
       ],
     },
     entry: {
