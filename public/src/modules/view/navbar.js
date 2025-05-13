@@ -10,7 +10,7 @@ export function generateNavbar(parentElement, pubsub) {
     creation: {
       logo: true,
       right: [
-        '<a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a>',
+        '<a href="#personal"><img src="/assets/images/favicon.ico" id="logo"></a>',
         "<h3>Mind Sharing</h3>",
       ],
       left: ["<h3>Document Creation</h3>"],
@@ -23,7 +23,7 @@ export function generateNavbar(parentElement, pubsub) {
       ],
       left: [
         "<button class='button is-white' id='u-settings'> <i class='fa fa-gear'></i> </button>",
-        "<a href='#personal'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
+        "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
         `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`
       ],
     },
@@ -41,7 +41,7 @@ export function generateNavbar(parentElement, pubsub) {
     feed: {
       logo: true,
       right: [
-        '<a href="#feed"><img src="/assets/images/favicon.ico" id="logo"></a>',
+        '<a href="#personal"><img src="/assets/images/favicon.ico" id="logo"></a>',
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [

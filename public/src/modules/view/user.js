@@ -89,6 +89,13 @@ export const generateUser = (parentElement, pubSub) => {
                                         <div class="personal-preview" style="text-align: center !important;">
                                             <img src="/assets/images/doc-preview.png" alt="doc-thumbnail" id="doc-thumbnail">
                                         </div>
+                                        <button type="button" class="mypost-fullscreen" id="${e.id}">
+                                            <a href="#fullscreen-view" class="button btn-transparent">
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-up-right-and-down-left-from-center" style="color: #ffffff;"></i>
+                                                </span>
+                                            </a>
+                                        </button>
                                     </div>
                                 </div>
                                 ${index % 2 === 1 ? "</div>" : ""}
@@ -100,6 +107,15 @@ export const generateUser = (parentElement, pubSub) => {
             deleteButtons.forEach(element => {
                 element.onclick = () => {
                     pubSub.publish("delete-document", element.id);
+                }
+            });
+
+            const fullscreenButtons = document.querySelectorAll(".mypost-fullscreen");
+            fullscreenButtons.forEach(element => {
+                element.onclick = () => {
+                    console.log(element)
+                    const post = user.posts.find(e => e.id == element.id);
+                    pubSub.publish("open-document-fullscreen",post.path_note);
                 }
             });
 
