@@ -115,6 +115,9 @@ module.exports = function middleware(pubsub) {
         getDocTag: function (tag) {
             return pubsub.publish("databaseGetDocTag", { tag });
         },
+        getDocByTag: function (tag) {
+            return pubsub.publish("databaseGeDocByTag", { tag });
+        },
         // Feedback
         giveFeedback: async function(id, author_email, star){
             return await pubsub.publish("databaseGiveFeedback", { id, author_email, star });

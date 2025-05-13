@@ -188,6 +188,10 @@ io.on('connection', (socket) => {
         const res = await middleware.getDocTag(values.tag);
         socket.emit("getDocTag", res);
     });
+    socket.on("getDocByTag", async (values) =>{
+        const res = await middleware.getDocByTag(values.tag);
+        socket.emit("getDocByTag", res);
+    });
 
     // Dcoument Edit
     socket.on("modifyDocument", async (values) => {
@@ -478,7 +482,17 @@ pubsub.subscribe("databaseGetDocTag", async (data) => {
         return { response: getDoc };
     }
     catch (err) {
-        return { error: "Error creating tag " + err };
+        return { error: "Error getting tag " + err };
+    }
+});
+
+pubsub.subscribe("databaseGetDocByTag", async (data) => {
+    try {
+        const getDocByTag= await database.getDocByTag(data.tag);
+        return { response: getDocByTag };
+    }
+    catch (err) {
+        return { error: "Error getting  doc by tag " + err };
     }
 });
 // Feedback
