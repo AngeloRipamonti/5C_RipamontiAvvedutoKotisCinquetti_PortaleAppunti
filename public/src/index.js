@@ -129,15 +129,16 @@ pubsub.subscribe("post-voted", (data) => {
 pubsub.subscribe('onsearch-tag', (data) => {
     let called = true;
     document.getElementById("error-div").innerText = ""; 
-    middleware.getDocTag(data.tag); 
+    middleware.getDocByTag(data.tag); 
 
     socket.on("getDocByTag", (stats) => {
-        if (!called) return;
+        if (!called || !stats || !stats.response) return;
+        //response è un oggetto non un array
         if (!Array.isArray(stats.response) || stats.response.length === 0) {
             return document.getElementById("error-div").innerText = "No content found for this tag";
         }
         location.href = "#search-results";
-        pubsub.publish("tagged-content", stats.response); 
+        //getFeedByTag(stats);
         called = false;
     });
 });
