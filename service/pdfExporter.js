@@ -13,7 +13,7 @@ htmlPdf.create(html, {
 })
 .toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
     if (err) {
-        console.error(err);
+        console.log(err);
         process.exit(1);   
     }
     console.log(`/dist/assets/pdf/${filename}`);

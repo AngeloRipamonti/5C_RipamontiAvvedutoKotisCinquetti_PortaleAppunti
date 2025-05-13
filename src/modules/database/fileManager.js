@@ -31,14 +31,17 @@ module.exports = function fileManager() {
                 const child = spawn('node', [path.join(process.cwd(), "service/pdfExporter.js"), html, filename]);
                 let result;
                 child.stderr.on('data', (data) => {
+                    console.log(data);
                     reject(data);
                 });
 
                 child.on('close', (code) => {
+                    console.log(code)
                     resolve(result);
                 });
 
                 child.stdout.on('data', (data) => {
+                    console.log(data);
                     result = data.toString().trim();
                 });
             });
