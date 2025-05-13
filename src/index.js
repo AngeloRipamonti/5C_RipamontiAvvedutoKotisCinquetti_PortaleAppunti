@@ -389,12 +389,9 @@ pubsub.subscribe("databaseImportDocument", async (data) => {
         await database.createNote(pathNote, data.author_email);
         const response = await database.findNote(pathNote);
         response.text = text;
-        console.log(response)
         return { response };
     }
     catch (err) {
-                console.log(err)
-
         return { error: "Error importing document " + err };
     }
 });
