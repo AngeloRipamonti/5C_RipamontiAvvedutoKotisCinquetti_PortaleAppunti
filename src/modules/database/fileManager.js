@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const htmlDocx = require('html-to-docx');
-const htmlPdf = require('html-pdf');
 const mammoth = require("mammoth");
+const { spawn } = require('child_process');
 
 module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/docx`)) fs.mkdirSync(`${process.cwd()}/dist/assets/docx`, { recursive: true });
@@ -11,8 +11,8 @@ module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/images`)) fs.mkdirSync(`${process.cwd()}/dist/assets/images`, { recursive: true });
 
     return {
-        saveWord: function (fileData, fileName){
-            const bufferData = Buffer.from(fileData); 
+        saveWord: function (fileData, fileName) {
+            const bufferData = Buffer.from(fileData);
             fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${fileName}`), bufferData);
             return `/dist/assets/docx/${fileName}`;
@@ -26,21 +26,25 @@ module.exports = function fileManager() {
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
             return `/dist/assets/docx/${filename}`;
         },
-        saveInPdf: async function (html, filename) {
-            await htmlPdf.create(html, {
-                format: 'A4',
-                border: {
-                    top: '10mm',
-                    right: '10mm',
-                    bottom: '10mm',
-                    left: '10mm'
-                }
-            })
-                .toFile(path.join(process.cwd(), `/dist/assets/pdf/${filename}`), (err, res) => {
-                    if (err) throw err;
-                    return `/dist/assets/pdf/${filename}`;
+        saveInPdf: function (html, filename) {
+            return new Promise((resolve, reject) => {
+                const child = spawn('node', [path.join(process.cwd(), "service/pdfExporter.js"), html, filename]);
+                let result;
+                child.stderr.on('data', (data) => {
+                    console.log(data);
+                    reject(data);
                 });
-             return `/dist/assets/pdf/${filename}`;
+
+                child.on('close', (code) => {
+                    console.log(code)
+                    resolve(result);
+                });
+
+                child.stdout.on('data', (data) => {
+                    console.log(data);
+                    result = data.toString().trim();
+                });
+            });
         },
         saveImage: function (fileData, fileName) {
             const base64 = fileData.split(',')[1];
