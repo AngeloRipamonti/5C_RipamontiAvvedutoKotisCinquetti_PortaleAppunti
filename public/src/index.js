@@ -152,7 +152,8 @@ pubsub.subscribe('onsearch-user', (data) => {
     middleware.getPublicData(data.username);
     socket.on("public-data", (stats) => {
         if (!called) return;
-        if (isNaN(stats.response.followers)) return document.getElementById("error-div").innerText = "No user found";
+        called = false;
+        if (stats?.error) return document.getElementById("error-div").innerText = "No user found";
         location.href = "#search-results";
         middleware.getProfile(data.username);
         socket.on("getProfile", ([dat]) => {
@@ -355,6 +356,7 @@ window.addEventListener("popstate", () => {
     if (new URL(location.href).hash === "#personal") {
         middleware.getPublicData(user.getUsername());
         socket.on("public-data", (data) => {
+            if(data?.error) return;
             pubsub.publish("user-personal-data", data.response);
         });
     }else if (new URL(location.href).hash === "#feed") {

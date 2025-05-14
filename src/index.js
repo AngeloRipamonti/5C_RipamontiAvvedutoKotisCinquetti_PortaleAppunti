@@ -11,7 +11,8 @@ const generateMiddleware = require("./modules/middleware/middleware.js")
 const generateMailerSender = require("./modules/database/mailerSender.js")
 const generateFileManager = require("./modules/database/fileManager.js")
 const generateDatabase = require("./modules/database/database.js")
-const generateEncrypter = require("./modules/businessLogic/encrypter.js")
+const generateEncrypter = require("./modules/businessLogic/encrypter.js");
+const { error } = require("console");
 
 // Express
 const app = express();
@@ -101,7 +102,7 @@ io.on('connection', (socket) => {
         const [follows] = await middleware.getFollows(values);
         const [posts] = await middleware.getDocByAuthor(values);
         if(followers?.error || follows?.error || posts?.error) {
-            socket.emit("public-data", {response: { followers: [], follows: [], posts: [] }});
+            socket.emit("public-data", {error: `${followers?.error} ${follows?.error} ${posts?.error}`});
             return;
         }
         socket.emit("public-data", {response: { followers: followers.response, follows: follows.response, posts: posts.response }});
