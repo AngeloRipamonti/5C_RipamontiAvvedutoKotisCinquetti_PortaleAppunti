@@ -29,6 +29,7 @@ export const generateViewNote = (parentElement, pubSub) => {
     }
     return{
         render: function(doc) {
+            console.log(doc)
             currentRating = 0;
             let starsHTML = '';
             for (let i = 0; i < 5; i++) {
@@ -67,6 +68,7 @@ export const generateViewNote = (parentElement, pubSub) => {
                 </div>
             `;
             const thisPost = parentElement;
+            console.log(parentElement)
             const starsBtns = thisPost.querySelectorAll('.btn-star');
             starsBtns.forEach(star => {
                 star.addEventListener('click', function() {

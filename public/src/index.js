@@ -131,17 +131,21 @@ pubsub.subscribe('onsearch-tag', (data) => {
     document.getElementById("error-div").innerText = ""; 
     middleware.getDocByTag(data.tag); 
 
-    socket.on("getDocByTag", (stats) => {
+    socket.on("getDocByTag", ([stats]) => {
         if (!called || !stats || !stats.response) return;
-        //response è un oggetto non un array
-        if (!Array.isArray(stats.response) || stats.response.length === 0) {
+
+        const results = stats.response;
+
+        if (!Array.isArray(results) || results.length === 0) {
             return document.getElementById("error-div").innerText = "No content found for this tag";
         }
+
         location.href = "#search-results";
-        //getFeedByTag(stats);
+        getFeedByTag(results); 
         called = false;
     });
 });
+
 
 pubsub.subscribe('onsearch-user', (data) => {
     let called = true;
@@ -402,4 +406,13 @@ function getFeed(user) {
         const postManager = generatePostManager(pubsub, posts, generateFeed(pubsub));
         postManager.updateFeed();
     });
+}
+
+function getFeedByTag(posts) {
+    const postsByTag = [];
+        search_result.innerHTML = "";
+        posts.forEach(e => search_result.innerHTML += `<div id="${e.id}"></div>`)
+        posts.forEach(e => postsByTag.push(generateNote(pubsub, generateDocument(e.id, e.created_at, e.visibility, e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(document.getElementById(e.id), pubsub))));
+        const postManager = generatePostManager(pubsub, postsByTag, generateFeed(pubsub));
+        postManager.updateFeed();
 }
