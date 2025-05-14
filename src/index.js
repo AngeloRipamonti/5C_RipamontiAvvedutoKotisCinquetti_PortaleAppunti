@@ -509,7 +509,6 @@ pubsub.subscribe("databaseGiveFeedback", async (data) => {
 });
 // Note Edit
 pubsub.subscribe("databaseUpdateDocument", async (data) => {
-    console.log(data);
     try {
         fileManager.saveInMd(data.text, path.basename(data.path_note));
         await database.editNote(data.id, data.author_email);        

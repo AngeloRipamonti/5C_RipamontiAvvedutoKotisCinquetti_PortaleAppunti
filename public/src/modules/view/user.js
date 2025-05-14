@@ -113,7 +113,6 @@ export const generateUser = (parentElement, pubSub) => {
             const fullscreenButtons = document.querySelectorAll(".mypost-fullscreen");
             fullscreenButtons.forEach(element => {
                 element.onclick = () => {
-                    console.log(element)
                     const post = user.posts.find(e => e.id == element.id);
                     pubSub.publish("open-document-fullscreen",post.path_note);
                 }

@@ -132,16 +132,15 @@ pubsub.subscribe('onsearch-tag', (data) => {
     middleware.getDocByTag(data.tag); 
 
     socket.on("getDocByTag", ([stats]) => {
-        if (!called || !stats || !stats.response) return;
-
+        if (!called || !stats || !stats.response  || stats.error) return;
         const results = stats.response;
 
         if (!Array.isArray(results) || results.length === 0) {
             return document.getElementById("error-div").innerText = "No content found for this tag";
         }
 
-        location.href = "#search-results";
-        getFeedByTag(results); 
+        getFeedByTag(results);
+        location.href = "#search-results"; 
         called = false;
     });
 });
@@ -180,7 +179,7 @@ pubsub.subscribe('onsearch-user', (data) => {
 });
 
 pubsub.subscribe('oncancel', (data) => {
-    console.log('Cancellazione ricerca per:', data.id);
+    //console.log('Cancellazione ricerca per:', data.id);
 });
 
 //Publisher and tags
@@ -189,7 +188,7 @@ pubsub.subscribe("publish-button-clicked", (data) => {
     if(data[0]) middleware.changeVisibility(createDocument.document.getID(), data[0]);
     if(data[1]){
         data[1].forEach(e => middleware.databaseAddTag(createDocument.document.getID(), e));
-        socket.on("addNoteTag",(res)=>console.log(res))
+        //socket.on("addNoteTag",(res)=>console.log(res))
         socket.on("changeVisibility", () => {
             document.getElementById("publish-modal").classList.remove("is-active");
             createDocument.import("");
@@ -229,7 +228,7 @@ pubsub.subscribe("modify-document", (values) => {
         location.href = "#modify";
         document.getElementById("saveModify").onclick = () => {
             middleware.modifyDocument(values[0], values[1] ,createDocument.getText(), user.getEmail());
-            socket.on("modifyDocument", (res) => console.log(res));
+            //socket.on("modifyDocument", (res) => console.log(res));
             location.href = "#personal";
         };
     })
@@ -410,9 +409,8 @@ function getFeed(user) {
 
 function getFeedByTag(posts) {
     const postsByTag = [];
-        search_result.innerHTML = "";
-        posts.forEach(e => search_result.innerHTML += `<div id="${e.id}"></div>`)
-        posts.forEach(e => postsByTag.push(generateNote(pubsub, generateDocument(e.id, e.created_at, e.visibility, e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(document.getElementById(e.id), pubsub))));
-        const postManager = generatePostManager(pubsub, postsByTag, generateFeed(pubsub));
-        postManager.updateFeed();
+    search_result.innerHTML = posts.map(e => `<div id="result-${e.id}"></div>`);
+    posts.forEach(e => postsByTag.push(generateNote(pubsub, generateDocument(e.id, e.created_at, e.visibility, e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(document.getElementById(`result-${e.id}`), pubsub))));
+    const postManager = generatePostManager(pubsub, postsByTag, generateFeed(pubsub));
+    postManager.updateFeed();
 }

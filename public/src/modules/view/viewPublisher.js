@@ -84,7 +84,6 @@ export const generateViewPublisher = (parentElement, pubSub) => {
                     document.querySelectorAll(".clickableTag").forEach((el) => {
                         el.onclick = () => {
                             tgs.push(el.textContent);
-                            console.log(tgs)
                             tags_container.innerHTML += `
                                 <span class="tag is-info m-1">${el.textContent}</span>
                             `;
