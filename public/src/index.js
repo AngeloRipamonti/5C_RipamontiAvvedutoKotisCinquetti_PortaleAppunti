@@ -159,7 +159,7 @@ pubsub.subscribe('onsearch-user', (data) => {
         socket.on("getProfile", ([dat]) => {
             middleware.checkFollow(user.getUsername(), dat.response.username);
             socket.on("checkFollow", ([res]) => {
-                pubsub.publish("navbar-follows", res);
+                pubsub.publish("navbar-follows", res?.response ? true : false);
                 const target = generateUserPresenter(pubsub, generateUserData(null, null, dat.response.username, dat.response.bio, dat.response.path_thumbnail), generateUser(search_result, pubsub));
                 target.render(false);
                 called = false;

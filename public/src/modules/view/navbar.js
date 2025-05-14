@@ -71,7 +71,8 @@ export function generateNavbar(parentElement, pubsub) {
     if (el) el.onclick = handler;
   }
 
-  pubsub.subscribe("navbar-follows", ({ response }) => {
+  pubsub.subscribe("navbar-follows", ( response ) => {
+    console.log(response)
     elements["search-results"].left[1] = response
       ? `<button id='unFollow_user' class='button is-rounded'><i class='fa-solid fa-check' style='color: #ffffff;'></i></button>`
       : "<button id='follow_user' class='button is-rounded'>Follow</button>";
