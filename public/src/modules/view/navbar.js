@@ -1,11 +1,4 @@
 export function generateNavbar(parentElement, pubsub) {
-
-  pubsub.subscribe("navbar-follows", (res) => {
-     if(res.response) elements["search-results"].left[1] = `<button id='unFollow_user' class='button is-rounded'> <i class="fa-solid fa-check" style="color: #ffffff;"></i> </button>`;
-     else elements["search-results"].left[1] = "<button id='follow_user' class='button is-rounded'>Follow</button>";
-     pubsub.publish("render-nav");
-  });
-
   const elements = {
     creation: {
       logo: true,
@@ -22,9 +15,9 @@ export function generateNavbar(parentElement, pubsub) {
         "<h3>$username</h3>",
       ],
       left: [
-        "<button class='button is-white' id='u-settings'> <i class='fa fa-gear'></i> </button>",
-        "<a href='#feed'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
-        `<button type="button" class='button is-rounded' id='doc-creation'>+</button>`
+        "<button class='button is-white' id='u-settings'><i class='fa fa-gear'></i></button>",
+        "<a href='#feed'><button class='button is-white'><i class='fa-solid fa-house'></i></button></a>",
+        `<button type='button' class='button is-rounded' id='doc-creation'>+</button>`,
       ],
     },
     "search-results": {
@@ -34,9 +27,9 @@ export function generateNavbar(parentElement, pubsub) {
         "<h3>$username</h3>",
       ],
       left: [
-        "<a href='#personal'><button class='button is-white' id='u-settings'> <i class='fa-solid fa-house'></i> </button></a>",
-        "<button id='follow_user' class='button is-rounded'>Follow</button>"
-      ]
+        "<a href='#personal'><button class='button is-white'><i class='fa-solid fa-house'></i></button></a>",
+        "<button id='follow_user' class='button is-rounded'>Follow</button>",
+      ],
     },
     feed: {
       logo: true,
@@ -45,7 +38,7 @@ export function generateNavbar(parentElement, pubsub) {
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
-        "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>"
+        "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>",
       ],
     },
     entry: {
@@ -57,89 +50,82 @@ export function generateNavbar(parentElement, pubsub) {
 
   let index = new URL(location.href).hash.replace("#", "") || "entry";
 
-  const endTemplate = `
-       <div class="navbar-item">
-           <div class="field is-grouped">
-               %content%
-           </div>
-       </div>
-    `;
+  const templates = {
+    start: `<div class="navbar-item"><%content%></div>`,
+    end: `<div class="navbar-item"><div class="field is-grouped"><%content%></div></div>`,
+  };
 
-  const startTemplate = `
-       <div class="navbar-item">
-          %content%
-       </div>
-    `;
-
-  function build(element) {
-    if (elements[element]) index = element;
+  function build(newIndex) {
+    if (elements[newIndex]) index = newIndex;
   }
 
-  return {
-    setUserData: function (user) {
+  function replaceUserData(arr, user) {
+    return arr.map(e =>
+      e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`)
+       .replace("$username", user.username)
+    );
+  }
+
+  function addClickIfExists(id, handler) {
+    const el = document.getElementById(id);
+    if (el) el.onclick = handler;
+  }
+
+  pubsub.subscribe("navbar-follows", ({ response }) => {
+    elements["search-results"].left[1] = response
+      ? `<button id='unFollow_user' class='button is-rounded'><i class='fa-solid fa-check' style='color: #ffffff;'></i></button>`
+      : "<button id='follow_user' class='button is-rounded'>Follow</button>";
+    pubsub.publish("render-nav");
+  });
+
+  pubsub.subscribe("render-nav", () => navbar.render());
+  pubsub.subscribe("newHash", page => {
+    build(page);
+    navbar.render();
+  });
+
+  const navbar = {
+    setUserData(user) {
       for (const key in elements) {
-        if (key === "feed")
-          elements[key].left = elements[key].left.map((e) => {
-            return e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`).replace("$username", user.username);
-          });
-        else
-          elements[key].right = elements[key].right.map((e) => {
-            return e.replace("$thumbnail", `<img class="user-icon" src="${user.path_thumbnail}">`).replace("$username", user.username);
-          })
+        if (key === "feed") {
+          elements[key].left = replaceUserData(elements[key].left, user);
+        } else {
+          elements[key].right = replaceUserData(elements[key].right, user);
+        }
       }
       this.render();
     },
-    render: function () {
-      pubsub.subscribe("render-nav", () => this.render());
-      const data = elements[index];
+
+    render() {
+      const { left, right } = elements[index];
+      const startItems = right.map(e => templates.start.replace("<%content%>", e)).join("");
+      const endItems = left.map(e => templates.end.replace("<%content%>", e)).join("");
+
       parentElement.innerHTML = `
-              <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                  <a role="button" class="navbar-burger" data-target="navbarExampleTransparentExample" aria-label="menu" aria-expanded="false">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                  </a>
-                </div>
-                <div id="navbarExampleTransparentExample" class="navbar-menu">
-                    <div class="navbar-start">
-                        ${data.right
-          .map((e) => {
-            return startTemplate.replace("%content%", e);
-          })
-          .join("")}
-                    </div>
-                    <div class="navbar-end">
-                        ${data.left
-          .map((e) => {
-            return endTemplate.replace("%content%", e);
-          })
-          .join("")}
-                    </div>
-                </div>
-              </nav>
-          `;
+        <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
+          <div class="navbar-brand">
+            <a role="button" class="navbar-burger" data-target="navbarMenu" aria-label="menu" aria-expanded="false">
+              <span></span><span></span><span></span><span></span>
+            </a>
+          </div>
+          <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-start">${startItems}</div>
+            <div class="navbar-end">${endItems}</div>
+          </div>
+        </nav>
+      `;
 
-      if (index === "entry") document.getElementById("register").onclick = () => pubsub.publish("sign-up");
-      if (document.getElementById("goProfile")) document.getElementById("goProfile").onclick = () => location.href = "#personal";
-      if (document.getElementById("doc-creation")) document.getElementById("doc-creation").onclick = () => {
+      addClickIfExists("register", () => pubsub.publish("sign-up"));
+      addClickIfExists("goProfile", () => (location.href = "#personal"));
+      addClickIfExists("doc-creation", () => {
         pubsub.publish("doc-creation");
-        document.getElementById("md").classList.add("is-active");
-      }
-      if (document.getElementById("follow_user")) document.getElementById("follow_user").onclick = () => pubsub.publish("follow_user");
-      if (document.getElementById("unFollow_user")) document.getElementById("unFollow_user").onclick = () => pubsub.publish("unFollow_user");
-      if(document.getElementById("u-settings")) document.getElementById("u-settings").onclick = () => pubsub.publish("user-settings");
-      pubsub.subscribe("newHash", (page) => {
-        build(page);
-        this.render();
+        document.getElementById("md")?.classList.add("is-active");
       });
+      addClickIfExists("follow_user", () => pubsub.publish("follow_user"));
+      addClickIfExists("unFollow_user", () => pubsub.publish("unFollow_user"));
+      addClickIfExists("u-settings", () => pubsub.publish("user-settings"));
 
-      const navbarBurgers = Array.prototype.slice.call(
-        document.querySelectorAll(".navbar-burger"),
-        0
-      );
-      navbarBurgers.forEach((el) => {
+      document.querySelectorAll(".navbar-burger").forEach(el => {
         el.addEventListener("click", () => {
           const target = document.getElementById(el.dataset.target);
           el.classList.toggle("is-active");
@@ -148,4 +134,6 @@ export function generateNavbar(parentElement, pubsub) {
       });
     },
   };
+
+  return navbar;
 }
