@@ -14,9 +14,10 @@ export const generateCredentialManager = (parentElement, pubSub) => {
               <input class="input" type="email" id="emailInput" placeholder="Email" required>
               <input class="input" type="password" id="passwordInput" placeholder="Password" required>
               <div class="field">
-                <label class="checkbox">
-                  <input id="remember-me" type="checkbox" />
-                  Remember me
+                <label class="b-checkbox checkbox">
+                  <input id="remember-me" type="checkbox" value="false" checked="">
+                  <span class="check is-info"></span>
+                  <span class="control-label">Remember Me</span>
                 </label>
               </div>
             </div>

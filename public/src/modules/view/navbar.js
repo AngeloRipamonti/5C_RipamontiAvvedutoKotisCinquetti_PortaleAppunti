@@ -1,3 +1,5 @@
+import { themeComponent } from "/assets/js/themeCustom.js";
+
 export function generateNavbar(parentElement, pubsub) {
   const elements = {
     creation: {
@@ -6,7 +8,10 @@ export function generateNavbar(parentElement, pubsub) {
         '<a href="#personal"><img src="/assets/images/favicon.ico" id="logo"></a>',
         "<h3>Mind Sharing</h3>",
       ],
-      left: ["<h3>Document Creation</h3>"],
+      left: [
+        "<h3>Document Creation</h3>", 
+        `<button id="theme-toggle" class="button is-trasparent is-rounded is-flex is-justify-content-center is-align-items-center" style="width: 2.5rem; height: 2.5rem;"></button>`
+      ],
     },
     personal: {
       logo: false,
@@ -17,7 +22,8 @@ export function generateNavbar(parentElement, pubsub) {
       left: [
         "<button class='button is-white' id='u-settings'><i class='fa fa-gear'></i></button>",
         "<a href='#feed'><button class='button is-white'><i class='fa-solid fa-house'></i></button></a>",
-        `<button type='button' class='button is-rounded' id='doc-creation'>+</button>`,
+        `<button type='button' class='button is-rounded' id='doc-creation'>+</button>`, 
+        `<button id="theme-toggle" class="button is-trasparent is-rounded is-flex is-justify-content-center is-align-items-center" style="width: 2.5rem; height: 2.5rem;"></button>`
       ],
     },
     "search-results": {
@@ -28,7 +34,8 @@ export function generateNavbar(parentElement, pubsub) {
       ],
       left: [
         "<a href='#personal'><button class='button is-white'><i class='fa-solid fa-house'></i></button></a>",
-        "<button id='follow_user' class='button is-rounded'>Follow</button>",
+        "<button id='follow_user' class='button is-rounded'>Follow</button>", 
+        `<button id="theme-toggle" class="button is-trasparent is-rounded is-flex is-justify-content-center is-align-items-center" style="width: 2.5rem; height: 2.5rem;"></button>`
       ],
     },
     feed: {
@@ -38,13 +45,17 @@ export function generateNavbar(parentElement, pubsub) {
         "<div><h3>Mind Sharing</h3></div>",
       ],
       left: [
-        "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>",
+        "<button id='goProfile' class='btn is-trasparent u-icon'>$thumbnail</button>", 
+        `<button id="theme-toggle" class="button is-trasparent is-rounded is-flex is-justify-content-center is-align-items-center" style="width: 2.5rem; height: 2.5rem;"></button>`
       ],
     },
     entry: {
       logo: true,
       right: ['<img src="/assets/images/favicon.ico" id="logo">'],
-      left: ["<button class='button is-white' id='register'>Sign Up</button>"],
+      left: [
+        "<button class='button is-white' id='register'>Sign Up</button>", 
+        `<button id="theme-toggle" class="button is-trasparent is-rounded is-flex is-justify-content-center is-align-items-center" style="width: 2.5rem; height: 2.5rem;"></button>`
+      ],
     },
   };
 
@@ -125,6 +136,12 @@ export function generateNavbar(parentElement, pubsub) {
       addClickIfExists("follow_user", () => pubsub.publish("follow_user"));
       addClickIfExists("unFollow_user", () => pubsub.publish("unFollow_user"));
       addClickIfExists("u-settings", () => pubsub.publish("user-settings"));
+
+      const button = document.getElementById("theme-toggle");
+      if(button){
+        const theme = themeComponent(document.documentElement, button);
+        theme.initialize();
+      }
 
       document.querySelectorAll(".navbar-burger").forEach(el => {
         el.addEventListener("click", () => {
