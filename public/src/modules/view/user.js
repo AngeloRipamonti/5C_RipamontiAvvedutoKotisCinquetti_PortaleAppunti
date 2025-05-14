@@ -44,43 +44,48 @@ export const generateUser = (parentElement, pubSub) => {
                         </div>
                     </div>
                     ${user.posts ? user.posts.map((e, index) => {
+                        console.log(e)
                             return `
                                 ${index % 2 === 0 ? "<div class='columns'>" : ""}
                                 <div class="column is-half">
                                     <a class="hidden" id="download-file-${e.id}" target="_blank" download></a>
                                     <div class="post box" id="${e.id}">
-                                        ${itsme ? `<div class="post-tabs columns">
-                                            <div class="column is-one-third has-text-centered post-tab">
+                                        ${itsme ? `
+                                        <div class="post-tabs columns">
+                                            <div class="column is-one-fifth has-text-centered">
                                                 <button type="button" class="delete-doc-button" id="${e.id}" class="button btn-transparent">
                                                     <span class="icon">
                                                         <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
                                                     </span>
                                                 </button>
                                             </div>
-                                            <div class="column is-one-third has-text-centered post-tab">
+                                            <div class="column is-one-fifth has-text-centered">
                                                 <button type="button" class="modify-doc-button" id="${e.id}" class="button btn-transparent">
                                                     <span class="icon">
                                                         <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
                                                     </span>
                                                 </button>
                                             </div>
-                                            <div class="column is-one-third post-tab">
-                                                <div class="columns">
-                                                    <div class="column has-text-centered">
-                                                        <button type="button" class="export-pdf-button" id="${e.id}" class="button btn-transparent">
-                                                            <span class="icon">
-                                                                <i class="fa-solid fa-file-pdf" style="color: #ffffff;"></i>
-                                                            </span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="column has-text-centered">
-                                                        <button type="button" class="export-docx-button" id="${e.id}" class="button btn-transparent">
-                                                            <span class="icon">
-                                                                <i class="fa-solid fa-file-word" style="color: #ffffff;"></i>
-                                                            </span>
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                            <div class="column is-one-fifth has-text-centered">
+                                                <button type="button" class="export-pdf-button" id="${e.id}" class="button btn-transparent">
+                                                    <span class="icon">
+                                                        <i class="fa-solid fa-file-pdf" style="color: #ffffff;"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <div class="column is-one-fifth has-text-centered">
+                                                <button type="button" class="export-docx-button" id="${e.id}" class="button btn-transparent">
+                                                    <span class="icon">
+                                                        <i class="fa-solid fa-file-word" style="color: #ffffff;"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <div class="column is-one-fifth has-text-centered">
+                                                <label class="switch is-rounded is-small">
+                                                    <input type="checkbox" id="${e.id}" ${e.visibility == 1 ? "checked" : ""} class="change-visibility-checker">
+                                                    <span class="check"></span>
+                                                    <span class="control-label">Public</span>
+                                                </label>
                                             </div>
                                         </div>` : "" }
                                         <div class="header is-flex is-justify-content-space-between">
@@ -103,6 +108,7 @@ export const generateUser = (parentElement, pubSub) => {
                         }).join("") + (user.posts.length % 2 === 1 ? "</div>" : "") : ""}
                 </div>
             `;
+            console.log(parentElement)
             const deleteButtons = document.querySelectorAll(".delete-doc-button");
             deleteButtons.forEach(element => {
                 element.onclick = () => {
@@ -139,7 +145,14 @@ export const generateUser = (parentElement, pubSub) => {
                     pubSub.publish("export-docx-document", user.posts.find(e => e.id == element.id).path_note);
                 }
             });
-      });
+
+            const checks = document.querySelectorAll(".change-visibility-checker");
+            checks.forEach(element => {
+                element.onclick = () => {
+                    pubSub.publish("change-visibility-btn-clicked", {id: element.id, public: element.checked});
+                }
+            });
+        });
     },
   };
 };

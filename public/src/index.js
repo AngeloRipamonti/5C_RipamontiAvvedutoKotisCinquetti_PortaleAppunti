@@ -145,6 +145,13 @@ pubsub.subscribe('onsearch-tag', (data) => {
     });
 });
 
+pubsub.subscribe("change-visibility-btn-clicked", (values) => {
+    const visibility = values.public === true ? 1 : 0;
+    middleware.changeVisibility(values.id, visibility);
+    socket.on("changeVisibility", ([resp]) => {
+        console.log(resp);
+    });
+})
 
 pubsub.subscribe('onsearch-user', (data) => {
     let called = true;

@@ -13,11 +13,16 @@ html {
     color: white;
 }
 
+.post {
+    max-height: none !important;
+    height: max-content !important;
+}
+
 #posts-container, #bio-container {
     margin-top: 6%;
 }
 
-.post-tab {
+.post-tabs {
     border: 1px solid grey;
 }
 
