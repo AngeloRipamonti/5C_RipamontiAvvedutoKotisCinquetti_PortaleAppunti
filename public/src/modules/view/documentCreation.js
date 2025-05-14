@@ -33,7 +33,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                         </span>
                         <span class="file-label">Choose a file…</span>
                         </span>
-                        <span class="file-name" style="color: black !important;">Just docx</span>
+                        <span class="file-name">Just docx</span>
                     </label>
                     </div>                            
                     <button type="button" class="button is-link" id="submit-doc">SUBMIT</button>
@@ -84,7 +84,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                                     </span>
                                     <span class="file-label">Choose a file…</span>
                                     </span>
-                                    <span class="file-name" style="color: black !important;">Just docx</span>
+                                    <span class="file-name">Just docx</span>
                                 </label>
                                 </div>                            
                                 <button type="button" class="button is-link" id="submit-doc">SUBMIT</button>
@@ -111,7 +111,7 @@ export const generateDocumentCreation = (parentElement, pubSub) => {
                             header.innerText = "From zero to hero!";
                             body_doc.innerHTML = `
                                 <button type="button" class="button is-link" id="start-zero">Start from zero</button>
-                                <p style="color: black !important;">Start with a black file!</p>
+                                <p>Start with a black file!</p>
                                 `;
                             document.getElementById("start-zero").onclick = () => pubSub.publish("zero-start");
                         }

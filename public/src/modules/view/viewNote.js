@@ -42,7 +42,7 @@ export const generateViewNote = (parentElement, pubSub) => {
                             <div>${renderStars(doc.getStarsAvg())}</div>
                         </div>
                         <div class="preview" style="text-align: center !important;">
-                            <img src="/assets/images/doc-preview.png" alt="doc-thumbnail" id="doc-thumbnail">
+                            <i class="fa-solid fa-file-invoice doc-preview"></i>
                         </div>
                         <div class="columns">
                             <div class="vote-wrapper column is-half">
@@ -57,7 +57,7 @@ export const generateViewNote = (parentElement, pubSub) => {
                                <button type="button" id="open-fullscreen">
                                     <a href="#fullscreen-view" class="button btn-transparent">
                                         <span class="icon">
-                                            <i class="fa-solid fa-up-right-and-down-left-from-center" style="color: #ffffff;"></i>
+                                            <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
                                         </span>
                                     </a>
                                </button>

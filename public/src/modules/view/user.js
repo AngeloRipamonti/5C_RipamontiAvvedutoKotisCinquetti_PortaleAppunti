@@ -5,7 +5,7 @@ export const generateUser = (parentElement, pubSub) => {
         parentElement.innerHTML = `
                 <div class="columns">
                     <div class="column is-half has-text-left">
-                        <h1 class="title has-text-white">${userData.getUsername()}</h1>
+                        <h1 class="title">${userData.getUsername()}</h1>
                     </div>
                 </div>
                 <div id="user-stats" class="columns is-flex is-justify-content-center">
@@ -27,8 +27,8 @@ export const generateUser = (parentElement, pubSub) => {
                 </div>
                 <div id="bio-container">
                     <div class="columns">
-                        <div class="column is-one-fifth has-text-centered">
-                            <h1 class="title has-text-white">Bio</h1>
+                        <div class="column is-one-fifth">
+                            <h1 class="title">Bio</h1>
                             <div class="line"></div>
                         </div>
                     </div>
@@ -62,21 +62,21 @@ export const generateUser = (parentElement, pubSub) => {
                                             <div class="column is-one-fifth has-text-centered">
                                                 <button type="button" class="modify-doc-button" id="${e.id}" class="button btn-transparent">
                                                     <span class="icon">
-                                                        <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
+                                                        <i class="fa-solid fa-pen"></i>
                                                     </span>
                                                 </button>
                                             </div>
                                             <div class="column is-one-fifth has-text-centered">
                                                 <button type="button" class="export-pdf-button" id="${e.id}" class="button btn-transparent">
                                                     <span class="icon">
-                                                        <i class="fa-solid fa-file-pdf" style="color: #ffffff;"></i>
+                                                        <i class="fa-solid fa-file-pdf"></i>
                                                     </span>
                                                 </button>
                                             </div>
                                             <div class="column is-one-fifth has-text-centered">
                                                 <button type="button" class="export-docx-button" id="${e.id}" class="button btn-transparent">
                                                     <span class="icon">
-                                                        <i class="fa-solid fa-file-word" style="color: #ffffff;"></i>
+                                                        <i class="fa-solid fa-file-word"></i>
                                                     </span>
                                                 </button>
                                             </div>
@@ -92,12 +92,12 @@ export const generateUser = (parentElement, pubSub) => {
                                             <div>${userData.getUsername()}</div>
                                         </div>
                                         <div class="personal-preview" style="text-align: center !important;">
-                                            <img src="/assets/images/doc-preview.png" alt="doc-thumbnail" id="doc-thumbnail">
+                                            <i class="fa-solid fa-file-invoice doc-preview"></i>
                                         </div>
                                         <button type="button" class="mypost-fullscreen" id="${e.id}">
                                             <a href="#fullscreen-view" class="button btn-transparent">
                                                 <span class="icon">
-                                                    <i class="fa-solid fa-up-right-and-down-left-from-center" style="color: #ffffff;"></i>
+                                                    <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
                                                 </span>
                                             </a>
                                         </button>
