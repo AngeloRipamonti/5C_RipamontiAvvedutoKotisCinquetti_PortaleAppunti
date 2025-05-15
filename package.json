@@ -35,18 +35,13 @@
     "crypto": "^1.0.1",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
-    "html-to-docx": "^1.8.0",
     "http": "^0.0.1-security",
-    "mammoth": "^1.9.0",
     "mysql2": "^3.14.0",
     "nodemailer": "^6.9.15",
     "path": "^0.12.7",
     "quill": "^2.0.3",
     "socket.io": "^4.8.1",
-    "turndown": "^7.1.1",
-    "turndown-plugin-gfm": "^1.0.2",
-    "uuid": "^11.1.0",
-    "wkhtmltopdf": "^0.4.0"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "pm2": "^6.0.5"
