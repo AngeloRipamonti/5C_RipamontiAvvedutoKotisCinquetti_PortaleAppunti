@@ -2,7 +2,7 @@ export const generateCredentialManager = (parentElement, pubSub) => {
   return {
     renderLogin: function () {
       parentElement.innerHTML = `
-        <div class="container has-text-centered">
+        <div class="container has-text-centered" id="login-form">
           <div class="section">
             <h1 class="title is-1">Take notes and share them with everyone</h1>
             <h2 class="subtitle is-3">Welcome on mind sharing!</h2>

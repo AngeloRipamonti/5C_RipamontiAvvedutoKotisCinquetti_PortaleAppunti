@@ -159,4 +159,25 @@ div.post {
     .modal-content {
         max-width: 40vh !important;
     }
+    div:not(.line) {
+        max-width: none !important;
+        width: max-content !important;
+        max-height: none !important;
+        height: max-content !important;
+    }
+    .column {
+        max-width: 100vw;
+    }
+
+    #login-form {
+        width: 50px !important;
+    }
+
+    #login-form .field.is-grouped {
+        flex-direction: column;
+    }
+
+    #login-form > * {
+        max-width: 100% !important;
+    }
 }
