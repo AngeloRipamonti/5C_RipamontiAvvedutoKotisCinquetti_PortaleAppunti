@@ -240,9 +240,10 @@ pubsub.subscribe("publish-button-clicked", (data) => {
             document.getElementById("publish-modal").classList.remove("is-active");
             createDocument.import("");
             location.href = "#personal";
-            hideLoader();
         })
+        hideLoader();
     }
+    hideLoader();
 });
 
 
