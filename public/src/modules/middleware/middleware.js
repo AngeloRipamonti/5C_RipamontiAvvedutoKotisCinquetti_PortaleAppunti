@@ -14,16 +14,19 @@ export const generateMiddleware = (pubsub, socket) => {
             socket.emit("register", { username: usr, email: mail });
         },
         changeUsername: function (email, username) {
-            socket.emit("changeUsername", { email, username });
+            let token = sessionStorage.getItem("token");
+            socket.emit("changeUsername", { email, username, token: token ? token : undefined });
         },
         changePassword: function (email, oldPassword, newPassword) {
             socket.emit("changePassword", { email, oldPassword, newPassword });
         },
         changeThumbnail: function (fileName, fileData, email) {
-            socket.emit("changeThumbnail", { fileName, fileData, email });
+            let token = sessionStorage.getItem("token");
+            socket.emit("changeThumbnail", { fileName, fileData, email, token: token ? token : undefined });
         },
         changeBio: function (bio, email) {
-            socket.emit("changeBio", { email, bio });
+            let token = sessionStorage.getItem("token");
+            socket.emit("changeBio", { email, bio, token: token ? token : undefined });
         },
         deleteAccount: function (email) {
             socket.emit("deleteAccount", { email });

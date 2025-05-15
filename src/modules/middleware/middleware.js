@@ -19,22 +19,24 @@ module.exports = function middleware(pubsub) {
                 password: password
             });
         },
-        changeUsername: async function (email, username) {
+        changeUsername: async function (email, username, token) {
             return await pubsub.publish("databaseChangeUsername", {
                 email: email,
-                username: username
+                username: username,
+                token
             });
         },
         changePassword: async function (email, oldPassword, newPassword) {
             return await pubsub.publish("databaseChangePassword", { email, oldPassword, newPassword });
         },
-        changeThumbnail: async function (fileName, fileData, email) {
-            return await pubsub.publish("databaseChangeThumbnail", { email, fileName, fileData });
+        changeThumbnail: async function (fileName, fileData, email, token) {
+            return await pubsub.publish("databaseChangeThumbnail", { email, fileName, fileData, token });
         },
-        changeBio: async function (bio, email) {
+        changeBio: async function (bio, email, token) {
             return await pubsub.publish("databaseChangeBio", {
                 email: email,
-                bio: bio
+                bio: bio,
+                token
             });
         },
         deleteAccount: async function (email) {

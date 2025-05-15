@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("changeUsername", async (values) => {
-        const res = await middleware.changeUsername(values.email, values.username);
+        const res = await middleware.changeUsername(values.email, values.username, values.token);
         socket.emit("changeUsername", res);
     });
 
@@ -73,12 +73,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on("changeThumbnail", async (values) => {
-        const res = await middleware.changeThumbnail(values.fileName, values.fileData, values.email);
+        const res = await middleware.changeThumbnail(values.fileName, values.fileData, values.email, values.token);
         socket.emit("changeThumbnail", res);
     });
 
     socket.on("changeBio", async (values) => {
-        const res = await middleware.changeBio(values.bio, values.email);
+        const res = await middleware.changeBio(values.bio, values.email, values.token);
         socket.emit("changeBio", res);
     });
 
@@ -256,6 +256,12 @@ pubsub.subscribe("databaseLoginAccount", async (data) => {
 pubsub.subscribe("databaseChangeUsername", async (data) => {
     try {
         await database.updateUserUsername(data.email, data.username);
+        if (data.token) {
+            const userIndex = users.findIndex(u => u.token === data.token);
+            if (userIndex !== -1) {
+                users[userIndex].user.username = data.username;
+            }
+        }
         return { response: "Username changed successfully" };
     }
     catch (err) {
@@ -291,6 +297,12 @@ pubsub.subscribe("databaseChangeThumbnail", async (data) => {
     try {
         const thumbnail = fileManager.saveImage(data.fileData, data.fileName);
         await database.updateUserThumbnail(data.email, thumbnail);
+        if (data.token) {
+            const userIndex = users.findIndex(u => u.token === data.token);
+            if (userIndex !== -1) {
+                users[userIndex].user.path_thumbnail = thumbnail;
+            }
+        }
         return { response: thumbnail };
     }
     catch (err) {
@@ -300,6 +312,12 @@ pubsub.subscribe("databaseChangeThumbnail", async (data) => {
 pubsub.subscribe("databaseChangeBio", async (data) => {
     try {
         await database.updateUserBio(data.email, data.bio);
+        if (data.token) {
+            const userIndex = users.findIndex(u => u.token === data.token);
+            if (userIndex !== -1) {
+                users[userIndex].user.bio = data.bio;
+            }
+        }
         return { response: "Bio changed successfully" };
     }
     catch (err) {
