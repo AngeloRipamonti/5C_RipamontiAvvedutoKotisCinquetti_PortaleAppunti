@@ -83,8 +83,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on("deleteAccount", async (values) => {
+        users = users.filter(user => user.token !== values.token);
         const res = await middleware.deleteAccount(values.email);
         socket.emit("deleteAccount", res);
+    });
+
+    socket.on("logout", async (values) => {
+        users = users.filter(user => user.token !== values.token);
+        socket.emit("logout", {response: "Logout successfully"});
     });
 
     socket.on("getProfile", async (values) => {
