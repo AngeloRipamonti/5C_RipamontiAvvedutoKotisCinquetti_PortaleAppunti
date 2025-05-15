@@ -62,7 +62,18 @@ credential.renderLogin();
 const quillAdd = new Quill(editor, {
     modules: {
       toolbar: [
-        ["bold", "italic", "underline"]
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],  
+        [{ 'font': [] }],
+        [{ 'color': [] }, { 'background': [] }],       
+        [{ 'align': [] }],
+        ['bold', 'italic', 'underline', 'strike'],      
+        ['blockquote', 'code-block'],
+        ['link', 'image', 'video', 'formula'],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],    
+        [{ 'indent': '-1'}, { 'indent': '+1' }],         
+        ['clean']
       ]
     },
     placeholder: "Write something...",
@@ -72,12 +83,24 @@ const quillAdd = new Quill(editor, {
 const quillModify = new Quill(modify_editor, {
     modules: {
       toolbar: [
-        ["bold", "italic", "underline"]
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],  
+        [{ 'font': [] }],
+        [{ 'color': [] }, { 'background': [] }],       
+        [{ 'align': [] }],
+        ['bold', 'italic', 'underline', 'strike'],      
+        ['blockquote', 'code-block'],
+        ['link', 'image', 'video', 'formula'],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],    
+        [{ 'indent': '-1'}, { 'indent': '+1' }],         
+        ['clean']
       ]
     },
     placeholder: "Write something...",
     theme: "snow"
 });  
+
 
 const createDocument = generateDocPresenter(quillAdd, generateDocument(), generateDocumentCreation(creation, pubsub));
 
