@@ -1,9 +1,11 @@
 :root {
     --line-color: white;
+    --loader-color: white;
 }
 
 [data-theme="light"] {
     --line-color: black;
+    --loader-color: black;
 }
 
 html {
@@ -130,6 +132,52 @@ a.tab-doc {
     color:white !important;
 }
 
+#loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+}
+
+.main-loader {
+  display: block;
+  width: 130px;
+  height: 4px;
+  border-radius: 30px;
+  background-color: rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.main-loader::before {
+  content: "";
+  position: absolute;
+  background: var(--loader-color);
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  border-radius: 30px;
+  animation: moving 1s ease-in-out infinite;
+  ;
+}
+
+@keyframes moving {
+  50% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+    right: 0;
+    left: unset;
+  }
+}
+
 div#middle-modal-content {
     background-color: white;
     max-width: none;
@@ -165,6 +213,32 @@ div.post {
         max-height: none !important;
         height: max-content !important;
     }
+
+    .ql-toolbar.ql-snow {
+        max-width: 100vw !important;
+        white-space: normal; 
+    }
+
+    #editor-wrapper, #modify {
+        max-width: 100vw !important;
+        height: 65vh !important;
+    }
+
+    .post-tabs {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .author-container {
+        font-size: xx-small;
+    }
+
+    #editor, #modify-editor {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
     .column {
         max-width: 100vw;
     }

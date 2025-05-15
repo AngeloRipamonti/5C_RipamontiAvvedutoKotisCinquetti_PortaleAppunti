@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const htmlDocx = require('html-to-docx');
 const mammoth = require("mammoth");
+const TurndownService = require('turndown')
+let turndownPluginGfm = require('turndown-plugin-gfm')
 const { spawn } = require('child_process');
 
 module.exports = function fileManager() {
@@ -9,6 +11,22 @@ module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/pdf`)) fs.mkdirSync(`${process.cwd()}/dist/assets/pdf`, { recursive: true });
     if (!fs.existsSync(`${process.cwd()}/dist/assets/md`)) fs.mkdirSync(`${process.cwd()}/dist/assets/md`, { recursive: true });
     if (!fs.existsSync(`${process.cwd()}/dist/assets/images`)) fs.mkdirSync(`${process.cwd()}/dist/assets/images`, { recursive: true });
+
+    let gfm = turndownPluginGfm.gfm
+    let turndownService = new TurndownService()
+    turndownService.use(gfm)
+    turndownService.addRule('strikethrough', {
+        filter: ['del', 's', 'strike'],
+        replacement: function (content) {
+            return '~~' + content + '~~'
+        }
+    })
+    turndownService.addRule('underline', {
+        filter: ['u'],
+        replacement: function (content) {
+            return '<u>' + content + '</u>'
+        }
+    })
 
     return {
         saveWord: function (fileData, fileName) {
@@ -18,7 +36,7 @@ module.exports = function fileManager() {
             return `/dist/assets/docx/${fileName}`;
         },
         saveInMd: function (html, filename) {
-            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/md/${filename}`), html);
+            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/md/${filename}`), turndownService.turndown(html));
             return `/dist/assets/md/${filename}`;
         },
         saveInDocx: async function (html, filename) {
