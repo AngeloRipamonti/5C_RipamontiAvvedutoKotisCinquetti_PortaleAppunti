@@ -224,6 +224,10 @@ div.post {
         height: 65vh !important;
     }
 
+    #fullscreen-view {
+        max-width: 100vw !important;
+    }
+
     .post-tabs {
         width: 100%;
         display: flex;

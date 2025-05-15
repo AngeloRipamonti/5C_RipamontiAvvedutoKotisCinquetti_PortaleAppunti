@@ -37,9 +37,9 @@ export const generateViewNote = (parentElement, pubSub) => {
             parentElement.innerHTML = `
                 <div class="post-container">
                     <div class="post box">
-                        <div class="header is-flex is-justify-content-space-between">
-                            <div class="author-container">${doc.getAuthor()}</div>
-                            <div>${renderStars(doc.getStarsAvg())}</div>
+                        <div class="columns">
+                            <div class="author-container column is-half">${doc.getAuthor()}</div>
+                            <div class="column is-half">${renderStars(doc.getStarsAvg())}</div>
                         </div>
                         <div class="preview" style="text-align: center !important;">
                             <i class="fa-solid fa-file-invoice doc-preview"></i>
