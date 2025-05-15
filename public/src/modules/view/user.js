@@ -44,7 +44,6 @@ export const generateUser = (parentElement, pubSub) => {
                         </div>
                     </div>
                     ${user.posts ? user.posts.map((e, index) => {
-                        console.log(e)
                             return `
                                 ${index % 2 === 0 ? "<div class='columns'>" : ""}
                                 <div class="column is-half">
@@ -108,7 +107,6 @@ export const generateUser = (parentElement, pubSub) => {
                         }).join("") + (user.posts.length % 2 === 1 ? "</div>" : "") : ""}
                 </div>
             `;
-            console.log(parentElement)
             const deleteButtons = document.querySelectorAll(".delete-doc-button");
             deleteButtons.forEach(element => {
                 element.onclick = () => {

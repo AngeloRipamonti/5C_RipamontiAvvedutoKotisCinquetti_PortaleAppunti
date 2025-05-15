@@ -244,10 +244,11 @@ pubsub.subscribe("modify-document", (values) => {
         createDocument.render();
         location.href = "#modify";
         keyCounter = 0;
-        document.getElementById("editor").addEventListener("keydown", (key) => {
+        document.getElementById("modify-editor").addEventListener("keydown", (key) => {
             keyCounter++;
             if(keyCounter == 10) {
-                middleware.modifyDocument(data.response.path_note, data.response.id, createDocument.getText(), user.getEmail());
+                middleware.modifyDocument(values[0], values[1], createDocument.getText(), user.getEmail());
+                //socket.on("modifyDocument", (res) => console.log(res));
                 keyCounter = 0;
             }
         })

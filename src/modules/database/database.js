@@ -170,7 +170,6 @@ module.exports = function database() {
             return await _query("SELECT * FROM tags", [tag]);
         },
         getDocByTag: async function (tag){
-            console.log(tag);
             return await _query("SELECT * FROM notes_tags JOIN notes ON notes_tags.id = notes.id WHERE notes_tags.name = ?;", [tag]);
         },
         // Feedback
