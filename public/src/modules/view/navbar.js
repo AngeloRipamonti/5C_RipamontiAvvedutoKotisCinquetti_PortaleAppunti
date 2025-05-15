@@ -95,6 +95,12 @@ export function generateNavbar(parentElement, pubsub) {
     build(page);
     navbar.render();
   });
+  pubsub.subscribe("navbar-result-users", () => {
+    elements["search-results"].left[1] = "<button id='follow_user' class='button is-rounded'>Follow</button>";
+  });
+  pubsub.subscribe("navbar-result-tags", () => {
+    elements["search-results"].left[1] = "<button id='follow_user' class='button is-rounded is-hidden'>Follow</button>";
+  });
 
   const navbar = {
     setUserData(user) {

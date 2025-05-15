@@ -138,7 +138,7 @@ pubsub.subscribe('onsearch-tag', (data) => {
         if (!Array.isArray(results) || results.length === 0) {
             return document.getElementById("error-div").innerText = "No content found for this tag";
         }
-
+        pubsub.publish("navbar-result-tags");
         getFeedByTag(results);
         location.href = "#search-results"; 
         called = false;
@@ -175,6 +175,7 @@ pubsub.subscribe('onsearch-user', (data) => {
                     middleware.followAccount(user.getEmail(), target.follow());
                     socket.on("followAccount", ([data]) => {
                         if (data?.response) pubsub.publish("navbar-follows", true);
+                        pubsub.publish("navbar-result-users");
                     });
                 });
                 pubsub.subscribe("unFollow_user", async () => {
