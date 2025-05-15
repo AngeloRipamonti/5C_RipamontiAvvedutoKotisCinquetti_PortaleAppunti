@@ -181,7 +181,7 @@ pubsub.subscribe('onsearch-user', (data) => {
     showLoader();
     let called = true;
     if (data.username.toLowerCase() === user.getUsername().toLowerCase()) return document.getElementById("error-div").innerText = "You are that user!";
-    middleware.getPublicData(data.username);
+    middleware.getPublicData(data.username, false);
     socket.on("public-data", (stats) => {
         if (!called) return;
         called = false;
@@ -267,7 +267,7 @@ pubsub.subscribe("create-new-tag", (tag)=>{
 pubsub.subscribe("delete-document", (id) => {
     showLoader();
     middleware.deleteDocument(id);
-    middleware.getPublicData(user.getUsername());
+    middleware.getPublicData(user.getUsername(), true);
     socket.on("public-data", (data) => {
         pubsub.publish("user-personal-data", data.response);
         hideLoader();
@@ -454,7 +454,7 @@ document.getElementById("saveDocument").onclick = () => {
 /* EVENT LISTENER */
 window.addEventListener("popstate", () => {
     if (new URL(location.href).hash === "#personal") {
-        middleware.getPublicData(user.getUsername());
+        middleware.getPublicData(user.getUsername(), true);
         socket.on("public-data", (data) => {
             if(data?.error) return;
             pubsub.publish("user-personal-data", data.response);

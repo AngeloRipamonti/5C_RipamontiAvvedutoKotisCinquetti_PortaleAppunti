@@ -104,9 +104,10 @@ io.on('connection', (socket) => {
     })
 
     socket.on("getUserPublicData", async (values) => {
-        const [followers] = await middleware.getFollowers(values);
-        const [follows] = await middleware.getFollows(values);
-        const [posts] = await middleware.getDocByAuthor(values);
+        console.log(values)
+        const [followers] = await middleware.getFollowers(values.username);
+        const [follows] = await middleware.getFollows(values.username);
+        const [posts] = await middleware.getDocByAuthor(values.username, values.all);
         if(followers?.error || follows?.error || posts?.error) {
             socket.emit("public-data", {error: `${followers?.error} ${follows?.error} ${posts?.error}`});
             return;
@@ -432,7 +433,7 @@ pubsub.subscribe("databaseSaveDocument", async (data) => {
 });
 pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
     try {
-        const response = await database.findNoteByUser(data.username);
+        const response = await database.findNoteByUser(data.username, data.all);
         return { response };
     }
     catch (err) {

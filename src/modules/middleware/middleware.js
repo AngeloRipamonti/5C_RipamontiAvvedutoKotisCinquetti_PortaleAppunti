@@ -88,8 +88,8 @@ module.exports = function middleware(pubsub) {
                 author_email: author_email
             });
         },
-        getDocByAuthor: async function (username) {
-            return await pubsub.publish("databaseGetDocByAuthor", { username });
+        getDocByAuthor: async function (username, all) {
+            return await pubsub.publish("databaseGetDocByAuthor", { username, all });
         },
         exportDocument: async function (path_note, format, text) {
             return await pubsub.publish("databaseExportDocument", {
