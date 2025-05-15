@@ -440,3 +440,7 @@ function getFeedByTag(posts) {
     const postManager = generatePostManager(pubsub, postsByTag, generateFeed(pubsub));
     postManager.updateFeed();
 }
+
+socket.on("disconnect", () => {
+    location.href = "#error";
+})

@@ -19,7 +19,7 @@
         <div class="page" id="entry">
             <div id="credential-container"></div>
         </div>
-        <div class="page" id="creation">
+        <div class="page is-hidden" id="creation">
             <div id="editor-wrapper" class="hide">
                 <div id="editor"></div>
                 <div class="buttons level mt-4">
@@ -34,21 +34,44 @@
             <div id="creation-start"></div>
             <div id="publisher"></div>
         </div>
-        <div class="page" id="personal"></div>
-        <div class="page" id="modify">
+        <div class="page is-hidden" id="personal"></div>
+        <div class="page is-hidden" id="modify">
             <div id="modify-editor"></div>
             <button type="button" id="saveModify" class="button is-primary mt-4">Save</button>
         </div>
-        <div class="page" id="feed">
+        <div class="page is-hidden" id="feed">
             <div class="columns">
                 <div class="column is-one-fifth" id="searchbar-container"></div>
             </div>
             <div id="posts" class="is-flex is-justify-content-center"></div>
         </div>
-        <div class="page" id="fullscreen-view"></div>
-        <div class="page" id="account-target"></div>
-        <div class="page" id="search-results"></div>
-        <div class="page" id="settings"></div>
+        <div class="page is-hidden" id="fullscreen-view"></div>
+        <div class="page is-hidden" id="account-target"></div>
+        <div class="page is-hidden" id="search-results"></div>
+        <div class="page is-hidden" id="settings"></div>
+        <div class="page is-hidden" id="error">
+            <div class="hero is-fullheight">
+                <div class="hero-body">
+                    <div class="container has-text-centered">
+                        <p class="title">
+                            <i class="fas fa-wifi-slash fa-2x"></i>
+                        </p>
+                        <p class="title is-2">
+                            You're Offline
+                        </p>
+                        <p class="subtitle is-4">
+                            Please check your internet connection and try again
+                        </p>
+                        <button class="button is-primary is-medium" onclick="window.location.reload()">
+                            <span class="icon">
+                                <i class="fas fa-sync-alt"></i>
+                            </span>
+                            <span>Refresh Page</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script type="module" src="/src/index.js"></script>
