@@ -306,6 +306,7 @@ pubsub.subscribe("export-pdf-document", (path) => {
     showLoader();
     let called = true;
     middleware.getDocument(path);
+    socket.off("getDocumentByPath");
     socket.on("getDocumentByPath", ([doc]) => {
         middleware.exportDocument(path, "pdf", doc.response.text);
         socket.on("exportDocument", ([path]) => {
@@ -324,6 +325,7 @@ pubsub.subscribe("export-docx-document", (path) => {
     showLoader();
     let called = true;
     middleware.getDocument(path);
+    socket.off("getDocumentByPath");
     socket.on("getDocumentByPath", ([doc]) => {
         middleware.exportDocument(path, "docx", doc.response.text);
         socket.on("exportDocument", ([path]) => {
