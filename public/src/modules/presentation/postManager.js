@@ -6,10 +6,6 @@ export const generatePostManager = (pubsub,documents,feed) => {
     return{
         updateFeed: function() {
             feed.render(documents);
-        },
-        /*
-        votePost: function(post, vote){
-            
-        }*/
+        }
     }
 }
