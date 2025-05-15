@@ -147,19 +147,22 @@ pubsub.subscribe("post-voted", (data) => {
 
 //SearchBar
 pubsub.subscribe('onsearch-tag', (data) => {
+    showLoader()
     let called = true;
     document.getElementById("error-div").innerText = ""; 
     middleware.getDocByTag(data.tag); 
 
     socket.on("getDocByTag", ([stats]) => {
-        if (!called || !stats || !stats.response  || stats.error) return;
+        if (!called || !stats || !stats.response  || stats.error) return hideLoader();
         const results = stats.response;
 
         if (!Array.isArray(results) || results.length === 0) {
+            hideLoader();
             return document.getElementById("error-div").innerText = "No content found for this tag";
         }
         pubsub.publish("navbar-result-tags");
         getFeedByTag(results);
+        hideLoader();
         location.href = "#search-results"; 
         called = false;
     });
@@ -196,16 +199,21 @@ pubsub.subscribe('onsearch-user', (data) => {
                 target.render(false);
                 called = false;
                 pubsub.publish("user-personal-data", stats.response);
+                hideLoader();
                 pubsub.subscribe("follow_user", async () => {
+                    showLoader();
                     middleware.followAccount(user.getEmail(), target.follow());
                     socket.on("followAccount", ([data]) => {
                         if (data?.response) pubsub.publish("navbar-follows", true);
                         pubsub.publish("navbar-result-users");
                     });
+                    hideLoader();
                 });
                 pubsub.subscribe("unFollow_user", async () => {
+                    showLoader();
                     middleware.unfollowAccount(user.getEmail(), target.follow());
                     pubsub.publish("navbar-follows", false);
+                    hideLoader();
                 });
             })
         });
@@ -221,7 +229,10 @@ pubsub.subscribe('oncancel', (data) => {
 pubsub.subscribe("publish-button-clicked", (data) => {
     showLoader();
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
-    if(data[0]) middleware.changeVisibility(createDocument.document.getID(), data[0]);
+    if(data[0]) {
+        middleware.changeVisibility(createDocument.document.getID(), data[0]);
+        hideLoader();
+    }
     if(data[1]){
         data[1].forEach(e => middleware.databaseAddTag(createDocument.document.getID(), e));
         //socket.on("addNoteTag",(res)=>console.log(res))
@@ -291,6 +302,7 @@ pubsub.subscribe("modify-document", (values) => {
 })
 
 pubsub.subscribe("export-pdf-document", (path) => {
+    showLoader();
     let called = true;
     middleware.getDocument(path);
     socket.on("getDocumentByPath", ([doc]) => {
@@ -302,11 +314,13 @@ pubsub.subscribe("export-pdf-document", (path) => {
                 target.click();
                 called = false;
             }
+            hideLoader();
         })
     })
 });
 
 pubsub.subscribe("export-docx-document", (path) => {
+    showLoader();
     let called = true;
     middleware.getDocument(path);
     socket.on("getDocumentByPath", ([doc]) => {
@@ -318,6 +332,7 @@ pubsub.subscribe("export-docx-document", (path) => {
                 target.click();
                 called = false;
             }
+            hideLoader();
         })
     })
 });
@@ -348,28 +363,37 @@ pubsub.subscribe("post-voted", (result) => {
     }
 });
 pubsub.subscribe("changeBio", (bio) =>{
+    showLoader();
     middleware.changeBio(bio, user.getEmail());
     socket.on("changeBio", ([data]) => {
         if(data?.response) user.setBio(bio);
+        hideLoader();
     })
 });
+
 pubsub.subscribe("changeThumbnail", (thumbnail) => {
+    showLoader();
     middleware.changeThumbnail(thumbnail.fileName, thumbnail.fileData, user.getEmail());
     socket.on("changeThumbnail", ([data]) => {
         if(data?.response) user.setThumbnail(data.response);
+        hideLoader();
     })
 });
-pubsub.subscribe("changeUsername", (username)=>{
+pubsub.subscribe("changeUsername", (username)=> {
+    showLoader();
     middleware.changeUsername(user.getEmail(), username);
     socket.on("changeUsername", ([data]) => {
         if(data?.response) user.setUsername(username);
+        hideLoader();
     })
 })
 pubsub.subscribe("changePassword", ([oldPassword, newPassword]) => {
+    showLoader();
     middleware.changePassword(user.getEmail(), oldPassword, newPassword);
     socket.on("changePassword", ([data]) => {
         if(data?.response) {
             location.href = "#entry";
+            hideLoader();
         }
     })
 });
