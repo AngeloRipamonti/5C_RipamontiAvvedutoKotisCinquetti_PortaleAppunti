@@ -67,14 +67,14 @@ export const generateUser = (parentElement, pubSub) => {
                                                 </button>
                                             </div>
                                             <div class="column is-one-fifth has-text-centered">
-                                                <button type="button" class="export-pdf-button" id="${e.id}" class="button btn-transparent">
+                                                <button type="button" class="export-pdf-button" id="pdf-${e.id}" class="button btn-transparent">
                                                     <span class="icon">
                                                         <i class="fa-solid fa-file-pdf"></i>
                                                     </span>
                                                 </button>
                                             </div>
                                             <div class="column is-one-fifth has-text-centered">
-                                                <button type="button" class="export-docx-button" id="${e.id}" class="button btn-transparent">
+                                                <button type="button" class="export-docx-button" id="docx-${e.id}" class="button btn-transparent">
                                                     <span class="icon">
                                                         <i class="fa-solid fa-file-word"></i>
                                                     </span>
@@ -135,14 +135,16 @@ export const generateUser = (parentElement, pubSub) => {
             const exportPdfButtons = document.querySelectorAll(".export-pdf-button");
             exportPdfButtons.forEach(element => {
                 element.onclick = () => {
-                    pubSub.publish("export-pdf-document", user.posts.find(e => e.id == element.id).path_note);
+                    const buttonID = element.id.split("-")[1];
+                    pubSub.publish("export-pdf-document", user.posts.find(e => e.id == buttonID).path_note);
                 }
             });
 
             const exportDocxButtons = document.querySelectorAll(".export-docx-button");
             exportDocxButtons.forEach(element => {
                 element.onclick = () => {
-                    pubSub.publish("export-docx-document", user.posts.find(e => e.id == element.id).path_note);
+                    const buttonID = element.id.split("-")[1];
+                    pubSub.publish("export-docx-document", user.posts.find(e => e.id == buttonID).path_note);
                 }
             });
 
