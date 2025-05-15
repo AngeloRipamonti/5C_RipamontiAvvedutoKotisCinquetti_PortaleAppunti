@@ -38,7 +38,7 @@ export const generateViewNote = (parentElement, pubSub) => {
                 <div class="post-container">
                     <div class="post box">
                         <div class="header is-flex is-justify-content-space-between">
-                            <div>${doc.getAuthor()}</div>
+                            <div class="author-container">${doc.getAuthor()}</div>
                             <div>${renderStars(doc.getStarsAvg())}</div>
                         </div>
                         <div class="preview" style="text-align: center !important;">

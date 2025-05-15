@@ -37,6 +37,7 @@ const personalContainer = document.getElementById("personal");
 const search_result = document.getElementById("search-results");
 const modify_doc = document.getElementById("modify");
 const modify_editor = document.getElementById("modify-editor");
+const loader = document.querySelector("#loader-container");
 
 //pubSub and Navigator
 const pubsub = generatePubSub();
@@ -165,21 +166,26 @@ pubsub.subscribe('onsearch-tag', (data) => {
 });
 
 pubsub.subscribe("change-visibility-btn-clicked", (values) => {
+    showLoader();
     const visibility = values.public === true ? 1 : 0;
     middleware.changeVisibility(values.id, visibility);
     socket.on("changeVisibility", ([resp]) => {
-        console.log(resp);
+        hideLoader();
     });
 })
 
 pubsub.subscribe('onsearch-user', (data) => {
+    showLoader();
     let called = true;
     if (data.username.toLowerCase() === user.getUsername().toLowerCase()) return document.getElementById("error-div").innerText = "You are that user!";
     middleware.getPublicData(data.username);
     socket.on("public-data", (stats) => {
         if (!called) return;
         called = false;
-        if (stats?.error) return document.getElementById("error-div").innerText = "No user found";
+        if (stats?.error) {
+            hideLoader();
+            return document.getElementById("error-div").innerText = "No user found";
+        }
         location.href = "#search-results";
         middleware.getProfile(data.username);
         socket.on("getProfile", ([dat]) => {
@@ -204,6 +210,7 @@ pubsub.subscribe('onsearch-user', (data) => {
             })
         });
     });
+    hideLoader();
 });
 
 pubsub.subscribe('oncancel', (data) => {
@@ -212,6 +219,7 @@ pubsub.subscribe('oncancel', (data) => {
 
 //Publisher and tags
 pubsub.subscribe("publish-button-clicked", (data) => {
+    showLoader();
     middleware.saveDocument(createDocument.document.getPath(), createDocument.getText(), createDocument.document.getAuthor());
     if(data[0]) middleware.changeVisibility(createDocument.document.getID(), data[0]);
     if(data[1]){
@@ -221,33 +229,41 @@ pubsub.subscribe("publish-button-clicked", (data) => {
             document.getElementById("publish-modal").classList.remove("is-active");
             createDocument.import("");
             location.href = "#personal";
+            hideLoader();
         })
     }
 });
 
 
 pubsub.subscribe("search-tag", (tag)=>{
+    showLoader();
     middleware.getDocTag(tag);
     socket.on("getDocTag", ([values])=>{
         pubsub.publish("tags-result", [values.response, tag]);
+        hideLoader();
     })
 });
 
 pubsub.subscribe("create-new-tag", (tag)=>{
+    showLoader();
     middleware.createTag(tag);
-    socket.on("createTag", ([values])=>{
+    socket.on("createTag", ([values]) => {
+        hideLoader();
     })
 });
 
 pubsub.subscribe("delete-document", (id) => {
+    showLoader();
     middleware.deleteDocument(id);
     middleware.getPublicData(user.getUsername());
     socket.on("public-data", (data) => {
         pubsub.publish("user-personal-data", data.response);
+        hideLoader();
     });
 });
 
 pubsub.subscribe("modify-document", (values) => {
+    showLoader();
     middleware.getDocumentText(values[0]);
     socket.on("getDocumentText", ([data]) => {
         const createDocument = generateDocPresenter(quillModify, generateDocument(null,null,null,null,data.response,null,null,null));
@@ -264,10 +280,13 @@ pubsub.subscribe("modify-document", (values) => {
             }
         })
         document.getElementById("saveModify").onclick = () => {
+            showLoader();
             middleware.modifyDocument(values[0], values[1] ,createDocument.getText(), user.getEmail());
             //socket.on("modifyDocument", (res) => console.log(res));
             location.href = "#personal";
+            hideLoader();
         };
+        hideLoader();
     })
 })
 
@@ -304,9 +323,11 @@ pubsub.subscribe("export-docx-document", (path) => {
 });
 
 pubsub.subscribe("open-document-fullscreen", (path) => {
+    showLoader();
     middleware.getDocumentText(path);
     socket.on("getDocumentText", ([data]) => {
         document.getElementById("fullscreen-view").innerHTML = data.response;
+        hideLoader();
     });
 });
 
@@ -467,6 +488,14 @@ function getFeedByTag(posts) {
     posts.forEach(e => postsByTag.push(generateNote(pubsub, generateDocument(e.id, e.created_at, e.visibility, e.path_note,null,e.tags,e.author_email,e.average_stars), generateViewNote(document.getElementById(`result-${e.id}`), pubsub))));
     const postManager = generatePostManager(pubsub, postsByTag, generateFeed(pubsub));
     postManager.updateFeed();
+}
+
+function showLoader() {
+    loader.classList.remove("is-hidden");
+}
+
+function hideLoader() {
+    loader.classList.add("is-hidden");
 }
 
 socket.on("disconnect", () => {
