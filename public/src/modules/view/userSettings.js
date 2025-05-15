@@ -69,11 +69,11 @@ export const generateUserSettings = (parentElement, pubSub) => {
                         </div>
 
                         <div class="mt-4">
-                            <button class="button is-danger">Logout</button>
+                            <button id="logout" class="button is-danger">Logout</button>
                         </div>
 
                         <div class="mt-4">
-                            <button class="button is-danger">Delete Account</button>
+                            <button id="deleteAccount" class="button is-danger">Delete Account</button>
                         </div>
                     </div>
                 </div>`;
@@ -97,6 +97,8 @@ export const generateUserSettings = (parentElement, pubSub) => {
                 }
             }
             document.getElementById("changeBio").onclick = () => pubSub.publish("changeBio", document.getElementById("bioChange").value);
+            document.getElementById("logout").onclick = () => pubSub.publish("logout");
+            document.getElementById("deleteAccount").onclick = () => pubSub.publish("deleteAccount");
         }
     }
 }

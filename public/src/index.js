@@ -324,7 +324,23 @@ pubsub.subscribe("changePassword", ([oldPassword, newPassword]) => {
         }
     })
 });
+pubsub.subscribe("logout", () => {
+    middleware.logout(user.getEmail());
+    socket.on("logout", (data) => {
+        if(data?.response) {
+            location.href = "#entry";
+        }
+    })
+});
 
+pubsub.subscribe("deleteAccount", () => {
+    middleware.deleteAccount(user.getEmail());
+    socket.on("deleteAccount", ([data]) => {
+        if(data?.response) {
+            location.href = "#entry";
+        }
+    })
+});
 
 /* Calllback */
 document.getElementById("saveDocument").onclick = () => {
