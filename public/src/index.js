@@ -66,7 +66,7 @@ const quillAdd = new Quill(editor, {
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         ['bold', 'italic', 'underline', 'strike'],      
         ['blockquote', 'code-block'],
-        ['link', 'image', 'formula'],
+        ['link', 'formula'],
         [{ 'list': 'ordered'}],
         ['clean']
       ]
@@ -81,7 +81,7 @@ const quillModify = new Quill(modify_editor, {
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         ['bold', 'italic', 'underline', 'strike'],      
         ['blockquote', 'code-block'],
-        ['link', 'image', 'formula'],
+        ['link', 'formula'],
         [{ 'list': 'ordered'}],
         ['clean']
       ]
