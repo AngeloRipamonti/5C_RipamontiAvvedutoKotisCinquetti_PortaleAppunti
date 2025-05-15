@@ -29,7 +29,12 @@ export const generateMiddleware = (pubsub, socket) => {
             socket.emit("changeBio", { email, bio, token: token ? token : undefined });
         },
         deleteAccount: function (email) {
-            socket.emit("deleteAccount", { email });
+            let token = sessionStorage.getItem("token");
+            socket.emit("deleteAccount", { email, token: token ? token : undefined });
+        },
+        logout: function () {
+            let token = sessionStorage.getItem("token");
+            socket.emit("logout", { token: token ? token : undefined });
         },
         getProfile: function (username) {
             socket.emit("getProfile", { username });
