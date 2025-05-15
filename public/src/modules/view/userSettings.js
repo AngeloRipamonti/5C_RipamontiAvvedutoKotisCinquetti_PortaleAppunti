@@ -95,8 +95,8 @@ export const generateUserSettings = (parentElement, pubSub) => {
                         reader.readAsDataURL(file);
                     }
                 }
-                document.getElementById("changeBio").onclick = () => pubSub.publish("changeBio", document.getElementById("bioChange").value);
             }
+            document.getElementById("changeBio").onclick = () => pubSub.publish("changeBio", document.getElementById("bioChange").value);
         }
     }
 }
