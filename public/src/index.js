@@ -47,6 +47,7 @@ const navbar = generateNavbar(navbarContainer, pubsub);
 const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager(credentialContainer, pubsub);
 let userObject;
+let keyCounter = 0;
 
 
 
@@ -114,6 +115,13 @@ pubsub.subscribe("zero-start", () => {
         discardButton.addEventListener("click", () => {
             middleware.deleteDocument(createDocument.document.getID());
             createDocument.import("");
+        })
+        document.getElementById("editor").addEventListener("keydown", (key) => {
+            keyCounter++;
+            if(keyCounter == 10) {
+                middleware.modifyDocument(data.response.path_note, data.response.id, createDocument.getText(), user.getEmail());
+                keyCounter = 0;
+            }
         })
     })
 });
@@ -235,6 +243,14 @@ pubsub.subscribe("modify-document", (values) => {
         createDocument.import(data.response);
         createDocument.render();
         location.href = "#modify";
+        keyCounter = 0;
+        document.getElementById("editor").addEventListener("keydown", (key) => {
+            keyCounter++;
+            if(keyCounter == 10) {
+                middleware.modifyDocument(data.response.path_note, data.response.id, createDocument.getText(), user.getEmail());
+                keyCounter = 0;
+            }
+        })
         document.getElementById("saveModify").onclick = () => {
             middleware.modifyDocument(values[0], values[1] ,createDocument.getText(), user.getEmail());
             //socket.on("modifyDocument", (res) => console.log(res));
