@@ -408,8 +408,8 @@ pubsub.subscribe("databaseDeleteDocument", async (data) => {
 });
 pubsub.subscribe("databaseImportDocument", async (data) => {
     try {
-        const {path_note, text} = fileManager.docxToHtml(data.fileData, data.fileName);
-        console.log(path_note, text)
+        const values = fileManager.docxToHtml(data.fileData, data.fileName);
+        console.log(values)
         await database.createNote(path_note, data.author_email);
                 console.log("note create")
 
