@@ -188,6 +188,42 @@ module.exports = function fileManager() {
         }
     }
     
+    async function htmlTextToMarkdown(text) {
+        const tempInput = await saveToTempFile(text, 'html');
+        const tempOutput = await saveToTempFile('', 'md');
+        await htmlToMarkdown(tempInput, tempOutput);
+        const result = fs.readFileSync(tempOutput, 'utf8');
+        return result;
+    }
+
+    async function markdownTextToHtml(text) {
+        const tempInput = await saveToTempFile(text, 'md');
+        const tempOutput = await saveToTempFile('', 'html');
+        await markdownToHtml(tempInput, tempOutput);
+        const result = fs.readFileSync(tempOutput, 'utf8');
+        return result;
+    }
+
+    async function markdownTextToWord(text) {
+        const tempInput = await saveToTempFile(text, 'md');
+        const tempOutput = await saveToTempFile('', 'docx');
+        await markdownToWord(tempInput, tempOutput);
+        return tempOutput; // restituisce il percorso del file docx generato
+    }
+
+    async function markdownTextToPdf(text) {
+        const tempInput = await saveToTempFile(text, 'md');
+        const tempOutput = await saveToTempFile('', 'pdf');
+        await markdownToPdf(tempInput, tempOutput);
+        return tempOutput; // restituisce il percorso del file pdf generato
+    }
+
+    async function wordFileToMarkdownText(wordFilePath) {
+        const tempOutput = await saveToTempFile('', 'md');
+        await wordToMarkdown(wordFilePath, tempOutput);
+        const result = fs.readFileSync(tempOutput, 'utf8');
+        return result;
+    }
 
     return {
         checkDependencies: function () {
@@ -319,6 +355,11 @@ module.exports = function fileManager() {
             fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
             fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${fileName}`), bufferData);
             return `/dist/assets/images/${fileName}`;
-        }
+        },
+        htmlTextToMarkdown,
+        markdownTextToHtml,
+        markdownTextToWord,
+        markdownTextToPdf,
+        wordFileToMarkdownText
     }
 }
