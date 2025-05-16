@@ -54,16 +54,12 @@ module.exports = function fileManager() {
             fs.writeFileSync(outputPath, bufferData);
             const tempMd = path.join(assets.md, `${fileName}.md`);
             const tempHtml = path.join(assets.temp, `temp_${Date.now()}.html`);
-            console.log("dn first")
             await execCommand(`pandoc -f docx -t markdown "${outputPath}" -o "${tempMd}"`).catch((err) => {
                 console.log(err);
             });
-            console.log("execCommand n1")
             await execCommand(`pandoc -f markdown -t html "${tempMd}" -o "${tempHtml}"`).catch((err) => {
                 console.log(err);
             });
-                        console.log("execCommand n2")
-
             const text = fs.readFileSync(tempHtml, 'utf8');
             return {path_note: tempMd, text}
         },
