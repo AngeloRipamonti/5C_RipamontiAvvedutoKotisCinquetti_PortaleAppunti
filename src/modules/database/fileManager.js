@@ -8,6 +8,7 @@ module.exports = function fileManager() {
     };
 
     const assets = {
+        md: path.join('dist/assets/md'),
         docx: path.join('dist/assets/docx'),
         pdf: path.join('dist/assets/pdf'),
         html: path.join('dist/assets/html'),
@@ -51,9 +52,6 @@ module.exports = function fileManager() {
             const oPath = path.join(assets.temp, `temp_${Date.now()}.md`)
             const outputPath = path.join(process.cwd(), oPath);
             fs.writeFileSync(outputPath, bufferData);
-            console.log("1 step")
-            console.log(assets.md, `${fileName}.md`)
-            console.log(assets.temp, `temp_${Date.now()}.html`)
             const tempMd = path.join(assets.md, `${fileName}.md`);
             const tempHtml = path.join(assets.temp, `temp_${Date.now()}.html`);
             await execCommand(`pandoc -f docx -t markdown "${outputPath}" -o "${tempMd}"`).catch((err) => {
@@ -62,7 +60,6 @@ module.exports = function fileManager() {
             await execCommand(`pandoc -f markdown -t html "${tempMd}" -o "${tempHtml}"`).catch((err) => {
                 console.log(err);
             });
-            console.log("2 step")
             const text = fs.readFileSync(tempHtml, 'utf8');
             return {path_note: tempMd, text}
         },
