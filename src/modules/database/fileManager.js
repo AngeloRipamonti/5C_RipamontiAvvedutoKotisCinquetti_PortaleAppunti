@@ -1,82 +1,86 @@
 const path = require('path');
 const fs = require('fs');
-const htmlDocx = require('html-to-docx');
-const mammoth = require("mammoth");
-const TurndownService = require('turndown')
-let turndownPluginGfm = require('turndown-plugin-gfm')
-const { spawn } = require('child_process');
+const { exec } = require('child_process');
 
 module.exports = function fileManager() {
-    if (!fs.existsSync(`${process.cwd()}/dist/assets/docx`)) fs.mkdirSync(`${process.cwd()}/dist/assets/docx`, { recursive: true });
-    if (!fs.existsSync(`${process.cwd()}/dist/assets/pdf`)) fs.mkdirSync(`${process.cwd()}/dist/assets/pdf`, { recursive: true });
-    if (!fs.existsSync(`${process.cwd()}/dist/assets/md`)) fs.mkdirSync(`${process.cwd()}/dist/assets/md`, { recursive: true });
-    if (!fs.existsSync(`${process.cwd()}/dist/assets/images`)) fs.mkdirSync(`${process.cwd()}/dist/assets/images`, { recursive: true });
+    const ensureDir = (dirPath) => {
+        if (!fs.existsSync(dirPath)) fs.mkdirSync(path.join(process.cwd(), dirPath), { recursive: true });
+    };
 
-    let gfm = turndownPluginGfm.gfm
-    let turndownService = new TurndownService()
-    turndownService.use(gfm)
-    turndownService.addRule('strikethrough', {
-        filter: ['del', 's', 'strike'],
-        replacement: function (content) {
-            return '~~' + content + '~~'
-        }
-    })
-    turndownService.addRule('underline', {
-        filter: ['u'],
-        replacement: function (content) {
-            return '<u>' + content + '</u>'
-        }
-    })
+    const assets = {
+        md: path.join('dist/assets/md'),
+        docx: path.join('dist/assets/docx'),
+        pdf: path.join('dist/assets/pdf'),
+        html: path.join('dist/assets/html'),
+        temp: path.join('temp'),
+        img: path.join("dist/assets/images")
+    };
+
+    Object.values(assets).forEach(ensureDir);
+
+    const execCommand = (command) => {
+        return new Promise((resolve, reject) => {
+            exec(command, (error, stdout, stderr) => {
+                if (error) return reject(error.message);
+                if (stderr) console.warn(`Warning: ${stderr}`);
+                resolve(stdout);
+            });
+        });
+    };
 
     return {
-        saveWord: function (fileData, fileName) {
+        mdToDocx: async function(inputPath){
+            const oPath = path.join(assets.docx, `${path.basename(inputPath, '.md')}.docx`)
+            const outputPath = path.join(process.cwd(), oPath);
+            await execCommand(`pandoc -f markdown -t docx "${path.join(process.cwd(), inputPath)}" -o "${outputPath}"`).catch(console.error);
+            return oPath;
+        },
+        mdToPdf: async function(inputPath){
+            const oPath = path.join(assets.pdf, `${path.basename(inputPath, '.md')}.pdf`)
+            const outputPath = path.join(process.cwd(), oPath);
+            await execCommand(`pandoc "${path.join(process.cwd(), inputPath)}" -o "${outputPath}" --pdf-engine=wkhtmltopdf`).catch(console.error);
+            return oPath;
+        },
+        mdToHtml: async function(inputPath){
+            const tempOutput = path.join(assets.temp, `temp_${Date.now()}.html`);
+            await execCommand(`pandoc -f markdown -t html "${path.join(process.cwd(), inputPath)}" -o "${tempOutput}"`).catch(console.error);
+            return fs.readFileSync(tempOutput, 'utf8');
+        },
+        docxToHtml: async function(fileData, fileName){
+            console.log(fileName)
             const bufferData = Buffer.from(fileData);
             fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
-            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${fileName}`), bufferData);
-            return `/dist/assets/docx/${fileName}`;
-        },
-        saveInMd: function (html, filename) {
-            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/md/${filename}`), turndownService.turndown(html));
-            return `/dist/assets/md/${filename}`;
-        },
-        saveInDocx: async function (html, filename) {
-            const docxBuffer = await htmlDocx(html);
-            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/docx/${filename}`), docxBuffer);
-            return `/dist/assets/docx/${filename}`;
-        },
-        saveInPdf: function (html, filename) {
-            return new Promise((resolve, reject) => {
-                const child = spawn('node', [path.join(process.cwd(), "service/pdfExporter.js"), html, filename]);
-                let result;
-                child.stderr.on('data', (data) => {
-                    console.log(data);
-                    reject(data);
-                });
+            const oPath = path.join(assets.temp, `temp_${Date.now()}.md`)
+            const outputPath = path.join(process.cwd(), oPath);
+            fs.writeFileSync(outputPath, bufferData);
+                        console.log(outputPath, oPath)
 
-                child.on('close', (code) => {
-                    console.log(code)
-                    resolve(result);
-                });
+            const oTempMd = path.join(assets.md, `${fileName}.md`);
+            const tempMd = path.join(process.cwd(), oTempMd);
+            const tempHtml = path.join(assets.temp, `temp_${Date.now()}.html`);
+                        console.log(oTempMd, tempMd, tempHtml)
 
-                child.stdout.on('data', (data) => {
-                    console.log(data);
-                    result = data.toString().trim();
-                });
-            });
+            await execCommand(`pandoc -f docx -t markdown "${outputPath}" -o "${tempMd}"`).catch(console.error);
+            await execCommand(`pandoc -f markdown -t html "${tempMd}" -o "${tempHtml}"`).catch(console.error);
+            const text = fs.readFileSync(tempHtml, 'utf8');
+            return {path_note: oTempMd, text}
+        },
+        htmlToMd: async function(htmlContent, output){
+            const tempHtml = path.join(assets.temp, `temp_${Date.now()}.html`);
+            const oPath = path.join(assets.md, output)
+            const outputPath = path.join(process.cwd(), oPath);
+            fs.writeFileSync(tempHtml, htmlContent, 'utf8');
+            await execCommand(`pandoc -f html -t markdown "${tempHtml}" -o "${outputPath}"`).catch(console.error);
+            return oPath;
         },
         saveImage: function (fileData, fileName) {
             const base64 = fileData.split(',')[1];
             const bufferData = Buffer.from(base64, 'base64');
             fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
-            fs.writeFileSync(path.join(process.cwd(), `/dist/assets/images/${fileName}`), bufferData);
-            return `/dist/assets/images/${fileName}`;
-        },
-        importFromMd: function (filepath) {
-            return fs.readFileSync(path.join(process.cwd(), filepath)).toString();
-        },
-        importFromDocx: async function (filepath) {
-            const result = await mammoth.convertToHtml({ path: path.join(process.cwd(), filepath) }, { styleMap: ["u => u"] });
-            return result.value;
+            const oPath = path.join(assets.img, fileName)
+            const outputPath = path.join(process.cwd(), oPath);
+            fs.writeFileSync(outputPath, bufferData);
+            return oPath;
         }
-    }
-}
+    };
+};
