@@ -36,12 +36,10 @@ module.exports = function fileManager() {
             return oPath;
         },
         mdToPdf: async function(inputPath){
-            console.log(inputPath)
             const oPath = path.join(assets.pdf, `${path.basename(inputPath, '.md')}.pdf`)
             const outputPath = path.join(process.cwd(), oPath);
             await execCommand(`pandoc "${path.join(process.cwd(), inputPath)}" -o "${outputPath}" --pdf-engine=wkhtmltopdf`).catch(console.error);
-            console.log("command executed")
-            return outputPath;
+            return oPath;
         },
         mdToHtml: async function(inputPath){
             const tempOutput = path.join(assets.temp, `temp_${Date.now()}.html`);
