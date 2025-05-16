@@ -408,11 +408,9 @@ pubsub.subscribe("databaseDeleteDocument", async (data) => {
 });
 pubsub.subscribe("databaseImportDocument", async (data) => {
     try {
-        const path_note = fileManager.saveWord(data.fileData, data.fileName);
-        const text = await fileManager.importFromDocx(path_note);
-        const pathNote = fileManager.saveInMd(text, path.basename(path_note));
-        await database.createNote(pathNote, data.author_email);
-        const response = await database.findNote(pathNote);
+        const {path_note, text} = fileManager.docxToHtml(data.fileData, data.fileName);
+        await database.createNote(path_note, data.author_email);
+        const response = await database.findNote(path_note);
         response.text = text;
         return { response };
     }
@@ -423,7 +421,7 @@ pubsub.subscribe("databaseImportDocument", async (data) => {
 pubsub.subscribe("databaseSaveDocument", async (data) => {
     try {
         let pathNote = path.basename(data.path_note);
-        fileManager.saveInMd(data.text, pathNote);
+        fileManager.htmlToMd(data.text, pathNote);
         return { response: "Document saved successfully" };
     }
     catch (err) {
@@ -442,11 +440,11 @@ pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
 pubsub.subscribe("databaseExportDocument", async (data) => {
     try {
         if (data.format == 'docx') {
-            const response = await fileManager.saveInDocx(data.text, path.basename(data.path_note) + ".docx")
+            const response = await fileManager.mdToDocx(path.basename(data.path_note))
             return { response };
         }
         else if (data.format == 'pdf') {
-            const response = await fileManager.saveInPdf(data.text, path.basename(data.path_note) + ".pdf");
+            const response = await fileManager.mdToPdf(path.basename(data.path_note));
             return { response };
         }
         else return { response: "Format not supported" };
@@ -467,7 +465,7 @@ pubsub.subscribe("databaseChangeVisibility", async (data) => {
 pubsub.subscribe("databaseGetDocument", async (data) => {
     try {
         const response = await database.findNote(data.path_note);
-        response.text = fileManager.importFromMd(data.path_note);
+        response.text = fileManager.mdToHtml(data.path_note);
         return { response };
     }
     catch (err) {
@@ -485,7 +483,7 @@ pubsub.subscribe("databaseGetFollowDocuments", async (data) => {
 });
 pubsub.subscribe("fileGetDocumentText", async (data) => {
     try {
-        const response = fileManager.importFromMd(data.path_note);
+        const response = fileManager.mdToHtml(data.path_note);
         return { response };
     }
     catch (err) {
@@ -535,7 +533,7 @@ pubsub.subscribe("databaseGiveFeedback", async (data) => {
 // Note Edit
 pubsub.subscribe("databaseUpdateDocument", async (data) => {
     try {
-        fileManager.saveInMd(data.text, path.basename(data.path_note));
+        fileManager.htmlToMd(data.text, path.basename(data.path_note));
         await database.editNote(data.id, data.author_email);        
         return { response: "Note edited successfully" };
     }
