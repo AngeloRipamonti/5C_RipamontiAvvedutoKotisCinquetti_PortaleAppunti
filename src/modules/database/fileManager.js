@@ -32,18 +32,20 @@ module.exports = function fileManager() {
         mdToDocx: async function(inputPath){
             const oPath = path.join(assets.docx, `${path.basename(inputPath, '.md')}.docx`)
             const outputPath = path.join(process.cwd(), oPath);
-            await execCommand(`pandoc -f markdown -t docx "${inputPath}" -o "${outputPath}"`);
+            await execCommand(`pandoc -f markdown -t docx "${inputPath}" -o "${outputPath}"`).catch(console.error);
             return oPath;
         },
         mdToPdf: async function(inputPath){
+            console.log("Helo")
             const oPath = path.join(assets.pdf, `${path.basename(inputPath, '.md')}.pdf`)
             const outputPath = path.join(assets.pdf, oPath);
-            await execCommand(`pandoc "${inputPath}" -o "${outputPath}" --pdf-engine=wkhtmltopdf`);
+            await execCommand(`pandoc "${inputPath}" -o "${outputPath}" --pdf-engine=wkhtmltopdf`).catch(console.error);
+            console.log("command executed")
             return outputPath;
         },
         mdToHtml: async function(inputPath){
             const tempOutput = path.join(assets.temp, `temp_${Date.now()}.html`);
-            await execCommand(`pandoc -f markdown -t html "${inputPath}" -o "${tempOutput}"`);
+            await execCommand(`pandoc -f markdown -t html "${inputPath}" -o "${tempOutput}"`).catch(console.error);
             return fs.readFileSync(tempOutput, 'utf8');
         },
         docxToHtml: async function(fileData, fileName){
@@ -54,12 +56,8 @@ module.exports = function fileManager() {
             fs.writeFileSync(outputPath, bufferData);
             const tempMd = path.join(assets.md, `${fileName}.md`);
             const tempHtml = path.join(assets.temp, `temp_${Date.now()}.html`);
-            await execCommand(`pandoc -f docx -t markdown "${outputPath}" -o "${tempMd}"`).catch((err) => {
-                console.log(err);
-            });
-            await execCommand(`pandoc -f markdown -t html "${tempMd}" -o "${tempHtml}"`).catch((err) => {
-                console.log(err);
-            });
+            await execCommand(`pandoc -f docx -t markdown "${outputPath}" -o "${tempMd}"`).catch(console.error);
+            await execCommand(`pandoc -f markdown -t html "${tempMd}" -o "${tempHtml}"`).catch(console.error);
             const text = fs.readFileSync(tempHtml, 'utf8');
             return {path_note: tempMd, text}
         },
@@ -68,7 +66,7 @@ module.exports = function fileManager() {
             const oPath = path.join(assets.md, output)
             const outputPath = path.join(process.cwd(), oPath);
             fs.writeFileSync(tempHtml, htmlContent, 'utf8');
-            await execCommand(`pandoc -f html -t markdown "${tempHtml}" -o "${outputPath}"`);
+            await execCommand(`pandoc -f html -t markdown "${tempHtml}" -o "${outputPath}"`).catch(console.error);
             return oPath;
         },
         saveImage: function (fileData, fileName) {
