@@ -52,6 +52,8 @@ module.exports = function fileManager() {
             const outputPath = path.join(process.cwd(), oPath);
             fs.writeFileSync(outputPath, bufferData);
             console.log("1 step")
+            console.log(assets.md, `${fileName}.md`)
+            console.log(assets.temp, `temp_${Date.now()}.html`)
             const tempMd = path.join(assets.md, `${fileName}.md`);
             const tempHtml = path.join(assets.temp, `temp_${Date.now()}.html`);
             await execCommand(`pandoc -f docx -t markdown "${outputPath}" -o "${tempMd}"`).catch((err) => {
