@@ -440,12 +440,11 @@ pubsub.subscribe("databaseGetDocByAuthor", async (data) => {
 pubsub.subscribe("databaseExportDocument", async (data) => {
     try {
         if (data.format == 'docx') {
-            console.log(data.path_note, path.basename(data.path_note))
-            const response = await fileManager.mdToDocx(path.basename(data.path_note))
+            const response = await fileManager.mdToDocx(data.path_note)
             return { response };
         }
         else if (data.format == 'pdf') {
-            const response = await fileManager.mdToPdf(path.basename(data.path_note));
+            const response = await fileManager.mdToPdf(data.path_note);
             return { response };
         }
         else return { response: "Format not supported" };
