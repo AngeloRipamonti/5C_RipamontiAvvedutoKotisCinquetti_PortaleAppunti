@@ -49,14 +49,19 @@ module.exports = function fileManager() {
             return fs.readFileSync(tempOutput, 'utf8');
         },
         docxToHtml: async function(fileData, fileName){
+            console.log(fileName)
             const bufferData = Buffer.from(fileData);
             fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
             const oPath = path.join(assets.temp, `temp_${Date.now()}.md`)
             const outputPath = path.join(process.cwd(), oPath);
             fs.writeFileSync(outputPath, bufferData);
+                        console.log(outputPath, oPath)
+
             const oTempMd = path.join(assets.md, `${fileName}.md`);
             const tempMd = path.join(process.cwd(), oTempMd);
             const tempHtml = path.join(assets.temp, `temp_${Date.now()}.html`);
+                        console.log(oTempMd, tempMd, tempHtml)
+
             await execCommand(`pandoc -f docx -t markdown "${outputPath}" -o "${tempMd}"`).catch(console.error);
             await execCommand(`pandoc -f markdown -t html "${tempMd}" -o "${tempHtml}"`).catch(console.error);
             const text = fs.readFileSync(tempHtml, 'utf8');
