@@ -378,6 +378,7 @@ pubsub.subscribe("changeThumbnail", (thumbnail) => {
     showLoader();
     middleware.changeThumbnail(thumbnail.fileName, thumbnail.fileData, user.getEmail());
     socket.on("changeThumbnail", ([data]) => {
+        console.log(data?.response)
         if(data?.response) user.setThumbnail(data.response);
         hideLoader();
     })
