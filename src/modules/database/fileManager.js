@@ -7,6 +7,7 @@ module.exports = function fileManager() {
     if (!fs.existsSync(`${process.cwd()}/dist/assets/pdf`)) fs.mkdirSync(`${process.cwd()}/dist/assets/pdf`, { recursive: true });
     if (!fs.existsSync(`${process.cwd()}/dist/assets/md`)) fs.mkdirSync(`${process.cwd()}/dist/assets/md`, { recursive: true });
     if (!fs.existsSync(`${process.cwd()}/dist/assets/images`)) fs.mkdirSync(`${process.cwd()}/dist/assets/images`, { recursive: true });
+    if (!fs.existsSync(`${process.cwd()}/dist/assets/html`)) fs.mkdirSync(`${process.cwd()}/dist/assets/pdf`, { recursive: true });
 
     function htmlToMarkdown(input, output) {
         return new Promise((resolve, reject) => {
@@ -156,6 +157,37 @@ module.exports = function fileManager() {
         });
     };
 
+    async function markdownToHtmlContent(input) {
+        try {
+            const tempOutput = await saveToTempFile('', 'html'); 
+            const command = `pandoc -f markdown -t html "${input}" -o "${tempOutput}"`;
+    
+            return new Promise((resolve, reject) => {
+                exec(command, (error, stdout, stderr) => {
+                    if (error) {
+                        reject(`Errore nella conversione Markdown a HTML: ${error.message}`);
+                        return;
+                    }
+    
+                    if (stderr) {
+                        console.warn(`Warning: ${stderr}`);
+                    }
+    
+                    fs.readFile(tempOutput, 'utf8', (readErr, data) => {
+                        if (readErr) {
+                            reject(`Errore nella lettura del file HTML generato: ${readErr.message}`);
+                            return;
+                        }
+    
+                        resolve(data);
+                    });
+                });
+            });
+        } catch (err) {
+            throw new Error(`Errore nella generazione del file HTML temporaneo: ${err.message}`);
+        }
+    }
+    
 
     return {
         checkDependencies: function () {
@@ -208,7 +240,7 @@ module.exports = function fileManager() {
             try {
                 option = parseInt(option.trim());
 
-                if (![1, 2, 3, 4].includes(option)) {
+                if (![1, 2, 3, 4, 5].includes(option)) {
                     console.error('Opzione non valida. FileManager');
                     return;
                 }
@@ -240,12 +272,15 @@ module.exports = function fileManager() {
                 switch (option) {
                     case 1:
                         await htmlToMarkdown(inputPath, path.join(process.cwd(), "/dist/assets/md", output));
+                        return output;
                         break;
                     case 2:
                         await markdownToWord(inputPath, path.join(process.cwd(), "/dist/assets/docx", output));
+                        return output;
                         break;
                     case 3:
                         await markdownToPdf(inputPath, path.join(process.cwd(), "/dist/assets/pdf", output));
+                        return output;
                         break;
                     case 4:
                         const outputHtml = output.endsWith('.html') ? path.join(process.cwd(), "/dist/assets/html", output) : path.join(process.cwd(), "/dist/assets/html", `${output}.html`);
@@ -259,7 +294,18 @@ module.exports = function fileManager() {
 
                         console.log(`File Markdown intermedio salvato in: ${outputMd}`);
                         console.log(`File HTML finale salvato in: ${outputHtml}`);
+                        return this.menu(5,outputHtml);
                         break;
+                    case 5:
+                        const htmlText = await markdownToHtmlContent(inputPath);
+                        const outputHtmlPath = path.join(process.cwd(), "/dist/assets/html", output.endsWith('.html') ? output : `${output}.html`);
+                        fs.writeFileSync(outputHtmlPath, htmlText, 'utf8');
+                        console.log(`Contenuto HTML scritto in: ${outputHtmlPath}`);
+                        console.log('\nContenuto HTML:\n');
+                        console.log(htmlText);
+                        return htmlText;
+                        break;
+                        
                 }
 
                 console.log(`\nConversione completata!`);
