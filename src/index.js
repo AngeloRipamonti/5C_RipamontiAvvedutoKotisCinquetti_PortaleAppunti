@@ -408,8 +408,8 @@ pubsub.subscribe("databaseDeleteDocument", async (data) => {
 });
 pubsub.subscribe("databaseImportDocument", async (data) => {
     try {
-        const values = fileManager.docxToHtml(data.fileData, data.fileName);
-        console.log(values)
+        const {path_note, text} = await fileManager.docxToHtml(data.fileData, data.fileName);
+        console.log(path_note, text)
         await database.createNote(path_note, data.author_email);
                 console.log("note create")
 
@@ -426,7 +426,7 @@ pubsub.subscribe("databaseImportDocument", async (data) => {
 pubsub.subscribe("databaseSaveDocument", async (data) => {
     try {
         let pathNote = path.basename(data.path_note);
-        fileManager.htmlToMd(data.text, pathNote);
+        await fileManager.htmlToMd(data.text, pathNote);
         return { response: "Document saved successfully" };
     }
     catch (err) {
@@ -470,7 +470,7 @@ pubsub.subscribe("databaseChangeVisibility", async (data) => {
 pubsub.subscribe("databaseGetDocument", async (data) => {
     try {
         const response = await database.findNote(data.path_note);
-        response.text = fileManager.mdToHtml(data.path_note);
+        response.text = await fileManager.mdToHtml(data.path_note);
         return { response };
     }
     catch (err) {
@@ -488,7 +488,7 @@ pubsub.subscribe("databaseGetFollowDocuments", async (data) => {
 });
 pubsub.subscribe("fileGetDocumentText", async (data) => {
     try {
-        const response = fileManager.mdToHtml(data.path_note);
+        const response = await fileManager.mdToHtml(data.path_note);
         return { response };
     }
     catch (err) {
@@ -538,7 +538,7 @@ pubsub.subscribe("databaseGiveFeedback", async (data) => {
 // Note Edit
 pubsub.subscribe("databaseUpdateDocument", async (data) => {
     try {
-        fileManager.htmlToMd(data.text, path.basename(data.path_note));
+        await fileManager.htmlToMd(data.text, path.basename(data.path_note));
         await database.editNote(data.id, data.author_email);        
         return { response: "Note edited successfully" };
     }
