@@ -14,7 +14,6 @@ import { generateFeed } from "./modules/view/feed.js";
 import { generatePostManager } from "./modules/presentation/postManager.js";
 import { generatePublisher } from "./modules/presentation/publisher.js";
 import { generateViewPublisher } from "./modules/view/viewPublisher.js";
-import { v4 as uuidv4 } from '/node_modules/uuid/dist/esm-browser/index.js';
 import { generateNote } from "./modules/presentation/note.js";
 import { generateViewNote } from "./modules/view/viewNote.js";
 import { generateUserPresenter } from "./modules/presentation/userPresenter.js";
@@ -49,8 +48,6 @@ const searchbar = generateSearchbar(searchbarContainer, pubsub);
 const credential = generateCredentialManager(credentialContainer, pubsub);
 let userObject;
 let keyCounter = 0;
-
-
 
 let user;
 const socket = io();
@@ -107,14 +104,9 @@ pubsub.subscribe("isRegisted", (data) => {
 });
 //login
 pubsub.subscribe("isLogged", (data) => {
-    if (data[2]) {
-        const token = uuidv4();
-        sessionStorage.setItem("token", token);
-        middleware.login(data[0], data[1], token);
-    } else {
-        middleware.login(data[0], data[1]);
-    }
+    middleware.login(data[0], data[1], data[2]);    
 });
+
 pubsub.subscribe("doc-creation", () => {
     createDocument.render();
     location.href = "#creation";
@@ -469,6 +461,7 @@ window.addEventListener("popstate", () => {
 /* Sockets */
 socket.on("login", ([data]) => {
     if (data.error) return document.getElementById("error_area").innerHTML = "<p class='has-text-red'>Wrong credential!</p>";
+    if(data.response?.token) sessionStorage.setItem(data.response.token);
     user = generateUserData(null, data.response.email, data.response.username, data.response.bio, data.response.path_thumbnail);
     userObject = generateUserPresenter(pubsub, user, generateUser(personalContainer, pubsub));
     userObject.render(true);

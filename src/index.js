@@ -12,7 +12,6 @@ const generateMailerSender = require("./modules/database/mailerSender.js")
 const generateFileManager = require("./modules/database/fileManager.js")
 const generateDatabase = require("./modules/database/database.js")
 const generateEncrypter = require("./modules/businessLogic/encrypter.js");
-const { error } = require("console");
 
 // Express
 const app = express();

@@ -88,12 +88,28 @@ module.exports = function database() {
                             CONSTRAINT fk_feedbacks_id FOREIGN KEY (id) REFERENCES notes(id)
                                 ON DELETE CASCADE
                                 ON UPDATE CASCADE
-                        );`)
+                        );`),
+                db.execute(`CREATE TABLE IF NOT EXISTS session(
+                            email VARCHAR(255),
+                            token VARCHAR(255),
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            expired TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL 7 DAY,
+                            CONSTRAINT fk_session_email FOREIGN KEY (email) REFERENCES users(email)
+                                ON UPDATE CASCADE
+                                ON DELETE CASCADE
+                        ):`)
             ]).catch((err) => {
                 console.error(`Errore nella creazione delle tabelle: ${err.message}`);
                 throw err;
             });
             console.log("Database setup completato.");
+        },
+        // Session
+        getSession: async function (email){
+            await db._query(`SELECT COUNT(*) AS active_session, token FROM session WHERE expired > CURRENT_TIMESTAMP AND email = ?`, [email]);
+        },
+        updateSession: async function (){
+            
         },
         // Users
         registerUser: async function (email, password, password_salt, username) {
